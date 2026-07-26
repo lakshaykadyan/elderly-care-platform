@@ -1739,3 +1739,127 @@ button:disabled {
         font-size: 28px;
     }
 }
+
+/* ===========================================================
+   MOBILE FIXES - PROFILE & TOPBAR
+=========================================================== */
+
+/* --- Topbar Mobile --- */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 12px !important;
+    height: 64px !important;
+    min-height: 64px !important;
+    gap: 8px !important;
+  }
+  .topbar-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  .topbar-left h2 {
+    font-size: 15px !important;
+    max-width: 120px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .topbar-right {
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+  .hamburger-menu-btn {
+    display: flex !important;
+    font-size: 24px !important;
+    padding: 4px !important;
+  }
+  /* Notification dropdown mobile */
+  .notification-dropdown {
+    position: fixed !important;
+    top: 64px !important;
+    right: 8px !important;
+    width: calc(100% - 16px) !important;
+    max-width: 340px !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    z-index: 9999 !important;
+  }
+}
+
+/* --- Profile Page Mobile --- */
+@media (max-width: 768px) {
+  .profile-card {
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+  }
+  .profile-page .profile-card {
+    padding: 20px 16px !important;
+  }
+  .profile-info {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .profile-info .info-box:nth-child(4),
+  .profile-info .info-box:nth-child(5) {
+    grid-column: 1 !important;
+  }
+  .profile-image {
+    width: 60px !important;
+    height: 60px !important;
+    font-size: 28px !important;
+  }
+  .profile-page h2 {
+    font-size: 20px !important;
+  }
+  .profile-page p {
+    font-size: 14px !important;
+  }
+  .profile-actions {
+    justify-content: center !important;
+  }
+  .profile-actions .primary-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
+  .caregiver-profile-header {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 12px !important;
+  }
+  .caregiver-avatar {
+    width: 72px !important;
+    height: 72px !important;
+    font-size: 36px !important;
+  }
+  .profile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
+/* --- Extra Small Phones (Galaxy S20, iPhone SE) --- */
+@media (max-width: 480px) {
+  .topbar-left h2 {
+    font-size: 13px !important;
+    max-width: 90px !important;
+  }
+  .topbar-right {
+    gap: 4px !important;
+  }
+  .profile-card {
+    padding: 16px 12px !important;
+  }
+  .profile-image {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 24px !important;
+  }
+  .profile-page h2 {
+    font-size: 18px !important;
+  }
+  .dashboard-main {
+    padding: 12px !important;
+  }
+}
