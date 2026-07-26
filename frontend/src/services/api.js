@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// ✅ Dynamic Base URL (Vercel Environment variable se lega)
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+// ✅ FORCE PRODUCTION URL (Hardcoded fallback)
+const BASE_URL = "https://elderly-care-platform-tf3r.onrender.com/api";
 
 const API = axios.create({
   baseURL: BASE_URL,
@@ -10,7 +10,6 @@ const API = axios.create({
   },
 });
 
-// Request Interceptor - Attach token
 API.interceptors.request.use(
   (req) => {
     const token = localStorage.getItem("token");
@@ -22,7 +21,6 @@ API.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor - Handle 401
 API.interceptors.response.use(
   (response) => response,
   (error) => {
