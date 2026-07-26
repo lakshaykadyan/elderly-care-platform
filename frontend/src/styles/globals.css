@@ -300,6 +300,11 @@ img {
 [data-theme="dark"] .confirm-btn:hover {
   background: #dc2626 !important;
 }
+@media (max-width: 768px) {
+  .mobile-back-btn {
+    display: flex !important;
+  }
+}
 
 /* ===========================================================
    10. MEDICAL RECORDS
@@ -377,7 +382,7 @@ img {
 }
 
 /* ===========================================================
-   14. 🚀 BOOKING CARDS (MERGED - NO DUPLICATES)
+   14.BOOKING CARDS (MERGED - NO DUPLICATES)
 =========================================================== */
 /* --- Force Booking Cards Dark --- */
 html[data-theme="dark"] .booking-card,
@@ -410,7 +415,7 @@ html[data-theme="dark"] .booking-item span {
 }
 
 /* ===========================================================
-   15. 🎯 NOTIFICATIONS (MERGED - NO DUPLICATES)
+   15. NOTIFICATIONS (MERGED - NO DUPLICATES)
 =========================================================== */
 /* --- Header --- */
 [data-theme="dark"] .notifications-header,
@@ -523,6 +528,19 @@ html[data-theme="dark"] .notification-content small {
 }
 [data-theme="dark"] .notification-dropdown .notification-time {
   color: #94a3b8 !important;
+}
+
+@media (max-width: 768px) {
+  .notification-dropdown {
+    position: fixed !important;
+    top: 70px !important;
+    right: 10px !important;
+    width: calc(100% - 20px) !important;
+    max-width: 360px !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+    z-index: 9999 !important;
+  }
 }
 
 /* ===========================================================
