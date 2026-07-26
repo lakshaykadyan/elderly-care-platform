@@ -688,3 +688,103 @@ html[data-theme="dark"] .profile-card .request-note {
     font-size: 18px !important;
   }
 }
+/* ===========================================================
+   FORCE MOBILE FIX - ADMIN & CAREGIVER DASHBOARDS
+=========================================================== */
+
+/* --- Force Tables Responsive --- */
+@media (max-width: 768px) {
+  /* All tables inside dashboard */
+  .dashboard-main table,
+  .dashboard-main .admin-table,
+  .dashboard-main .profile-card table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Force dashboard grid to 2 columns */
+  .dashboard-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Force all cards in grid to be full width */
+  .dashboard-grid .dashboard-card {
+    min-width: 0 !important;
+    padding: 14px !important;
+  }
+
+  /* Force caregiver stats grid */
+  .caregiver-dashboard-wrapper .stats-grid,
+  .stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  /* Force availability buttons vertical */
+  .availability-buttons,
+  .status-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .status-btn {
+    width: 100% !important;
+  }
+
+  /* Force service grid single column */
+  .service-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Profile page grid */
+  .profile-info {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* All containers should not overflow */
+  .dashboard-main,
+  .profile-card,
+  .service-card {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Admin tables wrapper */
+  .admin-table-wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .dashboard-card {
+    padding: 10px !important;
+  }
+  .dashboard-card .card-icon {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 18px !important;
+  }
+  .dashboard-card h1 {
+    font-size: 18px !important;
+  }
+  .dashboard-card h3 {
+    font-size: 11px !important;
+  }
+}
