@@ -1,10 +1,9 @@
 require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
-
 const connectDB = require("./config/db");
 
+// Routes
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const serviceRoutes = require("./routes/serviceRoutes");
@@ -17,19 +16,21 @@ const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
-//console.log("adminRoutes type:", typeof adminRoutes);
-//console.log("authRoutes type:", typeof authRoutes);
-//console.log("profileRoutes type:", typeof profileRoutes);
-//console.log("serviceRoutes type:", typeof serviceRoutes);
-//console.log("caregiverRoutes type:", typeof caregiverRoutes);
-//console.log("complaintRoutes type:", typeof complaintRoutes);
-//console.log("notificationRoutes type:", typeof notificationRoutes);
-
 connectDB();
 
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+// ✅ CORS - Allow all origins (temporary for testing)
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://elderly-care-platform-eight.vercel.app",
+    process.env.CLIENT_URL
+  ].filter(Boolean),
+  credentials: true,
+}));
+
 app.use(express.json());
-console.log("✅ Mounting admin routes...");
+
+// Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/patient-profile", profileRoutes);
 app.use("/api/service", serviceRoutes);
@@ -45,7 +46,6 @@ app.get("/", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

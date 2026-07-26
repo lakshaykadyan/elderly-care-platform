@@ -1,23 +1,9 @@
-import axios from "axios";
-
-const API = "http://localhost:5000/api/services";
+import API from "../services/api";
 
 export const submitReview = async (id, rating, review) => {
-
-  const token = localStorage.getItem("token");
-
-  const response = await axios.put(
-    `${API}/${id}/review`,
-    {
-      rating,
-      review,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-
+  const response = await API.put(`/services/${id}/review`, {
+    rating,
+    review,
+  });
   return response.data;
 };

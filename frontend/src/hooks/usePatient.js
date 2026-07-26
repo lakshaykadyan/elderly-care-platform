@@ -1,24 +1,21 @@
 import API from "../services/api";
 
-// ========================= Get Patient Profile =========================
-
 export const getPatientProfile = async () => {
-
-  const response = await API.get("/patient-profile");
-
-  return response.data;
-
+  try {
+    const response = await API.get("/patient-profile");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching patient profile:", error);
+    throw error;
+  }
 };
 
-// ========================= Save Patient Profile =========================
-
-export const savePatientProfile = async (profileData) => {
-
-  const response = await API.post(
-    "/patient-profile",
-    profileData
-  );
-
-  return response.data;
-
+export const savePatientProfile = async (data) => {
+  try {
+    const response = await API.post("/patient-profile", data);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving patient profile:", error);
+    throw error;
+  }
 };

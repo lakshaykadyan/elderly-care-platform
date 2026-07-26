@@ -1,24 +1,34 @@
-import axios from "axios";
+import API from "../services/api";
 
-const API = "http://localhost:5000/api/medical-records";
-
-const getToken = () => ({
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  },
-});
-
+// Get all medical records
 export const getMedicalRecords = async () => {
-  const response = await axios.get(API, getToken());
-  return response.data;
+  try {
+    const response = await API.get("/medical-records");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching medical records:", error);
+    throw error;
+  }
 };
 
-export const uploadMedicalRecord = async (record) => {
-  const response = await axios.post(API, record, getToken());
-  return response.data;
+// Upload new medical record
+export const uploadMedicalRecord = async (formData) => {
+  try {
+    const response = await API.post("/medical-records", formData);
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading medical record:", error);
+    throw error;
+  }
 };
 
+// Delete medical record
 export const deleteMedicalRecord = async (id) => {
-  const response = await axios.delete(`${API}/${id}`, getToken());
-  return response.data;
+  try {
+    const response = await API.delete(`/medical-records/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting medical record:", error);
+    throw error;
+  }
 };
