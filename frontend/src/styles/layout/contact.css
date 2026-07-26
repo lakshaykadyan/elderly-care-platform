@@ -1,0 +1,150 @@
+/* ===========================================================
+   CONTACT PAGE - LAYOUT STYLES
+=========================================================== */
+
+.contact-section {
+  padding: 100px 8%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  background: var(--white, #ffffff);
+  min-height: 80vh;
+}
+
+/* --- Left Side: Info --- */
+.contact-info h2 {
+  font-size: 48px;
+  color: var(--text-dark, #1f2a44);
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.contact-info p {
+  color: var(--text-muted, #666);
+  line-height: 1.8;
+  font-size: 16px;
+  max-width: 450px;
+}
+
+.contact-details {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-details p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 500;
+  color: var(--text-dark, #1f2a44);
+  margin: 0;
+}
+
+.contact-details p span {
+  color: var(--text-muted, #666);
+  font-weight: 400;
+}
+
+/* --- Right Side: Form --- */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 18px 20px;
+  border-radius: var(--radius-sm, 12px);
+  border: 1px solid var(--border-color, #ddd);
+  font-size: 16px;
+  background: var(--bg-body, #fafcff);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  font-family: inherit;
+  color: var(--text-dark, #1f2a44);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--primary, #4361ee);
+  background: var(--white, #ffffff);
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.10);
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #94a3b8;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.contact-form button {
+  padding: 18px;
+  border: none;
+  border-radius: var(--radius-sm, 12px);
+  background: linear-gradient(135deg, var(--primary, #4361ee), var(--primary-dark, #3651d4));
+  color: var(--white, #ffffff);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-shadow: 0 4px 14px rgba(67, 97, 238, 0.25);
+}
+
+.contact-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(67, 97, 238, 0.35);
+  background: linear-gradient(135deg, var(--primary-dark, #3651d4), #2a3fa8);
+}
+
+.contact-form button:active {
+  transform: translateY(0);
+}
+
+.contact-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .contact-section {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 60px 6%;
+  }
+  .contact-info h2 {
+    font-size: 36px;
+  }
+  .contact-info p {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section {
+    padding: 40px 20px;
+  }
+  .contact-info h2 {
+    font-size: 28px;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+  .contact-form button {
+    padding: 15px;
+    font-size: 16px;
+  }
+}

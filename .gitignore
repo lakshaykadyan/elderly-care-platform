@@ -1,0 +1,14 @@
+# Node Modules (Sabse important - isko ignore karo)
+**/node_modules
+
+# Environment Variables (Passwords wali file)
+**/.env
+
+# Build Folders (Vite/React build)
+**/dist
+**/build
+
+# OS Files
+.DS_Store
+*.log
+Thumbs.db

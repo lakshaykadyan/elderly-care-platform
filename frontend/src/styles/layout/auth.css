@@ -1,0 +1,188 @@
+/* ===========================================================
+   AUTH / LOGIN PAGE - PROFESSIONAL & DARK MODE READY
+=========================================================== */
+
+/* --- Page Background --- */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary, #4f6df5), #2a0a7a);
+  padding: 20px;
+}
+
+.auth-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: slideUp 0.5s ease;
+}
+
+/* --- Auth Card (Dark Mode Compatible) --- */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-card, #ffffff); /* ✅ Variable for dark mode */
+  padding: 45px 40px;
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.1));
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.auth-card h2 {
+  text-align: center;
+  margin: 0 0 4px 0;
+  color: var(--text-primary, #1f2a44);
+  font-size: 28px;
+  font-weight: 700;
+}
+.auth-card p {
+  text-align: center;
+  color: var(--text-secondary, #666);
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+/* --- Inputs (Dark Mode Compatible) --- */
+.auth-card input,
+.auth-card textarea,
+.auth-card select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: var(--radius-sm, 12px);
+  font-size: 16px;
+  background: var(--bg-body, #fafcff); /* ✅ Variable for dark mode */
+  color: var(--text-primary, #1e293b); /* ✅ Variable for dark mode */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.auth-card input:focus,
+.auth-card textarea:focus,
+.auth-card select:focus {
+  outline: none;
+  border-color: var(--primary, #4361ee);
+  background: var(--bg-card, #ffffff);
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.12);
+}
+
+.auth-card input::placeholder {
+  color: var(--text-muted, #94a3b8);
+  font-weight: 400;
+}
+
+.auth-card input:disabled {
+  background: var(--bg-body-alt, #f1f5f9);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* --- Buttons --- */
+.primary-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: var(--radius-sm, 12px);
+  background: linear-gradient(135deg, var(--primary, #4361ee), var(--primary-dark, #3651d4));
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(67, 97, 238, 0.35);
+}
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Text / Link Buttons --- */
+.text-btn {
+  background: none;
+  border: none;
+  color: var(--primary, #4361ee);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.text-btn:hover:not(:disabled) {
+  background: rgba(67, 97, 238, 0.08);
+  color: var(--primary-dark, #3651d4);
+}
+
+/* --- Footer --- */
+.auth-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color, #eef2f6);
+}
+.auth-footer span {
+  color: var(--text-secondary, #666);
+  font-size: 15px;
+}
+
+/* --- Animations --- */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 35px 30px;
+    max-width: 400px;
+  }
+}
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 15px;
+    align-items: flex-start;
+    padding-top: 50px;
+  }
+  .auth-card {
+    padding: 30px 20px;
+    border-radius: 16px;
+  }
+  .auth-card h2 {
+    font-size: 24px;
+  }
+  .auth-card input {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+  .primary-btn {
+    padding: 15px;
+    font-size: 16px;
+  }
+  .auth-footer {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

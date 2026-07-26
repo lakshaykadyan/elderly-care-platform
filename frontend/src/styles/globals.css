@@ -1,0 +1,571 @@
+/* ===========================================================
+   GLOBAL STYLES - CLEAN & MERGED (No Duplicates)
+=========================================================== */
+
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+
+/* --- Global Reset --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-body, #f8fafc);
+  color: var(--text-primary, #0f172a);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* ===========================================================
+   1. CSS VARIABLES (LIGHT MODE DEFAULT)
+=========================================================== */
+:root {
+  --bg-body: #f9fafb;
+  --bg-body-alt: #f1f4f9;
+  --bg-card: #ffffff;
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+
+  --border-color: #e2e8f0;
+  --primary-light: #eef2ff;
+
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --nav-border: rgba(0, 0, 0, 0.06);
+  --hero-bg: linear-gradient(165deg, #f1f4f9 0%, #ffffff 50%, #f9fafb 100%);
+}
+
+/* ===========================================================
+   2. CSS VARIABLES (DARK MODE OVERRIDE)
+=========================================================== */
+[data-theme="dark"] {
+  --bg-body: #0f172a;
+  --bg-body-alt: #1e293b;
+  --bg-card: #1e293b;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --border-color: #334155;
+  --primary-light: #334155;
+
+  --nav-bg: rgba(15, 23, 42, 0.95);
+  --nav-border: rgba(255, 255, 255, 0.03);
+  --hero-bg: linear-gradient(165deg, #0a0f1e 0%, #1a2639 50%, #0f172a 100%);
+}
+
+/* ===========================================================
+   3. UTILITIES (Container, Links, Images)
+=========================================================== */
+.container {
+  width: 90%;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+a {
+  color: var(--primary, #4f6df5);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--primary-dark, #3f5ce2);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+}
+
+::selection {
+  background: var(--primary, #4f6df5);
+  color: #ffffff;
+}
+::-moz-selection {
+  background: var(--primary, #4f6df5);
+  color: #ffffff;
+}
+
+/* ===========================================================
+   4. DASHBOARD LAYOUT (Container, Topbar, Sidebar)
+=========================================================== */
+[data-theme="dark"] .dashboard-container {
+  background: #0f172a !important;
+}
+[data-theme="dark"] .dashboard-main {
+  background: #0f172a !important;
+}
+
+[data-theme="dark"] .topbar {
+  background: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+[data-theme="dark"] .sidebar {
+  background: #0f172a !important;
+  border-right: 1px solid #1e293b !important;
+}
+
+/* ===========================================================
+   5. CARDS (Profile, Dashboard, Admin, Medical, Booking, etc.)
+=========================================================== */
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .dashboard-card,
+[data-theme="dark"] .admin-card,
+[data-theme="dark"] .medical-record-card,
+[data-theme="dark"] .booking-card,
+[data-theme="dark"] .service-card-v2,
+[data-theme="dark"] .contact-card,
+[data-theme="dark"] .complaint-card,
+[data-theme="dark"] .schedule-item,
+[data-theme="dark"] .request-service-wrapper,
+[data-theme="dark"] .request-form {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  box-shadow: none !important;
+}
+
+[data-theme="dark"] .dashboard-card::before {
+  background: #4f46e5 !important;
+}
+
+/* ===========================================================
+   6. TYPOGRAPHY (Headings & Paragraphs)
+=========================================================== */
+[data-theme="dark"] .dashboard-header h1,
+[data-theme="dark"] .dashboard-header h2,
+[data-theme="dark"] .profile-card h1,
+[data-theme="dark"] .profile-card h2,
+[data-theme="dark"] .profile-card h3,
+[data-theme="dark"] .dashboard-card h1,
+[data-theme="dark"] .dashboard-card h2,
+[data-theme="dark"] .dashboard-card h3,
+[data-theme="dark"] .admin-card h1,
+[data-theme="dark"] .admin-card h2,
+[data-theme="dark"] .medical-record-card h3,
+[data-theme="dark"] .booking-header h2,
+[data-theme="dark"] .service-card h3,
+[data-theme="dark"] .topbar-left h2,
+[data-theme="dark"] .notifications-header h2 {
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .profile-card p,
+[data-theme="dark"] .profile-card span,
+[data-theme="dark"] .dashboard-card p,
+[data-theme="dark"] .dashboard-card span,
+[data-theme="dark"] .admin-card p,
+[data-theme="dark"] .medical-record-card p,
+[data-theme="dark"] .booking-card p,
+[data-theme="dark"] .complaint-card p,
+[data-theme="dark"] .info-box label,
+[data-theme="dark"] .header-date,
+[data-theme="dark"] .online-status,
+[data-theme="dark"] .card-update,
+[data-theme="dark"] .profile-subtitle,
+[data-theme="dark"] .detail-box span,
+[data-theme="dark"] .description-card p,
+[data-theme="dark"] .booking-description p,
+[data-theme="dark"] .booking-notes p,
+[data-theme="dark"] .booking-review p {
+  color: #94a3b8 !important;
+}
+
+/* ===========================================================
+   7. FORMS & INPUTS
+=========================================================== */
+[data-theme="dark"] .info-box input,
+[data-theme="dark"] .info-box textarea,
+[data-theme="dark"] .info-box select,
+[data-theme="dark"] .profile-grid input,
+[data-theme="dark"] .profile-card input,
+[data-theme="dark"] .profile-card textarea,
+[data-theme="dark"] .profile-card select,
+[data-theme="dark"] .booking-card input,
+[data-theme="dark"] .booking-card textarea,
+[data-theme="dark"] .booking-card select,
+[data-theme="dark"] .medical-record-form input,
+[data-theme="dark"] .medical-record-form select,
+[data-theme="dark"] .contact-form input,
+[data-theme="dark"] .contact-form textarea,
+[data-theme="dark"] .medical-form .medical-input input,
+[data-theme="dark"] .medical-form .medical-input select,
+[data-theme="dark"] .service-filters input,
+[data-theme="dark"] .service-filters select,
+[data-theme="dark"] .search-box input,
+[data-theme="dark"] .contact-grid input,
+[data-theme="dark"] .contact-grid textarea,
+[data-theme="dark"] .profile-page input,
+[data-theme="dark"] .profile-page select,
+[data-theme="dark"] .profile-page textarea {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .info-box input:focus,
+[data-theme="dark"] .info-box textarea:focus,
+[data-theme="dark"] .profile-grid input:focus,
+[data-theme="dark"] .booking-card input:focus,
+[data-theme="dark"] .contact-form input:focus {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15) !important;
+}
+
+/* ===========================================================
+   8. ADMIN TABLES
+=========================================================== */
+[data-theme="dark"] .admin-table {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+[data-theme="dark"] .admin-table th {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+[data-theme="dark"] .admin-table td {
+  color: #94a3b8 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+[data-theme="dark"] .admin-table tr:hover {
+  background: #0f172a !important;
+}
+[data-theme="dark"] .admin-table select {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+/* ===========================================================
+   9. DROPDOWN & LOGOUT MODAL
+=========================================================== */
+[data-theme="dark"] .profile-dropdown-menu {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+[data-theme="dark"] .profile-dropdown-header {
+  background: #0f172a !important;
+  border-bottom: 1px solid #334155 !important;
+}
+[data-theme="dark"] .profile-dropdown-header h4 {
+  color: #f1f5f9 !important;
+}
+[data-theme="dark"] .profile-dropdown-header p {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .profile-menu-btn {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .profile-menu-btn:hover {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .logout-modal {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+[data-theme="dark"] .logout-modal h2 {
+  color: #f1f5f9 !important;
+}
+[data-theme="dark"] .logout-modal p {
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .cancel-btn {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border: 1px solid #334155 !important;
+}
+[data-theme="dark"] .cancel-btn:hover {
+  background: #1e293b !important;
+}
+[data-theme="dark"] .confirm-btn {
+  background: #ef4444 !important;
+}
+[data-theme="dark"] .confirm-btn:hover {
+  background: #dc2626 !important;
+}
+
+/* ===========================================================
+   10. MEDICAL RECORDS
+=========================================================== */
+[data-theme="dark"] .medical-record-card .medical-type {
+  background: #0f172a !important;
+  color: #818cf8 !important;
+}
+[data-theme="dark"] .medical-record-card .medical-record-body {
+  background: #0f172a !important;
+}
+[data-theme="dark"] .medical-record-actions .primary-btn {
+  background: #4f46e5 !important;
+}
+[data-theme="dark"] .medical-record-actions .danger-btn {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+}
+[data-theme="dark"] .medical-record-actions .danger-btn:hover {
+  background: #ef4444 !important;
+  color: #fff !important;
+}
+
+/* ===========================================================
+   11. CONTACTS
+=========================================================== */
+[data-theme="dark"] .contact-card .contact-details {
+  background: #0f172a !important;
+}
+[data-theme="dark"] .contact-card .contact-relation {
+  background: #0f172a !important;
+  color: #818cf8 !important;
+}
+[data-theme="dark"] .contact-actions .call-btn {
+  background: #22c55e !important;
+}
+[data-theme="dark"] .contact-actions .mail-btn {
+  background: #4f46e5 !important;
+}
+[data-theme="dark"] .contact-actions .delete-btn {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+}
+[data-theme="dark"] .contact-actions .delete-btn:hover {
+  background: #ef4444 !important;
+  color: #fff !important;
+}
+
+/* ===========================================================
+   12. COMPLAINTS
+=========================================================== */
+[data-theme="dark"] .complaint-card .admin-reply {
+  background: #0f172a !important;
+  border-left: 5px solid #4f46e5 !important;
+}
+[data-theme="dark"] .complaint-card .admin-reply p {
+  color: #94a3b8 !important;
+}
+
+/* ===========================================================
+   13. TIMELINE
+=========================================================== */
+[data-theme="dark"] .timeline::before {
+  background: #334155 !important;
+}
+[data-theme="dark"] .timeline-step .circle {
+  background: #1e293b !important;
+  border: 2px solid #334155 !important;
+  color: #94a3b8 !important;
+}
+[data-theme="dark"] .timeline-step.active .circle {
+  background: #4f46e5 !important;
+  border-color: #4f46e5 !important;
+  color: #ffffff !important;
+}
+
+/* ===========================================================
+   14. 🚀 BOOKING CARDS (MERGED - NO DUPLICATES)
+=========================================================== */
+/* --- Force Booking Cards Dark --- */
+html[data-theme="dark"] .booking-card,
+html[data-theme="dark"] .booking-description,
+html[data-theme="dark"] .booking-notes,
+html[data-theme="dark"] .booking-review,
+html[data-theme="dark"] .booking-details,
+html[data-theme="dark"] .booking-item {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .booking-card h2,
+html[data-theme="dark"] .booking-card h4,
+html[data-theme="dark"] .booking-card p,
+html[data-theme="dark"] .booking-card span,
+html[data-theme="dark"] .booking-card strong,
+html[data-theme="dark"] .booking-description h4,
+html[data-theme="dark"] .booking-notes h4,
+html[data-theme="dark"] .booking-review h4,
+html[data-theme="dark"] .booking-item strong {
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .booking-description p,
+html[data-theme="dark"] .booking-notes p,
+html[data-theme="dark"] .booking-review p,
+html[data-theme="dark"] .booking-item span {
+  color: #94a3b8 !important;
+}
+
+/* ===========================================================
+   15. 🎯 NOTIFICATIONS (MERGED - NO DUPLICATES)
+=========================================================== */
+/* --- Header --- */
+[data-theme="dark"] .notifications-header,
+[data-theme="dark"] .notification-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 25px !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+[data-theme="dark"] .notifications-header h2,
+[data-theme="dark"] .notification-header h2 {
+  color: #f1f5f9 !important;
+  margin: 0 !important;
+  font-size: 24px !important;
+}
+
+/* --- Mark All Read Button (Underline) --- */
+[data-theme="dark"] .notifications-header .mark-all-btn,
+[data-theme="dark"] .notification-header .mark-all-btn {
+  background: transparent !important;
+  color: #94a3b8 !important;
+  border: none !important;
+  border-bottom: 2px solid #4f46e5 !important;
+  padding: 4px 0px !important;
+  border-radius: 0 !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  margin-left: auto !important;
+  transition: all 0.3s ease !important;
+}
+[data-theme="dark"] .notifications-header .mark-all-btn:hover {
+  color: #cbd5e1 !important;
+  border-bottom-color: #818cf8 !important;
+  transform: translateY(-1px) !important;
+}
+
+/* --- Notification Cards --- */
+html[data-theme="dark"] .notification-card,
+html[data-theme="dark"] .notification-item {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  border-radius: 16px !important;
+  padding: 18px 22px !important;
+  margin-bottom: 0 !important;
+  transition: all 0.3s ease !important;
+}
+html[data-theme="dark"] .notification-card:hover,
+html[data-theme="dark"] .notification-item:hover {
+  border-color: #4f46e5 !important;
+}
+
+html[data-theme="dark"] .notification-card.unread,
+html[data-theme="dark"] .notification-item.unread {
+  border-left: 6px solid #4f46e5 !important;
+}
+html[data-theme="dark"] .notification-card.read,
+html[data-theme="dark"] .notification-item.read {
+  border-left: 6px solid #334155 !important;
+  opacity: 0.8 !important;
+}
+
+html[data-theme="dark"] .notification-message,
+html[data-theme="dark"] .notification-content p {
+  color: #f1f5f9 !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+}
+html[data-theme="dark"] .notification-content h3,
+html[data-theme="dark"] .notification-content small {
+  color: #f1f5f9 !important;
+}
+
+/* --- Status Badges --- */
+[data-theme="dark"] .notification-status {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 4px 14px !important;
+  border-radius: 30px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+[data-theme="dark"] .notification-status.unread {
+  background: rgba(34, 197, 94, 0.15) !important;
+  color: #4ade80 !important;
+}
+[data-theme="dark"] .notification-status.read {
+  background: rgba(100, 116, 139, 0.15) !important;
+  color: #94a3b8 !important;
+}
+
+/* --- Notification Dropdown (Topbar) --- */
+[data-theme="dark"] .notification-dropdown {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+[data-theme="dark"] .notification-dropdown .notification-header {
+  background: #0f172a !important;
+}
+[data-theme="dark"] .notification-dropdown .notification-item.unread {
+  background: #0f172a !important;
+  border-left: 5px solid #4f46e5 !important;
+}
+[data-theme="dark"] .notification-dropdown .notification-item.read {
+  background: #1e293b !important;
+}
+[data-theme="dark"] .notification-dropdown .notification-time {
+  color: #94a3b8 !important;
+}
+
+/* ===========================================================
+   16. BOOK SERVICE (Force Dark Fallback)
+=========================================================== */
+html[data-theme="dark"] .profile-card {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+}
+html[data-theme="dark"] .profile-card h2,
+html[data-theme="dark"] .profile-card p,
+html[data-theme="dark"] .profile-card label,
+html[data-theme="dark"] .profile-card .request-note {
+  color: #f1f5f9 !important;
+}
+html[data-theme="dark"] .profile-card .request-note {
+  background: #0f172a !important;
+}
+
+/* ===========================================================
+   17. GLOBAL ANIMATIONS
+=========================================================== */
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* ===========================================================
+   18. SAFE FALLBACKS (Inline style overrides)
+=========================================================== */
+[data-theme="dark"] div[style*="var(--bg-body)"] {
+  background: #0f172a !important;
+}
+[data-theme="dark"] div[style*="var(--bg-card)"] {
+  background: #1e293b !important;
+}
+[data-theme="dark"] div[style*="var(--text-primary)"] {
+  color: #f8fafc !important;
+}

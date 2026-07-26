@@ -1,0 +1,14 @@
+/* ===========================================================
+   MAIN.CSS - ENTRY POINT (Only essential imports)
+=========================================================== */
+
+/* --- Base & Global --- */
+@import "./reset.css";
+@import "./variables.css";
+@import "./globals.css";
+
+/* --- Layout Components (Only existing files) --- */
+@import "./layout/navbar.css";
+@import "./layout/auth.css";
+@import "./layout/contact.css";
+@import "./layout/dashboard.css";
