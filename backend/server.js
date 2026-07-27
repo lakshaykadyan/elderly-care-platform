@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
+const cors = require("cors"); 
 const connectDB = require("./config/db");
 
 // Routes
@@ -16,11 +16,16 @@ const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
+// Database connection
 connectDB();
 
-// ✅ UPDATED CORS CONFIG - Allow Vercel frontend
+// Middleware to parse JSON 
+app.use(express.json());
+
+// ===== CORS CONFIG  =====
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:3000",
   "https://elderly-care-platform-chi.vercel.app",
   process.env.CLIENT_URL,
 ].filter(Boolean);
@@ -28,11 +33,12 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
+      
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        console.log("❌ CORS blocked for origin:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -42,9 +48,7 @@ app.use(
   })
 );
 
-app.use(express.json());
-
-// Routes
+// ===== Routes =====
 app.use("/api/auth", authRoutes);
 app.use("/api/patient-profile", profileRoutes);
 app.use("/api/service", serviceRoutes);
