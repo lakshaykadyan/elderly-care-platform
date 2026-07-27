@@ -1,30 +1,58 @@
-export default function ConfirmLogoutModal({ onCancel, onConfirm }) {
+export default function ConfirmLogoutModal({
+  onCancel,
+  onConfirm,
+}) {
   return (
-    <div className="modal-overlay" onClick={onCancel}>
-      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2 style={{ color: "#f44336" }}>🚪 Logout</h2>
-        </div>
-        <div className="modal-body" style={{ textAlign: "center", padding: "40px 20px" }}>
-          <p style={{ fontSize: "18px", marginBottom: "30px" }}>
-            Are you sure you want to logout?
-          </p>
-          <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
-            <button
-              className="danger-btn"
-              onClick={onConfirm}
-              style={{ minWidth: "120px", padding: "12px 24px" }}
-            >
-              Yes, Logout
-            </button>
-            <button
-              className="primary-btn"
-              onClick={onCancel}
-              style={{ minWidth: "120px", padding: "12px 24px", background: "#6c757d" }}
-            >
-              Cancel
-            </button>
-          </div>
+    <div className="logout-overlay">
+      <div className="logout-modal">
+        <div className="logout-icon">🚪</div>
+        <h2>Logout</h2>
+        <p>Are you sure you want to logout?</p>
+        <div className="logout-actions">
+          {/* ✅ Cancel Button - Visible in both modes */}
+          <button
+            onClick={onCancel}
+            style={{
+              padding: "12px 28px",
+              borderRadius: "10px",
+              border: "1px solid #e2e8f0",
+              background: "#f1f5f9",
+              color: "#1e293b",
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "background 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#e2e8f0")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#f1f5f9")}
+          >
+            Cancel
+          </button>
+
+          {/* ✅ Yes, Logout Button - Red always visible */}
+          <button
+            onClick={onConfirm}
+            style={{
+              padding: "12px 28px",
+              borderRadius: "10px",
+              border: "none",
+              background: "#ef4444",
+              color: "#ffffff",
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "background 0.3s ease, transform 0.2s ease",
+              boxShadow: "0 4px 14px rgba(239, 68, 68, 0.3)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "#dc2626";
+              e.currentTarget.style.transform = "scale(1.02)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "#ef4444";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
+            Yes, Logout
+          </button>
         </div>
       </div>
     </div>
