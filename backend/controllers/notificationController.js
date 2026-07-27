@@ -5,31 +5,37 @@ console.log("✅ Notification Controller Loaded");
 // ================== GET NOTIFICATIONS ==================
 const getNotifications = async (req, res) => {
   try {
-    console.log("📢 [Backend] getNotifications called for user:", req.user?.id);
+    console.log("📢 [Backend] getNotifications called");
 
-    // ✅ Check if user is authenticated
-    if (!req.user || !req.user.id) {
-      console.error("❌ [Backend] User not authenticated");
+    // ✅ Check if user exists
+    if (!req.user) {
+      console.error("❌ [Backend] No user object in request");
       return res.status(401).json({
-        message: "Unauthorized",
+        message: "Unauthorized - No user found",
       });
     }
 
-    // ✅ Query notifications where userId matches the logged-in user
-    const notifications = await Notification.find({
-      userId: req.user.id,
-    }).sort({ createdAt: -1 });
+    const userId = req.user.id;
+    console.log(`📢 [Backend] Fetching notifications for userId: ${userId}`);
+
+    // ✅ Query notifications
+    const notifications = await Notification.find({ userId: userId })
+      .sort({ createdAt: -1 });
 
     console.log(`📢 [Backend] Found ${notifications.length} notifications`);
 
-    res.json({
-      notifications,
+    res.status(200).json({
+      notifications: notifications,
     });
+
   } catch (error) {
-    console.error("❌ [Backend] Error in getNotifications:", error.message);
+    console.error("❌ [Backend] CRITICAL ERROR in getNotifications:", error.message);
     console.error("❌ [Backend] Error stack:", error.stack);
+    
+    // ✅ Send a proper error response
     res.status(500).json({
-      message: error.message,
+      message: "Failed to fetch notifications",
+      error: error.message,
     });
   }
 };
@@ -37,12 +43,10 @@ const getNotifications = async (req, res) => {
 // ================== MARK AS READ ==================
 const markAsRead = async (req, res) => {
   try {
-    console.log("📢 [Backend] markAsRead called for notification:", req.params.id);
+    console.log(`📢 [Backend] markAsRead called for notification: ${req.params.id}`);
 
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const notification = await Notification.findOneAndUpdate(
@@ -64,10 +68,12 @@ const markAsRead = async (req, res) => {
       message: "Notification marked as read",
       notification,
     });
+
   } catch (error) {
     console.error("❌ [Backend] Error in markAsRead:", error.message);
     res.status(500).json({
-      message: error.message,
+      message: "Failed to mark notification as read",
+      error: error.message,
     });
   }
 };
@@ -75,10 +81,8 @@ const markAsRead = async (req, res) => {
 // ================== MARK ALL AS READ ==================
 const markAllAsRead = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const result = await Notification.updateMany(
@@ -86,16 +90,16 @@ const markAllAsRead = async (req, res) => {
       { isRead: true }
     );
 
-    console.log(`📢 [Backend] Marked ${result.modifiedCount} notifications as read`);
-
     res.json({
       message: "All notifications marked as read",
       modifiedCount: result.modifiedCount,
     });
+
   } catch (error) {
     console.error("❌ [Backend] Error in markAllAsRead:", error.message);
     res.status(500).json({
-      message: error.message,
+      message: "Failed to mark all notifications as read",
+      error: error.message,
     });
   }
 };
@@ -103,10 +107,8 @@ const markAllAsRead = async (req, res) => {
 // ================== DELETE NOTIFICATION ==================
 const deleteNotification = async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const notification = await Notification.findOneAndDelete({
@@ -123,10 +125,12 @@ const deleteNotification = async (req, res) => {
     res.json({
       message: "Notification deleted successfully",
     });
+
   } catch (error) {
     console.error("❌ [Backend] Error in deleteNotification:", error.message);
     res.status(500).json({
-      message: error.message,
+      message: "Failed to delete notification",
+      error: error.message,
     });
   }
 };
