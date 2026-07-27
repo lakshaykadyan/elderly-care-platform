@@ -5,11 +5,13 @@ export default function ConfirmLogoutModal({
   return (
     <div className="logout-overlay">
       <div className="logout-modal">
-        <div className="logout-icon">🚪</div>
+        <div className="logout-icon">
+          <LogOut size={48} strokeWidth={1.5} />
+        </div>
         <h2>Logout</h2>
         <p>Are you sure you want to logout?</p>
         <div className="logout-actions">
-          {/* ✅ Cancel Button - Visible in both modes */}
+          {/* Cancel Button - Visible in both modes */}
           <button
             onClick={onCancel}
             style={{
@@ -28,7 +30,7 @@ export default function ConfirmLogoutModal({
             Cancel
           </button>
 
-          {/* ✅ Yes, Logout Button - Red always visible */}
+          {/* Yes, Logout Button - Red always visible */}
           <button
             onClick={onConfirm}
             style={{

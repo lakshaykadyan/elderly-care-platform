@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Notification = require("../models/Notification"); // ✅ Added
 
 // ================== SIGNUP ==================
 const signup = async (req, res) => {
@@ -24,7 +25,7 @@ const signup = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      password, 
+      password,
     });
 
     res.status(201).json({
@@ -72,7 +73,7 @@ const caregiverSignup = async (req, res) => {
     const caregiver = await User.create({
       name,
       email,
-      password, // Raw password
+      password,
       role: "caregiver",
       caregiverProfile: {
         specialization,
@@ -82,6 +83,23 @@ const caregiverSignup = async (req, res) => {
         verified: false,
       },
     });
+
+    // 🔥 Notify all admins about new caregiver signup
+    try {
+      const admins = await User.find({ role: "admin" });
+      if (admins.length > 0) {
+        const notifications = admins.map((admin) => ({
+          recipient: admin._id,
+          message: `New caregiver "${name}" registered and needs verification.`,
+          type: "caregiver_verification",
+          relatedId: caregiver._id,
+        }));
+        await Notification.insertMany(notifications);
+        console.log(`📢 Notified ${admins.length} admin(s) about new caregiver.`);
+      }
+    } catch (notifError) {
+      console.error("Failed to send caregiver notification:", notifError);
+    }
 
     res.status(201).json({
       message: "Caregiver registered successfully",

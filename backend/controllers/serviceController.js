@@ -1,5 +1,6 @@
 const Service = require("../models/Service");
 const User = require("../models/User");
+const Notification = require("../models/Notification"); // ✅ Added
 
 const getServicePrice = (serviceType) => {
   if (serviceType === "Home Nursing") return 1200;
@@ -21,21 +22,13 @@ const createService = async (req, res) => {
     }
 
     if (bookingDate) {
-
       const today = new Date();
-
       const selected = new Date(bookingDate);
-
       if (selected < today) {
-
         return res.status(400).json({
-
           message: "Booking date cannot be in the past",
-
         });
-
       }
-
     }
 
     const service = await Service.create({
@@ -47,6 +40,24 @@ const createService = async (req, res) => {
       duration,
       price: getServicePrice(serviceType),
     });
+
+    // 🔥 Notify all admins about new service request
+    try {
+      const admins = await User.find({ role: "admin" });
+      if (admins.length > 0) {
+        const userName = req.user.name || "User";
+        const notifications = admins.map((admin) => ({
+          recipient: admin._id,
+          message: `New service request "${serviceType}" from ${userName}.`,
+          type: "new_service",
+          relatedId: service._id,
+        }));
+        await Notification.insertMany(notifications);
+        console.log(`📢 Notified ${admins.length} admin(s) about new service.`);
+      }
+    } catch (notifError) {
+      console.error("Failed to send service notification:", notifError);
+    }
 
     res.status(201).json({
       message: "Service request created Successfully",
