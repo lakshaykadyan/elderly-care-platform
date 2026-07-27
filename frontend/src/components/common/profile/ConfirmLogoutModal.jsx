@@ -1,10 +1,10 @@
-export default function ConfirmLogoutModal({
-  onCancel,
-  onConfirm,
-}) {
+import { LogOut } from "lucide-react";
+
+export default function ConfirmLogoutModal({ onCancel, onConfirm }) {
   return (
     <div className="logout-overlay">
       <div className="logout-modal">
+        {/* Icon replaced with LogOut from lucide-react */}
         <div className="logout-icon">
           <LogOut size={48} strokeWidth={1.5} />
         </div>
