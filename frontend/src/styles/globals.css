@@ -689,15 +689,15 @@ html[data-theme="dark"] .profile-card .request-note {
   }
 }
 /* ===========================================================
-   FORCE MOBILE FIX - ADMIN & CAREGIVER DASHBOARDS
+   MOBILE FINAL FIX - ADMIN & CAREGIVER DASHBOARDS
 =========================================================== */
 
-/* --- Force Tables Responsive --- */
 @media (max-width: 768px) {
-  /* All tables inside dashboard */
+  /* --- Force Tables Responsive --- */
   .dashboard-main table,
   .dashboard-main .admin-table,
-  .dashboard-main .profile-card table {
+  .dashboard-main .profile-card table,
+  .admin-table-wrapper table {
     display: block !important;
     overflow-x: auto !important;
     white-space: nowrap !important;
@@ -706,20 +706,18 @@ html[data-theme="dark"] .profile-card .request-note {
     max-width: 100% !important;
   }
 
-  /* Force dashboard grid to 2 columns */
+  /* --- Force Dashboard Grid to 2 Columns --- */
   .dashboard-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
   }
-
-  /* Force all cards in grid to be full width */
   .dashboard-grid .dashboard-card {
     min-width: 0 !important;
     padding: 14px !important;
   }
 
-  /* Force caregiver stats grid */
+  /* --- Force Caregiver Stats Grid --- */
   .caregiver-dashboard-wrapper .stats-grid,
   .stats-grid {
     display: grid !important;
@@ -727,7 +725,7 @@ html[data-theme="dark"] .profile-card .request-note {
     gap: 12px !important;
   }
 
-  /* Force availability buttons vertical */
+  /* --- Force Availability Buttons Vertical --- */
   .availability-buttons,
   .status-buttons {
     display: flex !important;
@@ -738,33 +736,26 @@ html[data-theme="dark"] .profile-card .request-note {
     width: 100% !important;
   }
 
-  /* Force service grid single column */
+  /* --- Force Service Grid Single Column --- */
   .service-grid {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 16px !important;
   }
 
-  /* Profile page grid */
+  /* --- Profile Page Grid --- */
   .profile-info {
     display: grid !important;
     grid-template-columns: 1fr !important;
     gap: 14px !important;
   }
 
-  /* All containers should not overflow */
+  /* --- Prevent Overflow --- */
   .dashboard-main,
   .profile-card,
   .service-card {
     max-width: 100% !important;
     overflow-x: hidden !important;
-  }
-
-  /* Admin tables wrapper */
-  .admin-table-wrapper {
-    width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
   }
 }
 
