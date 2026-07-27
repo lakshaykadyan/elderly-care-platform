@@ -33,11 +33,11 @@ export default function BookingRow({
   };
 
   const statusLabels = {
-    pending: "⏳ Pending",
-    accepted: "✅ Accepted",
-    "in-progress": "🔄 In Progress",
-    completed: "🎉 Completed",
-    rejected: "❌ Rejected",
+    pending: "Pending",
+    accepted: "Accepted",
+    "in-progress": "In Progress",
+    completed: "Completed",
+    rejected: "Rejected",
   };
 
   const formatDate = (dateString) => {
@@ -50,10 +50,8 @@ export default function BookingRow({
     });
   };
 
-  // ✅ Price auto-calculate based on duration (Backend will handle final price)
   const handleDurationChange = (value) => {
     setEditForm({ ...editForm, duration: value });
-    // Price will be recalculated by backend on save
   };
 
   return (
@@ -412,7 +410,7 @@ export default function BookingRow({
         </button>
       </div>
 
-      {/* ============================ EDIT FORM (UPGRADED) ============================ */}
+      {/* ============================ EDIT FORM ============================ */}
       {editingId === service._id && (
         <div
           style={{
@@ -423,7 +421,6 @@ export default function BookingRow({
             border: "1px solid var(--border-color)",
           }}
         >
-          {/* Service Type Dropdown */}
           <div style={{ marginBottom: "12px" }}>
             <label
               style={{
@@ -457,7 +454,6 @@ export default function BookingRow({
             </select>
           </div>
 
-          {/* Date & Time Row */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
             <div>
               <label
@@ -517,7 +513,6 @@ export default function BookingRow({
             </div>
           </div>
 
-          {/* Duration & Price Row (Price is READ-ONLY) */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
             <div>
               <label
@@ -564,7 +559,7 @@ export default function BookingRow({
                 type="number"
                 placeholder="1200"
                 value={editForm.price || ""}
-                disabled // ✅ USER CANNOT EDIT PRICE
+                disabled
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -581,7 +576,6 @@ export default function BookingRow({
             </div>
           </div>
 
-          {/* Description (Full Width) */}
           <div style={{ marginBottom: "12px" }}>
             <label
               style={{
@@ -614,7 +608,6 @@ export default function BookingRow({
             />
           </div>
 
-          {/* Update Button */}
           <button
             style={{
               padding: "10px 28px",
@@ -639,7 +632,7 @@ export default function BookingRow({
         </div>
       )}
 
-      {/* Review Form */}
+      {/* Review Form (No Emoji Stars) */}
       {service.status === "completed" && service.rating === 0 && (
         <div
           style={{
@@ -676,11 +669,11 @@ export default function BookingRow({
               outline: "none",
             }}
           >
-            <option value={5}>⭐⭐⭐⭐⭐</option>
-            <option value={4}>⭐⭐⭐⭐</option>
-            <option value={3}>⭐⭐⭐</option>
-            <option value={2}>⭐⭐</option>
-            <option value={1}>⭐</option>
+            <option value={5}>5 Stars</option>
+            <option value={4}>4 Stars</option>
+            <option value={3}>3 Stars</option>
+            <option value={2}>2 Stars</option>
+            <option value={1}>1 Star</option>
           </select>
           <textarea
             placeholder="Write your review..."
