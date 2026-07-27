@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
 
-console.log("✅ authController loaded. Notification model:", typeof Notification);
+console.log("✅ authController loaded");
 
 // ================== SIGNUP ==================
 const signup = async (req, res) => {
@@ -17,18 +17,13 @@ const signup = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       return res.status(400).json({
         message: "User already exists",
       });
     }
 
-    const user = await User.create({
-      name,
-      email,
-      password,
-    });
+    const user = await User.create({ name, email, password });
 
     res.status(201).json({
       message: "User saved in DB Successfully",
@@ -40,15 +35,15 @@ const signup = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
 // ================== CAREGIVER SIGNUP ==================
 const caregiverSignup = async (req, res) => {
   try {
+    console.log("📢 [Backend] caregiverSignup called with body:", req.body);
+
     const {
       name,
       email,
@@ -58,18 +53,16 @@ const caregiverSignup = async (req, res) => {
       serviceArea,
     } = req.body;
 
-    if (!name || !email || !password || !specialization || !serviceArea) {
-      return res.status(400).json({
-        message: "All caregiver fields are required",
-      });
-    }
+    // ✅ Clear error messages for missing fields
+    if (!name) return res.status(400).json({ message: "Name is required" });
+    if (!email) return res.status(400).json({ message: "Email is required" });
+    if (!password) return res.status(400).json({ message: "Password is required" });
+    if (!specialization) return res.status(400).json({ message: "Specialization is required" });
+    if (!serviceArea) return res.status(400).json({ message: "Service Area is required" });
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
-      return res.status(400).json({
-        message: "Caregiver already exists",
-      });
+      return res.status(400).json({ message: "Caregiver already exists" });
     }
 
     const caregiver = await User.create({
@@ -86,45 +79,22 @@ const caregiverSignup = async (req, res) => {
       },
     });
 
-    // ============================================================
-    // 🔥 DEBUGGING BLOCK - Check what's happening with notifications
-    // ============================================================
+    // ✅ Send notification to admins
     try {
-      console.log("🔍 [DEBUG] Looking for admin users...");
-      
-      // ✅ 1. Check if Notification model exists
-      if (!Notification) {
-        console.error("❌ [DEBUG] Notification model is undefined or null!");
-      } else {
-        console.log("✅ [DEBUG] Notification model loaded successfully.");
-      }
-
-      // ✅ 2. Find all admin users
       const admins = await User.find({ role: "admin" });
-      console.log(`🔍 [DEBUG] Found ${admins.length} admin(s).`);
-
       if (admins.length > 0) {
-        // ✅ 3. Prepare notifications
         const notifications = admins.map((admin) => ({
           userId: admin._id,
           message: `New caregiver "${name}" registered and needs verification.`,
           isRead: false,
         }));
-
-        console.log(`📝 [DEBUG] Preparing to insert ${notifications.length} notifications.`);
-
-        // ✅ 4. Insert into database
-        const result = await Notification.insertMany(notifications);
-        console.log(`✅ [DEBUG] Successfully inserted ${result.length} notification(s).`);
-
+        await Notification.insertMany(notifications);
+        console.log(`✅ Notified ${admins.length} admin(s) about new caregiver.`);
       } else {
-        console.warn("⚠️ [DEBUG] No admin users found. Notification NOT sent.");
+        console.log("⚠️ No admin users found to notify.");
       }
-
     } catch (notifError) {
-      // ✅ 5. Catch any error and log it clearly
-      console.error("❌ [DEBUG] NOTIFICATION ERROR:", notifError.message);
-      console.error("❌ [DEBUG] Error Stack:", notifError.stack);
+      console.error("❌ Notification error:", notifError.message);
     }
 
     res.status(201).json({
@@ -137,11 +107,9 @@ const caregiverSignup = async (req, res) => {
         caregiverProfile: caregiver.caregiverProfile,
       },
     });
-
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    console.error("❌ Caregiver signup error:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -151,31 +119,21 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({
-        message: "Email and password are required",
-      });
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
     const user = await User.findOne({ email });
-
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch) {
-      return res.status(400).json({
-        message: "Wrong password",
-      });
+      return res.status(400).json({ message: "Wrong password" });
     }
 
     if (user.isActive === false) {
-      return res.status(403).json({
-        message: "Your account has been disabled by admin",
-      });
+      return res.status(403).json({ message: "Your account has been disabled by admin" });
     }
 
     const token = jwt.sign(
@@ -195,9 +153,7 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(500).json({
-      message: error.message,
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
