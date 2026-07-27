@@ -15,7 +15,6 @@ export default function LoginForm({ onSignup, onForgot }) {
 
   // ========================== HANDLE LOGIN ==========================
   const handleLogin = async () => {
-    // ✅ Prevent multiple clicks
     if (loading) return;
 
     if (!email.trim() || !password.trim()) {
@@ -35,14 +34,14 @@ export default function LoginForm({ onSignup, onForgot }) {
         login(response.user, response.token);
         showSuccess("Login Successful");
 
+        // ✅ Use navigate (SPA friendly, avoids full reload)
         const role = response.user.role?.toLowerCase();
-        // ✅ Force redirect with window.location to avoid freezing
         if (role === "admin") {
-          window.location.href = "/dashboard/admin";
+          navigate("/dashboard/admin", { replace: true });
         } else if (role === "caregiver") {
-          window.location.href = "/dashboard/caregiver";
+          navigate("/dashboard/caregiver", { replace: true });
         } else {
-          window.location.href = "/dashboard/user";
+          navigate("/dashboard/user", { replace: true });
         }
       } else {
         showError(response.message || "Invalid email or password");
