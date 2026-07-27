@@ -1,6 +1,6 @@
 const Notification = require("../models/Notification");
 
-console.log("✅ Notification Controller Loaded (With Fallback)");
+console.log("✅ Notification Controller Loaded");
 
 // ================== GET NOTIFICATIONS ==================
 const getNotifications = async (req, res) => {
@@ -8,12 +8,9 @@ const getNotifications = async (req, res) => {
     console.log("📢 [Backend] getNotifications called");
 
     if (!req.user || !req.user.id) {
-      return res.status(401).json({
-        message: "Unauthorized",
-      });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // ✅ Try to fetch real notifications from database
     let notifications = [];
     try {
       notifications = await Notification.find({
@@ -22,7 +19,6 @@ const getNotifications = async (req, res) => {
       console.log(`📢 Found ${notifications.length} real notifications`);
     } catch (dbError) {
       console.error("❌ Database error, using fallback:", dbError.message);
-      // ✅ Fallback: Return hardcoded notification if DB fails
       notifications = [
         {
           _id: "fallback1",
@@ -38,7 +34,6 @@ const getNotifications = async (req, res) => {
 
   } catch (error) {
     console.error("❌ [Backend] Critical error:", error.message);
-    // ✅ Ultimate fallback
     res.json({
       notifications: [
         {
@@ -53,13 +48,26 @@ const getNotifications = async (req, res) => {
   }
 };
 
-// ================== MARK AS READ ==================
+// ================== MARK AS READ (Duplicate hataya, ab sirf ek baar hai) ==================
 const markAsRead = async (req, res) => {
   try {
+    console.log(`📢 [Backend] markAsRead called for ID: ${req.params.id}`);
+
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const existingNotification = await Notification.findOne({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    if (!existingNotification) {
+      console.log(`⚠️ Notification ${req.params.id} not found`);
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    // Update to read
     const notification = await Notification.findOneAndUpdate(
       {
         _id: req.params.id,
@@ -69,14 +77,11 @@ const markAsRead = async (req, res) => {
       { new: true }
     );
 
-    if (!notification) {
-      return res.status(404).json({ message: "Notification not found" });
-    }
-
     res.json({
       message: "Notification marked as read",
       notification,
     });
+
   } catch (error) {
     console.error("❌ [Backend] markAsRead error:", error.message);
     res.status(500).json({
@@ -86,47 +91,29 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// ================== MARK AS READ ==================
-const markAsRead = async (req, res) => {
+// ================== MARK ALL AS READ  ==================
+const markAllAsRead = async (req, res) => {
   try {
-    console.log(`📢 [Backend] markAsRead called for ID: ${req.params.id}`);
+    console.log("📢 [Backend] markAllAsRead called");
 
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    // ✅ Check if notification exists first
-    const existingNotification = await Notification.findOne({
-      _id: req.params.id,
-      userId: req.user.id,
-    });
-
-    if (!existingNotification) {
-      console.log(`⚠️ Notification ${req.params.id} not found in database`);
-      return res.status(404).json({
-        message: "Notification not found",
-      });
-    }
-
-    // ✅ Update to read
-    const notification = await Notification.findOneAndUpdate(
-      {
-        _id: req.params.id,
-        userId: req.user.id,
-      },
-      { isRead: true },
-      { new: true }
+    const result = await Notification.updateMany(
+      { userId: req.user.id, isRead: false },
+      { isRead: true }
     );
 
     res.json({
-      message: "Notification marked as read",
-      notification,
+      message: "All notifications marked as read",
+      modifiedCount: result.modifiedCount,
     });
 
   } catch (error) {
-    console.error("❌ [Backend] markAsRead error:", error.message);
+    console.error("❌ [Backend] markAllAsRead error:", error.message);
     res.status(500).json({
-      message: "Failed to mark notification as read",
+      message: "Failed to mark all notifications as read",
       error: error.message,
     });
   }
@@ -162,6 +149,6 @@ const deleteNotification = async (req, res) => {
 module.exports = {
   getNotifications,
   markAsRead,
-  markAllAsRead,
+  markAllAsRead, 
   deleteNotification,
 };
