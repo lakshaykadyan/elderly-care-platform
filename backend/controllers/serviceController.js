@@ -1,15 +1,36 @@
 const Service = require("../models/Service");
 const User = require("../models/User");
-const Notification = require("../models/Notification"); // ✅ Added
+const Notification = require("../models/Notification"); // ✅ Ensure imported
 
-const getServicePrice = (serviceType) => {
-  if (serviceType === "Home Nursing") return 1200;
-  if (serviceType === "Elderly Attendant") return 800;
-  if (serviceType === "Physiotherapy") return 1000;
-  if (serviceType === "Post Hospital Care") return 1500;
-  return 0;
+// ================== DYNAMIC PRICING ==================
+const getServicePrice = (serviceType, duration = 0) => {
+  // Base rates per hour
+  const rates = {
+    "Home Nursing": 100,
+    "Elderly Attendant": 80,
+    "Physiotherapy": 120,
+    "Post Hospital Care": 150,
+  };
+
+  const baseRate = rates[serviceType] || 0;
+  if (baseRate === 0) return 0;
+
+  // Extract hours from duration string (e.g., "2 Hours" -> 2)
+  const hours = parseInt(duration);
+  if (isNaN(hours) || hours <= 0) return baseRate * 1; // Default 1 hour
+
+  let price = baseRate * hours;
+
+  // ✅ Extra 30% for each hour beyond 2 hours
+  if (hours > 2) {
+    const extraHours = hours - 2;
+    price += extraHours * baseRate * 0.3;
+  }
+
+  return Math.round(price);
 };
 
+// ================== CREATE SERVICE ==================
 const createService = async (req, res) => {
   try {
     const { serviceType, description, bookingDate, bookingTime, duration } =
@@ -31,6 +52,9 @@ const createService = async (req, res) => {
       }
     }
 
+    // ✅ Price auto-calculated based on service type and duration
+    const price = getServicePrice(serviceType, duration);
+
     const service = await Service.create({
       userId: req.user.id,
       serviceType,
@@ -38,17 +62,16 @@ const createService = async (req, res) => {
       bookingDate,
       bookingTime,
       duration,
-      price: getServicePrice(serviceType),
+      price,
     });
 
-    // 🔥 Notify all admins about new service request
+    // ✅ Send notification to all admins
     try {
       const admins = await User.find({ role: "admin" });
       if (admins.length > 0) {
-        const userName = req.user.name || "User";
         const notifications = admins.map((admin) => ({
           recipient: admin._id,
-          message: `New service request "${serviceType}" from ${userName}.`,
+          message: `📋 New service request "${serviceType}" from ${req.user.name || "User"}.`,
           type: "new_service",
           relatedId: service._id,
         }));
@@ -68,6 +91,7 @@ const createService = async (req, res) => {
   }
 };
 
+// ================== GET USER SERVICES ==================
 const getUserServices = async (req, res) => {
   try {
     const services = await Service.find({ userId: req.user.id }).sort({
@@ -83,9 +107,10 @@ const getUserServices = async (req, res) => {
   }
 };
 
+// ================== UPDATE SERVICE ==================
 const updateService = async (req, res) => {
   try {
-    const { serviceType, description, status } = req.body;
+    const { serviceType, description, status, duration } = req.body;
 
     const service = await Service.findById(req.params.id);
 
@@ -97,8 +122,20 @@ const updateService = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
+    // Update fields
     service.serviceType = serviceType || service.serviceType;
     service.description = description || service.description;
+
+    // ✅ If duration changes, recalculate price (User cannot manually edit price)
+    if (duration !== undefined) {
+      service.duration = duration;
+      service.price = getServicePrice(service.serviceType, duration);
+    } else if (serviceType) {
+      // If only service type changes, recalculate price with existing duration
+      service.price = getServicePrice(service.serviceType, service.duration);
+    }
+
+    // Status update (if provided)
     const allowedStatus = [
       "pending",
       "accepted",
@@ -106,18 +143,12 @@ const updateService = async (req, res) => {
       "completed",
       "rejected",
     ];
-
     if (status && !allowedStatus.includes(status)) {
       return res.status(400).json({
         message: "Invalid Status",
       });
     }
-
     service.status = status || service.status;
-
-    if (serviceType) {
-      service.price = getServicePrice(serviceType);
-    }
 
     await service.save();
 
@@ -130,6 +161,7 @@ const updateService = async (req, res) => {
   }
 };
 
+// ================== DELETE SERVICE ==================
 const deleteService = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
@@ -152,6 +184,7 @@ const deleteService = async (req, res) => {
   }
 };
 
+// ================== SUBMIT REVIEW ==================
 const submitServiceReview = async (req, res) => {
   try {
     const { rating, review } = req.body;

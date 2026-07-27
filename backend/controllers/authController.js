@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const Notification = require("../models/Notification"); // ✅ Added
+const Notification = require("../models/Notification"); // ✅ Ensure this is imported
 
 // ================== SIGNUP ==================
 const signup = async (req, res) => {
@@ -84,13 +84,13 @@ const caregiverSignup = async (req, res) => {
       },
     });
 
-    // 🔥 Notify all admins about new caregiver signup
+    // ✅ Send notification to all admins
     try {
       const admins = await User.find({ role: "admin" });
       if (admins.length > 0) {
         const notifications = admins.map((admin) => ({
           recipient: admin._id,
-          message: `New caregiver "${name}" registered and needs verification.`,
+          message: `🆕 New caregiver "${name}" registered and needs verification.`,
           type: "caregiver_verification",
           relatedId: caregiver._id,
         }));
@@ -151,10 +151,11 @@ const login = async (req, res) => {
       });
     }
 
+    // 🔥 FIX: Token expires in 30 minutes (Auto logout)
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "30m" } // ✅ 30 minutes
     );
 
     res.json({
