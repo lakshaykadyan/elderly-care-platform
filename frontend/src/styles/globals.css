@@ -828,86 +828,31 @@ html[data-theme="dark"] .profile-card .request-note {
   }
 }
 /* ===========================================================
-   FIX: Prevent Action Buttons Text Spilling Out of Table Cell
+   ESSENTIAL RESPONSIVE FIXES - ADMIN TABLES & DASHBOARD
 =========================================================== */
 
-/* --- Desktop & Mobile --- */
-.profile-card table td:last-child {
-  overflow: hidden !important; /* ✅ Text ko bahar nikalne se rokega */
-  max-width: 140px !important; /* ✅ Column ki max width fix karo */
-}
-
-.profile-card table td:last-child div {
-  display: flex !important;
-  gap: 4px !important;
-  justify-content: center !important;
-  flex-wrap: wrap !important;
-}
-
-/* --- Buttons ko chhota aur tight karo --- */
-.profile-card table td:last-child button {
-  padding: 4px 8px !important;
-  font-size: 11px !important;
-  border-radius: 4px !important;
-  white-space: nowrap !important; /* ✅ Text ko ek line mein rakho */
-}
-
-/* --- Protected badge ko bhi chhota karo --- */
-.profile-card table td:last-child span {
-  font-size: 11px !important;
-  padding: 4px 8px !important;
-  white-space: nowrap !important;
-}
-
-/* --- Mobile ke liye aur bhi tight --- */
 @media (max-width: 768px) {
-  .profile-card table td:last-child {
-    max-width: 100px !important;
-    padding: 4px 2px !important;
-  }
-  .profile-card table td:last-child button {
-    padding: 2px 4px !important;
-    font-size: 9px !important;
-  }
-  .profile-card table td:last-child span {
-    font-size: 9px !important;
-    padding: 2px 4px !important;
-  }
-}
-/* ===========================================================
-   FINAL RESPONSIVE FIX - Admin Tables & Dashboard Grid
-=========================================================== */
-
-/* --- Dashboard Grid 2 columns on mobile --- */
-@media (max-width: 768px) {
+  /* --- Dashboard Grid --- */
   .dashboard-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
   }
 
-  /* --- Force inline grid overrides for Analytics cards --- */
+  /* --- Inline grid overrides (Analytics cards, Caregiver stats) --- */
   div[style*="grid-template-columns: repeat(4, 1fr)"] {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 12px !important;
   }
-
-  /* --- Caregiver stats grid --- */
   div[style*="grid-template-columns: repeat(3, 1fr)"] {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
-  /* --- Service details grid (4 col -> 2 col) --- */
-  div[style*="grid-template-columns: repeat(4, 1fr)"][style*="gap: 16px"] {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 8px !important;
-  }
-
-  /* --- Profile page grid (3 col -> 1 col) --- */
+  /* --- Profile grid --- */
   .profile-info {
     grid-template-columns: 1fr !important;
   }
 
-  /* --- Admin Tables: Keep scrollable but prevent text spilling --- */
+  /* --- Admin Tables: Scrollable, no extra text spill --- */
   .profile-card table {
     display: block !important;
     overflow-x: auto !important;
@@ -916,25 +861,13 @@ html[data-theme="dark"] .profile-card .request-note {
     width: 100% !important;
   }
 
-  /* ✅ Fix: Action column text ko cell ke andar rokho */
+  /* ✅ Only essential: stop text from spilling out of action cell */
   .profile-card table td:last-child {
     overflow: hidden !important;
     max-width: 120px !important;
   }
-  .profile-card table td:last-child div {
-    display: flex !important;
-    gap: 4px !important;
-    flex-wrap: wrap !important;
-  }
-  .profile-card table td:last-child button,
-  .profile-card table td:last-child span {
-    font-size: 10px !important;
-    padding: 2px 4px !important;
-    white-space: nowrap !important;
-  }
 }
 
-/* --- Extra Small Phones --- */
 @media (max-width: 480px) {
   .dashboard-grid {
     grid-template-columns: 1fr 1fr !important;
@@ -954,13 +887,9 @@ html[data-theme="dark"] .profile-card .request-note {
   .dashboard-card h3 {
     font-size: 11px !important;
   }
-
-  /* --- Caregiver stats grid --- */
   div[style*="grid-template-columns: repeat(3, 1fr)"] {
     grid-template-columns: 1fr 1fr !important;
   }
-
-  /* --- Profile grid --- */
   .profile-info {
     grid-template-columns: 1fr !important;
   }
