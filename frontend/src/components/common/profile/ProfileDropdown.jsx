@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { User, Lock, LogOut } from "lucide-react";
 import ConfirmLogoutModal from "./ConfirmLogoutModal";
 import "./ProfileDropdown.css";
 
 export default function ProfileDropdown() {
-  // ✅ Ab `useAuth` import nahi kiya — direct localStorage use karenge
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const dropdownRef = useRef(null);
 
-  // ✅ User info localStorage se read karo
   const user = JSON.parse(localStorage.getItem("elderlyUser") || "null");
   const userName = user?.name || user?.fullName || user?.username || "User";
   const role = user?.role || "User";
@@ -39,7 +38,6 @@ export default function ProfileDropdown() {
     };
   }, []);
 
-  // FINAL FIX: Direct clear + redirect (No React state, No Flash)
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("elderlyUser");
@@ -94,7 +92,8 @@ export default function ProfileDropdown() {
                 navigate("/profile");
               }}
             >
-              👤 My Profile
+              <User size={16} style={{ display: "inline-block", marginRight: "10px" }} />
+              My Profile
             </button>
 
             <button
@@ -104,7 +103,8 @@ export default function ProfileDropdown() {
                 navigate("/profile");
               }}
             >
-              🔐 Change Password
+              <Lock size={16} style={{ display: "inline-block", marginRight: "10px" }} />
+              Change Password
             </button>
 
             <hr />
@@ -116,7 +116,8 @@ export default function ProfileDropdown() {
                 setShowLogout(true);
               }}
             >
-              🚪 Logout
+              <LogOut size={16} style={{ display: "inline-block", marginRight: "10px" }} />
+              Logout
             </button>
           </div>
         )}
