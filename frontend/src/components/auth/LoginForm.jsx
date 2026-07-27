@@ -8,13 +8,16 @@ export default function LoginForm({ onSignup, onForgot }) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // ✅ Added
+  const [showPassword, setShowPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
   // ========================== HANDLE LOGIN ==========================
   const handleLogin = async () => {
+    // ✅ Prevent multiple clicks
+    if (loading) return;
+
     if (!email.trim() || !password.trim()) {
       showError("Please fill all fields");
       return;
@@ -32,14 +35,14 @@ export default function LoginForm({ onSignup, onForgot }) {
         login(response.user, response.token);
         showSuccess("Login Successful");
 
-        // Role-based Navigation
         const role = response.user.role?.toLowerCase();
+        // ✅ Force redirect with window.location to avoid freezing
         if (role === "admin") {
-          navigate("/dashboard/admin");
+          window.location.href = "/dashboard/admin";
         } else if (role === "caregiver") {
-          navigate("/dashboard/caregiver");
+          window.location.href = "/dashboard/caregiver";
         } else {
-          navigate("/dashboard/user");
+          window.location.href = "/dashboard/user";
         }
       } else {
         showError(response.message || "Invalid email or password");
@@ -88,7 +91,7 @@ export default function LoginForm({ onSignup, onForgot }) {
         onBlur={(e) => { e.target.borderColor = "var(--border-color)"; e.target.boxShadow = "none"; }}
       />
 
-      {/* ✅ Password Input with Show/Hide Toggle */}
+      {/* Password Input with Show/Hide Toggle */}
       <div style={{ position: "relative", width: "100%" }}>
         <input
           type={showPassword ? "text" : "password"}
@@ -125,7 +128,7 @@ export default function LoginForm({ onSignup, onForgot }) {
             border: "none",
             cursor: "pointer",
             fontSize: "20px",
-            color: "#f8fafc", 
+            color: "var(--text-secondary)",
             padding: "4px",
             display: "flex",
             alignItems: "center",
