@@ -16,17 +16,24 @@ const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
+// Database connection
 connectDB();
+
+// Middleware to parse JSON (ZAROORI)
 app.use(express.json());
 
-// ===== CORS - OPEN FOR ALL (Temporary) =====
-app.use(cors({
-  origin: true,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-}));
+// ===================== 🚀 CORS FINAL FIX =====================
+// Sirf tumhare Vercel frontend ko allow karo, with credentials
+app.use(
+  cors({
+    origin: "https://elderly-care-platform-chi.vercel.app", // ✅ Specific origin
+    credentials: true, // ✅ Cookies aur Authorization headers allow karne ke liye
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
+// ===================== ROUTES =====================
 app.use("/api/auth", authRoutes);
 app.use("/api/patient-profile", profileRoutes);
 app.use("/api/service", serviceRoutes);

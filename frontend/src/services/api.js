@@ -8,7 +8,7 @@ const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // ✅ Yeh line add ki hai taaki backend ke 'credentials: true' ke saath properly match ho
+  withCredentials: true, // ✅ Backend ke 'credentials: true' ke saath match karega
 });
 
 API.interceptors.request.use(
