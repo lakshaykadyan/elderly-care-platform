@@ -699,3 +699,54 @@ html[data-theme="dark"] .profile-card .request-note {
     grid-template-columns: 1fr !important;
   }
 }
+/* ===========================================================
+   FIX: Logout Modal Buttons (Light Mode Visible)
+=========================================================== */
+
+/* --- "Yes, Logout" Button (Always Visible) --- */
+.confirm-btn {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  transition: background 0.3s ease, transform 0.2s ease !important;
+}
+.confirm-btn:hover {
+  background: #dc2626 !important;
+  transform: scale(1.02) !important;
+}
+
+/* --- "Cancel" Button (Always Visible) --- */
+.cancel-btn {
+  background: #f1f5f9 !important;
+  color: #1e293b !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 12px 24px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  transition: background 0.3s ease !important;
+}
+.cancel-btn:hover {
+  background: #e2e8f0 !important;
+}
+
+/* --- Dark mode override (already there, but ensuring it stays) --- */
+[data-theme="dark"] .confirm-btn {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .confirm-btn:hover {
+  background: #dc2626 !important;
+}
+[data-theme="dark"] .cancel-btn {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+  border: 1px solid #334155 !important;
+}
+[data-theme="dark"] .cancel-btn:hover {
+  background: #1e293b !important;
+}
