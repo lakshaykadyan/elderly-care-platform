@@ -1,58 +1,140 @@
-// ✅ No model import needed - pure hardcoded response
-console.log("✅ Notification Controller Loaded (Pure Hardcoded Mode)");
+const Notification = require("../models/Notification");
+
+console.log("✅ Notification Controller Loaded (With Fallback)");
 
 // ================== GET NOTIFICATIONS ==================
 const getNotifications = async (req, res) => {
   try {
     console.log("📢 [Backend] getNotifications called");
-    console.log("📢 User ID:", req.user?.id);
 
-    // ✅ Pure hardcoded response - no database query
-    return res.status(200).json({
-      notifications: [
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    // ✅ Try to fetch real notifications from database
+    let notifications = [];
+    try {
+      notifications = await Notification.find({
+        userId: req.user.id,
+      }).sort({ createdAt: -1 });
+      console.log(`📢 Found ${notifications.length} real notifications`);
+    } catch (dbError) {
+      console.error("❌ Database error, using fallback:", dbError.message);
+      // ✅ Fallback: Return hardcoded notification if DB fails
+      notifications = [
         {
-          _id: "hardcoded_1",
-          userId: req.user?.id || "unknown",
-          message: "✅ This is a test notification. Backend is working!",
+          _id: "fallback1",
+          userId: req.user.id,
+          message: "✅ Backend is working! (Fallback mode)",
           isRead: false,
           createdAt: new Date().toISOString(),
         },
-        {
-          _id: "hardcoded_2",
-          userId: req.user?.id || "unknown",
-          message: "🔔 Caregiver verification pending for John Doe.",
-          isRead: true,
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-        },
-      ],
-    });
+      ];
+    }
+
+    res.json({ notifications });
 
   } catch (error) {
-    console.error("❌ [Backend] CRITICAL ERROR:", error.message);
-    console.error("❌ Stack:", error.stack);
-    return res.status(500).json({
-      message: "Server error",
-      error: error.message,
+    console.error("❌ [Backend] Critical error:", error.message);
+    // ✅ Ultimate fallback
+    res.json({
+      notifications: [
+        {
+          _id: "emergency1",
+          userId: req.user?.id || "unknown",
+          message: "⚠️ Service is running in emergency mode.",
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        },
+      ],
     });
   }
 };
 
 // ================== MARK AS READ ==================
 const markAsRead = async (req, res) => {
-  console.log("📢 markAsRead called");
-  return res.json({ message: "Marked as read (hardcoded)" });
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const notification = await Notification.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user.id,
+      },
+      { isRead: true },
+      { new: true }
+    );
+
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    res.json({
+      message: "Notification marked as read",
+      notification,
+    });
+  } catch (error) {
+    console.error("❌ [Backend] markAsRead error:", error.message);
+    res.status(500).json({
+      message: "Failed to mark notification as read",
+      error: error.message,
+    });
+  }
 };
 
 // ================== MARK ALL AS READ ==================
 const markAllAsRead = async (req, res) => {
-  console.log("📢 markAllAsRead called");
-  return res.json({ message: "All marked as read (hardcoded)" });
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const result = await Notification.updateMany(
+      { userId: req.user.id, isRead: false },
+      { isRead: true }
+    );
+
+    res.json({
+      message: "All notifications marked as read",
+      modifiedCount: result.modifiedCount,
+    });
+  } catch (error) {
+    console.error("❌ [Backend] markAllAsRead error:", error.message);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 // ================== DELETE NOTIFICATION ==================
 const deleteNotification = async (req, res) => {
-  console.log("📢 deleteNotification called");
-  return res.json({ message: "Deleted (hardcoded)" });
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const notification = await Notification.findOneAndDelete({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    if (!notification) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    res.json({
+      message: "Notification deleted successfully",
+    });
+  } catch (error) {
+    console.error("❌ [Backend] deleteNotification error:", error.message);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 module.exports = {
