@@ -86,26 +86,48 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// ================== MARK ALL AS READ ==================
-const markAllAsRead = async (req, res) => {
+// ================== MARK AS READ ==================
+const markAsRead = async (req, res) => {
   try {
+    console.log(`📢 [Backend] markAsRead called for ID: ${req.params.id}`);
+
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const result = await Notification.updateMany(
-      { userId: req.user.id, isRead: false },
-      { isRead: true }
+    // ✅ Check if notification exists first
+    const existingNotification = await Notification.findOne({
+      _id: req.params.id,
+      userId: req.user.id,
+    });
+
+    if (!existingNotification) {
+      console.log(`⚠️ Notification ${req.params.id} not found in database`);
+      return res.status(404).json({
+        message: "Notification not found",
+      });
+    }
+
+    // ✅ Update to read
+    const notification = await Notification.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        userId: req.user.id,
+      },
+      { isRead: true },
+      { new: true }
     );
 
     res.json({
-      message: "All notifications marked as read",
-      modifiedCount: result.modifiedCount,
+      message: "Notification marked as read",
+      notification,
     });
+
   } catch (error) {
-    console.error("❌ [Backend] markAllAsRead error:", error.message);
+    console.error("❌ [Backend] markAsRead error:", error.message);
     res.status(500).json({
-      message: error.message,
+      message: "Failed to mark notification as read",
+      error: error.message,
     });
   }
 };
