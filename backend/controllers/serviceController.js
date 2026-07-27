@@ -1,33 +1,36 @@
 const Service = require("../models/Service");
 const User = require("../models/User");
-const Notification = require("../models/Notification"); // ✅ Ensure imported
+const Notification = require("../models/Notification");
 
-// ================== DYNAMIC PRICING ==================
+// ================== DYNAMIC PRICING (Minimum ₹800) ==================
 const getServicePrice = (serviceType, duration = 0) => {
-  // Base rates per hour
+  // Base rates per hour (Adjust to ensure minimum ₹800)
   const rates = {
-    "Home Nursing": 100,
-    "Elderly Attendant": 80,
-    "Physiotherapy": 120,
-    "Post Hospital Care": 150,
+    "Home Nursing": 500,
+    "Elderly Attendant": 400,
+    "Physiotherapy": 450,
+    "Post Hospital Care": 550,
   };
 
+  const MIN_PRICE = 800; // ✅ Minimum fix charge
+
   const baseRate = rates[serviceType] || 0;
-  if (baseRate === 0) return 0;
+  if (baseRate === 0) return MIN_PRICE;
 
   // Extract hours from duration string (e.g., "2 Hours" -> 2)
   const hours = parseInt(duration);
-  if (isNaN(hours) || hours <= 0) return baseRate * 1; // Default 1 hour
+  if (isNaN(hours) || hours <= 0) return MIN_PRICE;
 
   let price = baseRate * hours;
 
-  // ✅ Extra 30% for each hour beyond 2 hours
+  // Extra 30% for each hour beyond 2 hours
   if (hours > 2) {
     const extraHours = hours - 2;
     price += extraHours * baseRate * 0.3;
   }
 
-  return Math.round(price);
+  // ✅ Ensure minimum price is ₹800
+  return Math.max(MIN_PRICE, Math.round(price));
 };
 
 // ================== CREATE SERVICE ==================
@@ -52,7 +55,6 @@ const createService = async (req, res) => {
       }
     }
 
-    // ✅ Price auto-calculated based on service type and duration
     const price = getServicePrice(serviceType, duration);
 
     const service = await Service.create({
@@ -65,18 +67,18 @@ const createService = async (req, res) => {
       price,
     });
 
-    // ✅ Send notification to all admins
+    // ✅ Send notification to all admins (No Emoji)
     try {
       const admins = await User.find({ role: "admin" });
       if (admins.length > 0) {
         const notifications = admins.map((admin) => ({
           recipient: admin._id,
-          message: `📋 New service request "${serviceType}" from ${req.user.name || "User"}.`,
+          message: `New service request "${serviceType}" from ${req.user.name || "User"}.`,
           type: "new_service",
           relatedId: service._id,
         }));
         await Notification.insertMany(notifications);
-        console.log(`📢 Notified ${admins.length} admin(s) about new service.`);
+        console.log(`Notified ${admins.length} admin(s) about new service.`);
       }
     } catch (notifError) {
       console.error("Failed to send service notification:", notifError);
@@ -122,20 +124,17 @@ const updateService = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    // Update fields
     service.serviceType = serviceType || service.serviceType;
     service.description = description || service.description;
 
-    // ✅ If duration changes, recalculate price (User cannot manually edit price)
+    // ✅ If duration changes, recalculate price with minimum ₹800
     if (duration !== undefined) {
       service.duration = duration;
       service.price = getServicePrice(service.serviceType, duration);
     } else if (serviceType) {
-      // If only service type changes, recalculate price with existing duration
       service.price = getServicePrice(service.serviceType, service.duration);
     }
 
-    // Status update (if provided)
     const allowedStatus = [
       "pending",
       "accepted",
