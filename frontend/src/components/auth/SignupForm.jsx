@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
 import { showSuccess, showError } from "../../utils/toast";
@@ -143,8 +144,7 @@ export default function SignupForm({ onLogin, onCaregiver }) {
             background: "transparent",
             border: "none",
             cursor: "pointer",
-            fontSize: "20px",
-            color: "#f8fafc", 
+            color: "var(--text-secondary)",
             padding: "4px",
             display: "flex",
             alignItems: "center",
@@ -152,10 +152,9 @@ export default function SignupForm({ onLogin, onCaregiver }) {
             opacity: loading ? 0.5 : 1,
           }}
         >
-          {showPassword ? "🙈" : "👁️"}
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
         </button>
       </div>
-
       <button
         className="primary-btn"
         onClick={handleSignup}

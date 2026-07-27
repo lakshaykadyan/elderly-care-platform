@@ -1,6 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import ThemeToggle from "../common/ThemeToggle"; 
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -36,7 +36,6 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
-        
           <ThemeToggle />
 
           {!user ? (
@@ -44,7 +43,8 @@ export default function Navbar() {
               <Link to="/login">
                 <button className="login-btn">Login</button>
               </Link>
-              <Link to="/login">
+              {/* ✅ Register button ab "signup" screen kholega */}
+              <Link to="/login" state={{ screen: "signup" }}>
                 <button className="register-btn">Register</button>
               </Link>
             </>

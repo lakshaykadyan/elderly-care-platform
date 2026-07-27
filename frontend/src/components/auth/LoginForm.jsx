@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { loginUser } from "../../services/authService";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -119,26 +120,24 @@ export default function LoginForm({ onSignup, onForgot }) {
           onClick={() => setShowPassword(!showPassword)}
           disabled={loading}
           style={{
-            position: "absolute",
-            right: "14px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "20px",
-            color: "var(--text-secondary)",
-            padding: "4px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: loading ? 0.5 : 1,
-          }}
-        >
-          {showPassword ? "🙈" : "👁️"}
-        </button>
-      </div>
-
+          position: "absolute",
+          right: "14px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          color: "var(--text-secondary)",
+          padding: "4px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: loading ? 0.5 : 1,
+        }}
+      >
+        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+      </button>
+    </div>
       <button
         className="primary-btn"
         onClick={handleLogin}

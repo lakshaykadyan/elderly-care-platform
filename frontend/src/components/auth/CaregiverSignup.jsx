@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { caregiverRegister } from "../../services/authService";
 import { showSuccess, showError } from "../../utils/toast";
@@ -150,26 +151,24 @@ export default function CaregiverSignup({ onLogin }) {
           onClick={() => setShowPassword(!showPassword)}
           disabled={loading}
           style={{
-            position: "absolute",
-            right: "14px",
-            top: "50%",
-            transform: "translateY(-50%)",
-            background: "transparent",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "20px",
-            color: "var(--text-secondary)",
-            padding: "4px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: loading ? 0.5 : 1,
-          }}
-        >
-          {showPassword ? "🙈" : "👁️"}
-        </button>
-      </div>
-
+          position: "absolute",
+          right: "14px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          color: "var(--text-secondary)",
+          padding: "4px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          opacity: loading ? 0.5 : 1,
+        }}
+      >
+        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+      </button>
+    </div>
       <input
         type="text"
         placeholder="Specialization (e.g., Elderly Care, Physiotherapy) *"
