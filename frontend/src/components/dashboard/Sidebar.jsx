@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { X } from "lucide-react"; // ✅ Import X icon
+import { 
+  X, LogOut, User, Calendar, FileText, Phone, Bell, AlertTriangle, 
+  Settings, LayoutDashboard, Users, Stethoscope, BarChart3, ClipboardList, Activity 
+} from "lucide-react";
 import ConfirmLogoutModal from "../common/profile/ConfirmLogoutModal";
 import { useSidebar } from "../../context/SidebarContext";
 
@@ -116,7 +119,7 @@ export default function Sidebar({
           {renderMenuButtons(getMenuClass, activePage, setActivePage, role)}
           <div style={{ marginTop: "auto", paddingTop: "20px" }}>
             <button className="logout-btn-sidebar" onClick={() => setShowLogoutModal(true)}>
-              🚪 Logout
+              <LogOut size={18} style={{ marginRight: "10px" }} /> Logout
             </button>
           </div>
         </nav>
@@ -130,7 +133,6 @@ export default function Sidebar({
 
       {/* ✅ Mobile Sidebar (Premium Close Button) */}
       <aside className={`sidebar sidebar-mobile ${isOpen ? "open" : ""}`}>
-        {/* ✅ Logo + Close Button in Flex Row */}
         <div style={{
           display: "flex",
           justifyContent: "space-between",
@@ -166,7 +168,7 @@ export default function Sidebar({
           {renderMenuButtons(getMenuClass, activePage, setActivePage, role)}
           <div style={{ marginTop: "auto", paddingTop: "20px" }}>
             <button className="logout-btn-sidebar" onClick={() => setShowLogoutModal(true)}>
-              🚪 Logout
+              <LogOut size={18} style={{ marginRight: "10px" }} /> Logout
             </button>
           </div>
         </nav>
@@ -188,31 +190,31 @@ function renderMenuButtons(getMenuClass, activePage, setActivePage, role) {
 
   if (role === "user") {
     buttons.push(
-      { key: "profile", label: "👤 My Profile", page: "profile" },
-      { key: "request", label: "🩺 Book Service", page: "request" },
-      { key: "bookings", label: "📅 My Bookings", page: "bookings" },
-      { key: "medical", label: "📂 Medical Records", page: "medical" },
-      { key: "contacts", label: "👨‍👩‍👧 Emergency Contacts", page: "contacts" },
-      { key: "notifications", label: "🔔 Notifications", page: "notifications" },
-      { key: "complaints", label: "⚠ Complaints", page: "complaints" },
-      { key: "settings", label: "⚙ Settings", page: "settings", disabled: true }
+      { key: "profile", label: "My Profile", Icon: User, page: "profile" },
+      { key: "request", label: "Book Service", Icon: Calendar, page: "request" },
+      { key: "bookings", label: "My Bookings", Icon: ClipboardList, page: "bookings" },
+      { key: "medical", label: "Medical Records", Icon: FileText, page: "medical" },
+      { key: "contacts", label: "Emergency Contacts", Icon: Phone, page: "contacts" },
+      { key: "notifications", label: "Notifications", Icon: Bell, page: "notifications" },
+      { key: "complaints", label: "Complaints", Icon: AlertTriangle, page: "complaints" },
+      { key: "settings", label: "Settings", Icon: Settings, page: "settings", disabled: true }
     );
   } else if (role === "admin") {
     buttons.push(
-      { key: "dashboard", label: "📊 Dashboard", page: "dashboard" },
-      { key: "users", label: "👥 Manage Users", page: "users" },
-      { key: "caregivers", label: "🧑‍⚕️ Manage Caregivers", page: "caregivers" },
-      { key: "services", label: "📅 Manage Services", page: "services" },
-      { key: "complaints", label: "⚠ Manage Complaints", page: "complaints" },
-      { key: "analytics", label: "📈 Analytics", page: "analytics" }
+      { key: "dashboard", label: "Dashboard", Icon: LayoutDashboard, page: "dashboard" },
+      { key: "users", label: "Manage Users", Icon: Users, page: "users" },
+      { key: "caregivers", label: "Manage Caregivers", Icon: Stethoscope, page: "caregivers" },
+      { key: "services", label: "Manage Services", Icon: Calendar, page: "services" },
+      { key: "complaints", label: "Manage Complaints", Icon: AlertTriangle, page: "complaints" },
+      { key: "analytics", label: "Analytics", Icon: BarChart3, page: "analytics" }
     );
   } else if (role === "caregiver") {
     buttons.push(
-      { key: "dashboard", label: "🏠 Dashboard", page: "dashboard" },
-      { key: "profile", label: "👤 My Profile", page: "profile" },
-      { key: "services", label: "📋 Assigned Services", page: "services" },
-      { key: "availability", label: "🟢 Availability", page: "availability" },
-      { key: "notifications", label: "🔔 Notifications", page: "notifications" }
+      { key: "dashboard", label: "Dashboard", Icon: LayoutDashboard, page: "dashboard" },
+      { key: "profile", label: "My Profile", Icon: User, page: "profile" },
+      { key: "services", label: "Assigned Services", Icon: ClipboardList, page: "services" },
+      { key: "availability", label: "Availability", Icon: Activity, page: "availability" },
+      { key: "notifications", label: "Notifications", Icon: Bell, page: "notifications" }
     );
   }
 
@@ -224,6 +226,7 @@ function renderMenuButtons(getMenuClass, activePage, setActivePage, role) {
       onClick={() => !btn.disabled && setActivePage(btn.page)}
       disabled={btn.disabled}
     >
+      <btn.Icon size={18} style={{ marginRight: "10px" }} />
       {btn.label}
     </button>
   ));

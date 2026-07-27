@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Users, Stethoscope, Calendar, AlertTriangle } from "lucide-react";
 import { getDashboardStats } from "../../../hooks/useAdmin";
 
 export default function Dashboard() {
@@ -21,10 +22,10 @@ export default function Dashboard() {
   };
 
   const cards = [
-    { icon: "👥", title: "Total Users", value: stats.totalUsers, color: "#4f46e5" },
-    { icon: "🧑‍⚕️", title: "Caregivers", value: stats.totalCaregivers, color: "#22c55e" },
-    { icon: "📅", title: "Services", value: stats.totalServices, color: "#f59e0b" },
-    { icon: "⚠️", title: "Complaints", value: stats.totalComplaints, color: "#ef4444" },
+    { icon: <Users size={28} />, title: "Total Users", value: stats.totalUsers, color: "#4f46e5" },
+    { icon: <Stethoscope size={28} />, title: "Caregivers", value: stats.totalCaregivers, color: "#22c55e" },
+    { icon: <Calendar size={28} />, title: "Services", value: stats.totalServices, color: "#f59e0b" },
+    { icon: <AlertTriangle size={28} />, title: "Complaints", value: stats.totalComplaints, color: "#ef4444" },
   ];
 
   return (
@@ -73,7 +74,7 @@ export default function Dashboard() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "28px",
+              color: card.color,
               border: `1px solid ${card.color}10`,
             }}>
               {card.icon}

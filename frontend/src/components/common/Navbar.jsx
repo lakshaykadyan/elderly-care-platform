@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "../common/ThemeToggle";
+import { Home, Info, Phone, LayoutDashboard, LogOut, User, Menu } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -29,10 +30,19 @@ export default function Navbar() {
         </div>
 
         <nav className="nav-links">
-          <NavLink to="/">Home</NavLink>
+          <NavLink to="/">
+            <Home size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+            Home
+          </NavLink>
           <NavLink to="/services">Services</NavLink>
-          <NavLink to="/about">About</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
+          <NavLink to="/about">
+            <Info size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+            About
+          </NavLink>
+          <NavLink to="/contact">
+            <Phone size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+            Contact
+          </NavLink>
         </nav>
 
         <div className="nav-actions">
@@ -41,9 +51,11 @@ export default function Navbar() {
           {!user ? (
             <>
               <Link to="/login">
-                <button className="login-btn">Login</button>
+                <button className="login-btn">
+                  <User size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+                  Login
+                </button>
               </Link>
-              {/* ✅ Register button ab "signup" screen kholega */}
               <Link to="/login" state={{ screen: "signup" }}>
                 <button className="register-btn">Register</button>
               </Link>
@@ -51,9 +63,11 @@ export default function Navbar() {
           ) : (
             <>
               <button className="login-btn" onClick={goToDashboard}>
+                <LayoutDashboard size={16} style={{ display: "inline-block", marginRight: "4px" }} />
                 Dashboard
               </button>
               <button className="logout-btn" onClick={handleLogout}>
+                <LogOut size={16} style={{ display: "inline-block", marginRight: "4px" }} />
                 Logout
               </button>
             </>

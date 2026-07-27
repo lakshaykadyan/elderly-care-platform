@@ -5,6 +5,20 @@ import {
   getAssignedServices,
   updateAvailability,
 } from "../../../hooks/useCaregiver";
+import {
+  ClipboardList,
+  Activity,
+  CheckCircle,
+  FileCheck,
+  Star,
+  DollarSign,
+  BarChart3,
+  LineChart,
+  Bell,
+  Home,
+  Calendar,
+  User,
+} from "lucide-react";
 
 export default function CaregiverDashboard() {
   const [availability, setAvailability] = useState("available");
@@ -94,14 +108,14 @@ export default function CaregiverDashboard() {
     offline: { bg: "#ef4444", text: "#f87171" },
   };
 
-  // Stats Cards Data (✅ Fixed averageRating)
+  // Stats Cards Data with Icons
   const statsCards = [
-    { icon: "📋", title: "Assigned", value: stats.total, color: "#4f46e5" },
-    { icon: "⚙️", title: "Working", value: stats.working, color: "#f59e0b" },
-    { icon: "✅", title: "Accepted", value: stats.accepted, color: "#22c55e" },
-    { icon: "🎉", title: "Completed", value: stats.completed, color: "#10b981" },
-    { icon: "⭐", title: "Rating", value: formatRating(stats.averageRating), color: "#f59e0b" },
-    { icon: "💰", title: "Earnings", value: `₹${stats.earnings}`, color: "#8b5cf6" },
+    { icon: <ClipboardList size={28} />, title: "Assigned", value: stats.total, color: "#4f46e5" },
+    { icon: <Activity size={28} />, title: "Working", value: stats.working, color: "#f59e0b" },
+    { icon: <CheckCircle size={28} />, title: "Accepted", value: stats.accepted, color: "#22c55e" },
+    { icon: <FileCheck size={28} />, title: "Completed", value: stats.completed, color: "#10b981" },
+    { icon: <Star size={28} />, title: "Rating", value: formatRating(stats.averageRating), color: "#f59e0b" },
+    { icon: <DollarSign size={28} />, title: "Earnings", value: `₹${stats.earnings}`, color: "#8b5cf6" },
   ];
 
   return (
@@ -265,7 +279,8 @@ export default function CaregiverDashboard() {
             margin: 0,
             letterSpacing: "-0.5px",
           }}>
-            🏠 Caregiver Dashboard
+            <Home size={24} style={{ display: "inline-block", marginRight: "8px" }} />
+            Caregiver Dashboard
           </h1>
           <p style={{
             color: "var(--text-secondary)",
@@ -306,11 +321,14 @@ export default function CaregiverDashboard() {
                   </h3>
                 </div>
                 <div style={{
-                  fontSize: "28px",
                   background: `rgba(79,70,229,0.08)`,
                   padding: "10px 12px",
                   borderRadius: "14px",
                   border: `1px solid rgba(79,70,229,0.04)`,
+                  color: card.color,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}>
                   {card.icon}
                 </div>
@@ -319,7 +337,7 @@ export default function CaregiverDashboard() {
           ))}
         </div>
 
-        {/* ====== PERFORMANCE SUMMARY (✅ Fixed averageRating) ====== */}
+        {/* ====== PERFORMANCE SUMMARY ====== */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
@@ -393,7 +411,8 @@ export default function CaregiverDashboard() {
               color: "var(--text-primary)",
               marginBottom: "16px",
             }}>
-              📊 Weekly Services
+              <BarChart3 size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+              Weekly Services
             </h3>
             <div style={{
               display: "flex",
@@ -443,7 +462,8 @@ export default function CaregiverDashboard() {
               color: "var(--text-primary)",
               marginBottom: "16px",
             }}>
-              📈 Service Status
+              <LineChart size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+              Service Status
             </h3>
             <div style={{
               display: "flex",
@@ -569,7 +589,8 @@ export default function CaregiverDashboard() {
             color: "var(--text-primary)",
             margin: "0 0 16px 0",
           }}>
-            📋 Recent Assigned Services
+            <ClipboardList size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+            Recent Assigned Services
           </h2>
           {recentServices.length === 0 ? (
             <p style={{
@@ -654,7 +675,8 @@ export default function CaregiverDashboard() {
             color: "var(--text-primary)",
             margin: "0 0 16px 0",
           }}>
-            📅 Today's Schedule
+            <Calendar size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+            Today's Schedule
           </h2>
           <div style={{
             display: "grid",
@@ -704,7 +726,8 @@ export default function CaregiverDashboard() {
                   color: "var(--text-muted)",
                   fontSize: "13px",
                 }}>
-                  👤 {item.patient}
+                  <User size={12} style={{ display: "inline-block", marginRight: "4px" }} />
+                  {item.patient}
                 </span>
               </div>
             ))}
@@ -728,7 +751,8 @@ export default function CaregiverDashboard() {
                 window.dispatchEvent(new CustomEvent("caregiver-page", { detail: "services" }))
               }
             >
-              📋 Assigned Services
+              <ClipboardList size={16} style={{ display: "inline-block", marginRight: "6px" }} />
+              Assigned Services
             </button>
             <button
               className="quick-btn"
@@ -744,7 +768,8 @@ export default function CaregiverDashboard() {
                 window.dispatchEvent(new CustomEvent("caregiver-page", { detail: "notifications" }))
               }
             >
-              🔔 Notifications
+              <Bell size={16} style={{ display: "inline-block", marginRight: "6px" }} />
+              Notifications
             </button>
           </div>
         </div>
