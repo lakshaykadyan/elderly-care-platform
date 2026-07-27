@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
 
+console.log("✅ authController loaded. Notification model:", typeof Notification);
+
 // ================== SIGNUP ==================
 const signup = async (req, res) => {
   try {
@@ -84,21 +86,45 @@ const caregiverSignup = async (req, res) => {
       },
     });
 
-    // ✅ Send notification to all admins (No Emoji)
+    // ============================================================
+    // 🔥 DEBUGGING BLOCK - Check what's happening with notifications
+    // ============================================================
     try {
-      const admins = await User.find({ role: "admin" });
-      if (admins.length > 0) {
-        const notifications = admins.map((admin) => ({
-          recipient: admin._id,
-          message: `New caregiver "${name}" registered and needs verification.`,
-          type: "caregiver_verification",
-          relatedId: caregiver._id,
-        }));
-        await Notification.insertMany(notifications);
-        console.log(`Notified ${admins.length} admin(s) about new caregiver.`);
+      console.log("🔍 [DEBUG] Looking for admin users...");
+      
+      // ✅ 1. Check if Notification model exists
+      if (!Notification) {
+        console.error("❌ [DEBUG] Notification model is undefined or null!");
+      } else {
+        console.log("✅ [DEBUG] Notification model loaded successfully.");
       }
+
+      // ✅ 2. Find all admin users
+      const admins = await User.find({ role: "admin" });
+      console.log(`🔍 [DEBUG] Found ${admins.length} admin(s).`);
+
+      if (admins.length > 0) {
+        // ✅ 3. Prepare notifications
+        const notifications = admins.map((admin) => ({
+          userId: admin._id,
+          message: `New caregiver "${name}" registered and needs verification.`,
+          isRead: false,
+        }));
+
+        console.log(`📝 [DEBUG] Preparing to insert ${notifications.length} notifications.`);
+
+        // ✅ 4. Insert into database
+        const result = await Notification.insertMany(notifications);
+        console.log(`✅ [DEBUG] Successfully inserted ${result.length} notification(s).`);
+
+      } else {
+        console.warn("⚠️ [DEBUG] No admin users found. Notification NOT sent.");
+      }
+
     } catch (notifError) {
-      console.error("Failed to send caregiver notification:", notifError);
+      // ✅ 5. Catch any error and log it clearly
+      console.error("❌ [DEBUG] NOTIFICATION ERROR:", notifError.message);
+      console.error("❌ [DEBUG] Error Stack:", notifError.stack);
     }
 
     res.status(201).json({
@@ -111,6 +137,7 @@ const caregiverSignup = async (req, res) => {
         caregiverProfile: caregiver.caregiverProfile,
       },
     });
+
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -151,7 +178,6 @@ const login = async (req, res) => {
       });
     }
 
-    // ✅ Auto logout after 30 minutes
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
