@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors"); 
+const cors = require("cors");
 const connectDB = require("./config/db");
 
 // Routes
@@ -16,39 +16,17 @@ const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
 
-// Database connection
 connectDB();
-
-// Middleware to parse JSON 
 app.use(express.json());
 
-// ===== CORS CONFIG  =====
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "https://elderly-care-platform-chi.vercel.app",
-  process.env.CLIENT_URL,
-].filter(Boolean);
+// ===== CORS - OPEN FOR ALL (Temporary) =====
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.log("❌ CORS blocked for origin:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// ===== Routes =====
 app.use("/api/auth", authRoutes);
 app.use("/api/patient-profile", profileRoutes);
 app.use("/api/service", serviceRoutes);
@@ -65,5 +43,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
