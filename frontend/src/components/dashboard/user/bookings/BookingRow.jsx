@@ -9,12 +9,6 @@ import {
   Edit,
   Trash2,
   Save,
-  CheckCircle,
-  XCircle,
-  Loader,
-  User,
-  Mail,
-  Phone,
 } from "lucide-react";
 
 export default function BookingRow({
@@ -56,13 +50,10 @@ export default function BookingRow({
     });
   };
 
-  // ✅ Price auto-calculate based on duration
+  // ✅ Price auto-calculate based on duration (Backend will handle final price)
   const handleDurationChange = (value) => {
     setEditForm({ ...editForm, duration: value });
-    const hours = parseInt(value);
-    if (!isNaN(hours) && hours > 0) {
-      setEditForm((prev) => ({ ...prev, duration: value, price: hours * 100 }));
-    }
+    // Price will be recalculated by backend on save
   };
 
   return (
@@ -526,7 +517,7 @@ export default function BookingRow({
             </div>
           </div>
 
-          {/* Duration & Price Row (Auto-calculate Price) */}
+          {/* Duration & Price Row (Price is READ-ONLY) */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
             <div>
               <label
@@ -573,16 +564,18 @@ export default function BookingRow({
                 type="number"
                 placeholder="1200"
                 value={editForm.price || ""}
-                onChange={(e) => setEditForm({ ...editForm, price: e.target.value })}
+                disabled // ✅ USER CANNOT EDIT PRICE
                 style={{
                   width: "100%",
                   padding: "12px 16px",
-                  background: "var(--bg-card)",
+                  background: "var(--bg-body)",
                   border: "1px solid var(--border-color)",
                   borderRadius: "12px",
                   color: "var(--text-primary)",
                   fontSize: "15px",
                   outline: "none",
+                  cursor: "not-allowed",
+                  opacity: 0.7,
                 }}
               />
             </div>
