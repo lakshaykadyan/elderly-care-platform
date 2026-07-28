@@ -9,7 +9,7 @@ export default function SignupForm({ onLogin, onCaregiver }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // ✅ Added
+  const [showPassword, setShowPassword] = useState(false); 
 
   const navigate = useNavigate();
 
@@ -108,7 +108,7 @@ export default function SignupForm({ onLogin, onCaregiver }) {
         onBlur={(e) => { e.target.borderColor = "var(--border-color)"; e.target.boxShadow = "none"; }}
       />
 
-      {/* ✅ Password Input with Show/Hide Toggle */}
+      {/* Password Input with Show/Hide Toggle */}
       <div style={{ position: "relative", width: "100%" }}>
         <input
           type={showPassword ? "text" : "password"}
