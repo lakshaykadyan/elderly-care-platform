@@ -2,7 +2,7 @@ const Notification = require("../models/Notification");
 
 console.log("✅ Notification Controller Loaded");
 
-// ================== GET NOTIFICATIONS ==================
+// ================== GET NOTIFICATIONS (UPGRADED WITH DEBUG LOGS) ==================
 const getNotifications = async (req, res) => {
   try {
     console.log("📢 [Backend] getNotifications called");
@@ -13,17 +13,30 @@ const getNotifications = async (req, res) => {
 
     let notifications = [];
     try {
-      notifications = await Notification.find({
-        userId: req.user.id,
-      }).sort({ createdAt: -1 });
+      // ✅ 1. Type mismatch se bachne ke liye userId ko string mein convert karo
+      const userIdString = req.user.id.toString();
+      console.log(`🔍 Querying notifications for userId: ${userIdString}`);
+      
+      // ✅ 2. Collection name bhi log karo (taaki pata chale sahi collection hit ho rahi hai)
+      console.log(`ℹ️ Notification collection name: ${Notification.collection.name}`);
+
+      // ✅ 3. Actual database query (with lean() for faster response)
+      notifications = await Notification.find({ userId: userIdString })
+        .sort({ createdAt: -1 })
+        .lean();
+
       console.log(`📢 Found ${notifications.length} real notifications`);
     } catch (dbError) {
-      console.error("❌ Database error, using fallback:", dbError.message);
+      // ✅ 4. Ab error FULLY log hoga (message + stack trace)
+      console.error("❌ DATABASE QUERY FAILED! Error:", dbError.message);
+      console.error("📚 Full Error Stack:", dbError.stack);
+      
+      // Fallback (temporary)
       notifications = [
         {
           _id: "fallback1",
           userId: req.user.id,
-          message: "✅ Backend is working! (Fallback mode)",
+          message: `⚠️ DB Error: ${dbError.message.substring(0, 50)}... (Check logs)`,
           isRead: false,
           createdAt: new Date().toISOString(),
         },
@@ -48,7 +61,7 @@ const getNotifications = async (req, res) => {
   }
 };
 
-// ================== MARK AS READ (Duplicate hataya, ab sirf ek baar hai) ==================
+// ================== MARK AS READ ==================
 const markAsRead = async (req, res) => {
   try {
     console.log(`📢 [Backend] markAsRead called for ID: ${req.params.id}`);
@@ -57,9 +70,11 @@ const markAsRead = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const userIdString = req.user.id.toString();
+
     const existingNotification = await Notification.findOne({
       _id: req.params.id,
-      userId: req.user.id,
+      userId: userIdString,
     });
 
     if (!existingNotification) {
@@ -67,11 +82,10 @@ const markAsRead = async (req, res) => {
       return res.status(404).json({ message: "Notification not found" });
     }
 
-    // Update to read
     const notification = await Notification.findOneAndUpdate(
       {
         _id: req.params.id,
-        userId: req.user.id,
+        userId: userIdString,
       },
       { isRead: true },
       { new: true }
@@ -91,7 +105,7 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// ================== MARK ALL AS READ  ==================
+// ================== MARK ALL AS READ ==================
 const markAllAsRead = async (req, res) => {
   try {
     console.log("📢 [Backend] markAllAsRead called");
@@ -100,8 +114,10 @@ const markAllAsRead = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const userIdString = req.user.id.toString();
+
     const result = await Notification.updateMany(
-      { userId: req.user.id, isRead: false },
+      { userId: userIdString, isRead: false },
       { isRead: true }
     );
 
@@ -126,9 +142,11 @@ const deleteNotification = async (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const userIdString = req.user.id.toString();
+
     const notification = await Notification.findOneAndDelete({
       _id: req.params.id,
-      userId: req.user.id,
+      userId: userIdString,
     });
 
     if (!notification) {
@@ -149,6 +167,6 @@ const deleteNotification = async (req, res) => {
 module.exports = {
   getNotifications,
   markAsRead,
-  markAllAsRead, 
+  markAllAsRead,
   deleteNotification,
 };
