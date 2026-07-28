@@ -2,31 +2,102 @@ const Service = require("../models/Service");
 const User = require("../models/User");
 const Notification = require("../models/Notification");
 
-// ================== DYNAMIC PRICING (Minimum ₹800) ==================
-const getServicePrice = (serviceType, duration = 0) => {
-  const rates = {
-    "Home Nursing": 500,
-    "Elderly Attendant": 400,
-    "Physiotherapy": 450,
-    "Post Hospital Care": 550,
-  };
+// ===================== SERVICE PRICING CONFIG =====================
+const SERVICE_CONFIG = {
+  "Home Nursing": {
+    fixedCharge: 600,      // 1-4 hours
+    dailyRate: 1000,
+  },
+  "Elderly Attendant": {
+    fixedCharge: 500,
+    dailyRate: 800,
+  },
+  "Physiotherapy": {
+    fixedCharge: 700,
+    dailyRate: 1200,
+  },
+  "Post Hospital Care": {
+    fixedCharge: 800,
+    dailyRate: 1500,
+  },
+};
 
-  const MIN_PRICE = 800;
-
-  const baseRate = rates[serviceType] || 0;
-  if (baseRate === 0) return MIN_PRICE;
-
-  const hours = parseInt(duration);
-  if (isNaN(hours) || hours <= 0) return MIN_PRICE;
-
-  let price = baseRate * hours;
-
-  if (hours > 2) {
-    const extraHours = hours - 2;
-    price += extraHours * baseRate * 0.3;
+// ===================== PRICING ENGINE =====================
+const calculateServicePrice = (serviceType, hours) => {
+  const config = SERVICE_CONFIG[serviceType];
+  if (!config) {
+    // Fallback if service type not found
+    console.warn(`⚠️ Unknown service type: ${serviceType}, using default pricing`);
+    return 800 * Math.max(1, Math.ceil(hours / 24));
   }
 
-  return Math.max(MIN_PRICE, Math.round(price));
+  const { fixedCharge, dailyRate } = config;
+  const hourlyRate = dailyRate / 24;
+
+  // 🟢 1-4 Hours → Fixed Charge
+  if (hours <= 4) {
+    return fixedCharge;
+  }
+
+  // 🟢 4-24 Hours → Fixed + 30% per extra hour
+  if (hours < 24) {
+    const extraHours = hours - 4;
+    const extraRate = hourlyRate * 1.30; // 30% hike
+    return Math.round(fixedCharge + extraHours * extraRate);
+  }
+
+  const days = hours / 24;
+  const weeks = days / 7;
+  const months = days / 30;
+
+  // 🟢 1 to 6 Days → Daily Rate × Days
+  if (days < 7) {
+    return Math.round(dailyRate * days);
+  }
+
+  // 🟢 Weekly (1 Week to 3 Weeks)
+  if (weeks >= 1 && weeks < 4) {
+    let weeklyDiscount = 0.10; // 10% base discount
+    let weeklyRate = dailyRate * 7 * (1 - weeklyDiscount);
+    let total = weeks * weeklyRate;
+
+    // Additional 3% discount per extra week (up to 15% total)
+    if (weeks >= 2) {
+      const extraWeeks = Math.floor(weeks) - 1;
+      const extraDiscount = Math.min(extraWeeks * 0.03, 0.15);
+      total = total * (1 - extraDiscount);
+    }
+    return Math.round(total);
+  }
+
+  // 🟢 Monthly (1 to 11 Months)
+  if (months >= 1 && months < 12) {
+    let monthlyDiscount = 0.20; // 20% base discount
+    let monthlyRate = dailyRate * 30 * (1 - monthlyDiscount);
+    let total = months * monthlyRate;
+
+    // Additional 2% per extra month (capped at 35% total discount)
+    if (months >= 2) {
+      const extraMonths = Math.floor(months) - 1;
+      const extraDiscount = Math.min(extraMonths * 0.02, 0.35);
+      total = total * (1 - extraDiscount);
+    }
+
+    // Special: Exactly 6 months → 25% off (as requested)
+    if (months >= 6 && months < 7) {
+      return Math.round(dailyRate * 30 * 6 * 0.75);
+    }
+    return Math.round(total);
+  }
+
+  // 🟢 Yearly (12+ Months) → 30% off
+  if (months >= 12) {
+    const yearlyRate = dailyRate * 30 * 0.70; // 30% off
+    return Math.round(yearlyRate * months);
+  }
+
+  // Fallback (safe)
+  return Math.round(dailyRate * days);
 };
 
 // ================== CREATE SERVICE ==================
@@ -51,7 +122,9 @@ const createService = async (req, res) => {
       }
     }
 
-    const price = getServicePrice(serviceType, duration);
+    // ✅ Calculate price using the new engine
+    const hours = parseInt(duration) || 0;
+    const price = calculateServicePrice(serviceType, hours);
 
     const service = await Service.create({
       userId: req.user.id,
@@ -68,15 +141,15 @@ const createService = async (req, res) => {
       const admins = await User.find({ role: "admin" });
       if (admins.length > 0) {
         const notifications = admins.map((admin) => ({
-          userId: admin._id, // ✅ Fixed: userId (not recipient)
-          message: `New service request "${serviceType}" from ${req.user.name || "User"}.`,
+          userId: admin._id,
+          message: `New service request "${serviceType}" from ${req.user.name || "User"}. Price: ₹${price}`,
           isRead: false,
         }));
         await Notification.insertMany(notifications);
-        console.log(`Notified ${admins.length} admin(s) about new service.`);
+        console.log(`📢 Notified ${admins.length} admin(s) about new service.`);
       }
     } catch (notifError) {
-      console.error("Failed to send service notification:", notifError);
+      console.error("❌ Failed to send service notification:", notifError);
     }
 
     res.status(201).json({
@@ -119,14 +192,16 @@ const updateService = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
+    // Update fields
     service.serviceType = serviceType || service.serviceType;
     service.description = description || service.description;
 
+    // Recalculate price if duration or serviceType changed
     if (duration !== undefined) {
       service.duration = duration;
-      service.price = getServicePrice(service.serviceType, duration);
+      service.price = calculateServicePrice(service.serviceType, duration);
     } else if (serviceType) {
-      service.price = getServicePrice(service.serviceType, service.duration);
+      service.price = calculateServicePrice(service.serviceType, service.duration);
     }
 
     const allowedStatus = [
