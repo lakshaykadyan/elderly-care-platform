@@ -11,13 +11,22 @@ import {
   Save,
 } from "lucide-react";
 
-// Helper to format duration for display
-const formatDurationDisplay = (hours) => {
-  if (!hours) return "Not Set";
-  if (hours >= 720 && hours % 720 === 0) return `${hours / 720} Month${hours / 720 > 1 ? 's' : ''}`;
-  if (hours >= 168 && hours % 168 === 0) return `${hours / 168} Week${hours / 168 > 1 ? 's' : ''}`;
-  if (hours >= 24 && hours % 24 === 0) return `${hours / 24} Day${hours / 24 > 1 ? 's' : ''}`;
-  return `${hours} Hour${hours > 1 ? 's' : ''}`;
+// Helper to get days in month (leap year aware)
+const getDaysInMonth = (dateString) => {
+  if (!dateString) return 31;
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  if (month === 1) return (year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0)) ? 29 : 28;
+  if ([3, 5, 8, 10].includes(month)) return 30;
+  return 31;
+};
+
+// Format duration display from value + unit
+const formatDurationDisplay = (value, unit) => {
+  if (!value) return "Not Set";
+  const map = { hours: "Hour", days: "Day", weeks: "Week", months: "Month", years: "Year" };
+  return `${value} ${map[unit] || ""}${value > 1 ? "s" : ""}`;
 };
 
 export default function BookingRow({
@@ -40,7 +49,6 @@ export default function BookingRow({
     completed: "#22c55e",
     rejected: "#ef4444",
   };
-
   const statusLabels = {
     pending: "Pending",
     accepted: "Accepted",
@@ -57,6 +65,50 @@ export default function BookingRow({
       month: "short",
       year: "numeric",
     });
+  };
+
+  // ---- Dynamic Max Duration based on Unit & Date ----
+  const getMaxDuration = (unit, bookingDate) => {
+    if (unit === "days") return getDaysInMonth(bookingDate);
+    switch (unit) {
+      case "hours": return 23;
+      case "weeks": return 4;
+      case "months": return 12;
+      case "years": return 5;  // max 5 years
+      default: return 100;
+    }
+  };
+
+  // ---- Handle Date Change (Auto-clamp days) ----
+  const handleBookingDateChange = (e) => {
+    const newDate = e.target.value;
+    setEditForm((prev) => {
+      const newForm = { ...prev, bookingDate: newDate };
+      if (prev.durationUnit === "days") {
+        const maxDays = getDaysInMonth(newDate);
+        if (prev.duration > maxDays) {
+          newForm.duration = maxDays;
+        }
+      }
+      return newForm;
+    });
+  };
+
+  // ---- Handle Unit Change with Clamping ----
+  const handleUnitChange = (e) => {
+    const newUnit = e.target.value;
+    const max = getMaxDuration(newUnit, editForm.bookingDate);
+    let newVal = parseInt(editForm.duration) || 1;
+    if (newVal > max) newVal = max;
+    setEditForm({ ...editForm, durationUnit: newUnit, duration: newVal });
+  };
+
+  // ---- Handle Duration Change ----
+  const handleDurationChange = (e) => {
+    let val = parseInt(e.target.value) || 1;
+    const max = getMaxDuration(editForm.durationUnit, editForm.bookingDate);
+    if (val > max) val = max;
+    setEditForm({ ...editForm, duration: val });
   };
 
   return (
@@ -215,7 +267,7 @@ export default function BookingRow({
               color: "var(--text-primary)",
             }}
           >
-            {formatDurationDisplay(service.duration)}
+            {formatDurationDisplay(service.durationValue, service.durationUnit)}
           </span>
         </div>
         <div>
@@ -408,7 +460,7 @@ export default function BookingRow({
         </button>
       </div>
 
-      {/* ===================== EDIT FORM ===================== */}
+      {/* ========== EDIT FORM ========== */}
       {editingId === service._id && (
         <div
           style={{
@@ -452,7 +504,14 @@ export default function BookingRow({
             </select>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "12px",
+              marginBottom: "12px",
+            }}
+          >
             <div>
               <label
                 style={{
@@ -468,7 +527,7 @@ export default function BookingRow({
               <input
                 type="date"
                 value={editForm.bookingDate || ""}
-                onChange={(e) => setEditForm({ ...editForm, bookingDate: e.target.value })}
+                onChange={handleBookingDateChange}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -511,7 +570,14 @@ export default function BookingRow({
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "12px",
+              marginBottom: "12px",
+            }}
+          >
             <div>
               <label
                 style={{
@@ -522,13 +588,23 @@ export default function BookingRow({
                   marginBottom: "4px",
                 }}
               >
-                Duration Value
+                Duration Value{" "}
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-muted)",
+                    fontWeight: "400",
+                  }}
+                >
+                  (Max: {getMaxDuration(editForm.durationUnit, editForm.bookingDate)})
+                </span>
               </label>
               <input
                 type="number"
                 min="1"
+                max={getMaxDuration(editForm.durationUnit, editForm.bookingDate)}
                 value={editForm.duration}
-                onChange={(e) => setEditForm({ ...editForm, duration: parseInt(e.target.value) || 1 })}
+                onChange={handleDurationChange}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -555,7 +631,7 @@ export default function BookingRow({
               </label>
               <select
                 value={editForm.durationUnit}
-                onChange={(e) => setEditForm({ ...editForm, durationUnit: e.target.value })}
+                onChange={handleUnitChange}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -571,6 +647,7 @@ export default function BookingRow({
                 <option value="days">Days</option>
                 <option value="weeks">Weeks</option>
                 <option value="months">Months</option>
+                <option value="years">Years</option>
               </select>
             </div>
           </div>

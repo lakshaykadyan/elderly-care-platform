@@ -9,22 +9,10 @@ import BookingTable from "./bookings/BookingTable";
 import LoadingBookings from "./bookings/LoadingBookings";
 
 // ---- Duration Helpers ----
-const convertToHours = (value, unit) => {
-  const num = parseInt(value) || 0;
-  switch (unit) {
-    case "hours": return num;
-    case "days": return num * 24;
-    case "weeks": return num * 168;
-    case "months": return num * 720;
-    default: return num;
-  }
-};
-
-const formatDuration = (hours) => {
-  if (hours >= 720 && hours % 720 === 0) return { value: hours / 720, unit: "months" };
-  if (hours >= 168 && hours % 168 === 0) return { value: hours / 168, unit: "weeks" };
-  if (hours >= 24 && hours % 24 === 0) return { value: hours / 24, unit: "days" };
-  return { value: hours, unit: "hours" };
+const formatDurationDisplay = (value, unit) => {
+  if (!value) return "Not Set";
+  const map = { hours: "Hour", days: "Day", weeks: "Week", months: "Month", years: "Year" };
+  return `${value} ${map[unit] || ""}${value > 1 ? "s" : ""}`;
 };
 
 export default function MyServices() {
@@ -37,6 +25,8 @@ export default function MyServices() {
   const [editForm, setEditForm] = useState({
     serviceType: "",
     description: "",
+    bookingDate: "",
+    bookingTime: "",
     duration: 1,
     durationUnit: "hours",
   });
@@ -67,13 +57,14 @@ export default function MyServices() {
   });
 
   const handleEdit = (service) => {
-    const durationInfo = formatDuration(service.duration || 1);
     setEditingId(service._id);
     setEditForm({
       serviceType: service.serviceType,
       description: service.description,
-      duration: durationInfo.value,
-      durationUnit: durationInfo.unit,
+      bookingDate: service.bookingDate ? service.bookingDate.split("T")[0] : "",
+      bookingTime: service.bookingTime || "",
+      duration: service.durationValue || 1,
+      durationUnit: service.durationUnit || "hours",
     });
   };
 
@@ -98,11 +89,13 @@ export default function MyServices() {
     }
     try {
       setProcessing(true);
-      const durationInHours = convertToHours(editForm.duration, editForm.durationUnit);
       const payload = {
         serviceType: editForm.serviceType,
         description: editForm.description,
-        duration: durationInHours,
+        bookingDate: editForm.bookingDate,
+        bookingTime: editForm.bookingTime,
+        duration: parseInt(editForm.duration) || 1,
+        durationUnit: editForm.durationUnit,
       };
       const data = await updateService(editingId, payload);
       showSuccess(data.message);
