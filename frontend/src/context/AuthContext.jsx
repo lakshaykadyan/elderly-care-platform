@@ -4,7 +4,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ Loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("elderlyUser");
@@ -32,6 +32,9 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("elderlyUser");
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+
+    // ✅ Force redirect to login with replace (history replace)
+    window.location.replace("/login");
   };
 
   const isAuthenticated = !!user;
