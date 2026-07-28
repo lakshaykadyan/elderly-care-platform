@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
+// const cors = require("cors"); // ❌ Ab iski zaroorat nahi, hum manual headers bhej rahe hain
 const connectDB = require("./config/db");
 
 // Routes
@@ -22,16 +22,22 @@ connectDB();
 // Middleware to parse JSON (ZAROORI)
 app.use(express.json());
 
-// ===================== 🚀 CORS FINAL FIX =====================
-// Sirf tumhare Vercel frontend ko allow karo, with credentials
-app.use(
-  cors({
-    origin: "https://elderly-care-platform-chi.vercel.app", // ✅ Specific origin
-    credentials: true, // ✅ Cookies aur Authorization headers allow karne ke liye
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// ===================== 🔥 FINAL CORS FIX (Manual Headers) =====================
+// Ye 'cors' package ki jagah direct headers force karega. 100% Guarantee!
+app.use((req, res, next) => {
+  // Sirf tumhare Vercel frontend ko allow karo
+  res.setHeader("Access-Control-Allow-Origin", "https://elderly-care-platform-chi.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  
+  // Preflight (OPTIONS) request ko turant 200 OK bhejo
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
+// =============================================================================
 
 // ===================== ROUTES =====================
 app.use("/api/auth", authRoutes);

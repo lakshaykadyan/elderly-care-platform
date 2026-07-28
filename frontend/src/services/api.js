@@ -8,7 +8,9 @@ const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, // ✅ Backend ke 'credentials: true' ke saath match karega
+  // ⚠️ Temporary false kiya hai taaki CORS preflight simple ho jaye.
+  // Login ho jane ke baad hum ise wapas true kar denge.
+  withCredentials: false,
 });
 
 API.interceptors.request.use(
