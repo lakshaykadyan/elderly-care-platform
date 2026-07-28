@@ -42,10 +42,7 @@ const updateAvailability = async (req, res) => {
     caregiver.caregiverProfile.availability = availability;
     await caregiver.save();
 
-    console.log(
-      "Saved Availability:",
-      caregiver.caregiverProfile.availability
-    );
+    console.log("Saved Availability:", caregiver.caregiverProfile.availability);
 
     res.json({
       message: "Availability updated successfully",
@@ -95,6 +92,24 @@ const updateCaregiverServiceStatus = async (req, res) => {
 
     await service.save();
 
+    // ✅ NEW: Notify user about EVERY status update
+    try {
+      const statusMessages = {
+        accepted: "has been accepted by your caregiver 🟢",
+        "in-progress": "is now in progress 🔄",
+        completed: "has been completed successfully ✅",
+        rejected: "has been rejected by the caregiver ❌",
+      };
+      await Notification.create({
+        userId: service.userId,
+        message: `Your service "${service.serviceType}" ${statusMessages[status] || `is now "${status}"`}.`,
+      });
+      console.log(`📢 Notified user ${service.userId} about status: ${status}`);
+    } catch (notifError) {
+      console.error("❌ Failed to send user notification:", notifError.message);
+    }
+
+    // ✅ Keep old notifications for specific statuses (but now redundant, still safe)
     if (status === "completed") {
       await Notification.create({
         userId: service.userId,
@@ -122,7 +137,6 @@ const updateCaregiverServiceStatus = async (req, res) => {
 
 const getAvailability = async (req, res) => {
   try {
-
     const caregiver = await User.findById(req.user.id);
 
     if (!caregiver) {
@@ -131,22 +145,15 @@ const getAvailability = async (req, res) => {
       });
     }
 
-    console.log(
-      "Fetched Availability:",
-      caregiver.caregiverProfile.availability
-    );
+    console.log("Fetched Availability:", caregiver.caregiverProfile.availability);
 
     res.json({
-      availability:
-        caregiver.caregiverProfile.availability,
+      availability: caregiver.caregiverProfile.availability,
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
@@ -154,65 +161,41 @@ const getAvailability = async (req, res) => {
 
 const getDashboardStats = async (req, res) => {
   try {
-
     const services = await Service.find({
       caregiverId: req.user.id,
     });
 
-    const completed = services.filter(
-      s => s.status === "completed"
-    ).length;
-
-    const working = services.filter(
-      s => s.status === "in-progress"
-    ).length;
-
-    const accepted = services.filter(
-      s => s.status === "accepted"
-    ).length;
-
+    const completed = services.filter((s) => s.status === "completed").length;
+    const working = services.filter((s) => s.status === "in-progress").length;
+    const accepted = services.filter((s) => s.status === "accepted").length;
     const total = services.length;
 
     const earnings = services
-      .filter(s => s.status === "completed")
+      .filter((s) => s.status === "completed")
       .reduce((sum, item) => sum + (item.price || 0), 0);
 
-    const ratingServices = services.filter(
-      s => s.rating > 0
-    );
+    const ratingServices = services.filter((s) => s.rating > 0);
 
     const averageRating =
       ratingServices.length > 0
         ? (
-            ratingServices.reduce(
-              (sum, item) => sum + item.rating,
-              0
-            ) / ratingServices.length
+            ratingServices.reduce((sum, item) => sum + item.rating, 0) /
+            ratingServices.length
           ).toFixed(1)
         : 0;
 
     res.json({
-
       total,
-
       completed,
-
       working,
-
       accepted,
-
       earnings,
-
       averageRating,
-
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
@@ -220,7 +203,6 @@ const getDashboardStats = async (req, res) => {
 
 const getCaregiverProfile = async (req, res) => {
   try {
-
     const caregiver = await User.findById(req.user.id).select("-password");
 
     if (!caregiver) {
@@ -233,13 +215,10 @@ const getCaregiverProfile = async (req, res) => {
       message: "Caregiver profile fetched successfully",
       caregiver,
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
@@ -247,7 +226,6 @@ const getCaregiverProfile = async (req, res) => {
 
 const updateCaregiverProfile = async (req, res) => {
   try {
-
     const {
       specialization,
       experience,
@@ -294,20 +272,17 @@ const updateCaregiverProfile = async (req, res) => {
 
     caregiver.caregiverProfile.serviceArea =
       serviceArea ?? caregiver.caregiverProfile.serviceArea;
-      
+
     await caregiver.save();
 
     res.json({
       message: "Profile updated successfully",
       caregiver,
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 

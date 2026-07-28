@@ -53,7 +53,7 @@ const updateServiceStatus = async (req, res) => {
     try {
       await Notification.create({
         userId: service.userId,
-        message: `🏥 Your service request is now "${status}".`,
+        message: `Your service request is now "${status}".`,
       });
     } catch (notificationError) {
       console.log("Status notification error:", notificationError.message);
@@ -89,8 +89,7 @@ const verifyCaregiver = async (req, res) => {
     try {
       await Notification.create({
         userId: caregiver._id,
-        message:
-          "🎉 Congratulations! Your caregiver profile has been verified by Admin.",
+        message: "🎉 Congratulations! Your caregiver profile has been verified by Admin.",
       });
     } catch (error) {
       console.log("Caregiver notification:", error.message);
@@ -115,7 +114,6 @@ const assignCaregiver = async (req, res) => {
         message: "Caregiver ID is required",
       });
     }
-    
 
     const service = await Service.findById(req.params.serviceId);
 
@@ -147,13 +145,25 @@ const assignCaregiver = async (req, res) => {
     service.status = "accepted";
     await service.save();
 
+    // ✅ Notification to USER
     try {
       await Notification.create({
         userId: service.userId,
-        message: `👨‍⚕️ A caregiver has been assigned to your service request.`,
+        message: `A caregiver has been assigned to your service request.`,
       });
     } catch (notificationError) {
-      console.log("Notification create error:", notificationError.message);
+      console.log("User notification error:", notificationError.message);
+    }
+
+    // ✅ NEW: Notification to CAREGIVER
+    try {
+      await Notification.create({
+        userId: caregiverId,
+        message: `You have been assigned to a new service "${service.serviceType}" by Admin.`,
+      });
+      console.log(`📢 Notified caregiver ${caregiverId} about assignment.`);
+    } catch (notifError) {
+      console.error("❌ Failed to send caregiver notification:", notifError.message);
     }
 
     res.json({
@@ -219,7 +229,7 @@ const updateComplaint = async (req, res) => {
       try {
         await Notification.create({
           userId: complaint.userId,
-          message: `📢 Admin replied to your complaint: "${complaint.subject}"`,
+          message: `Admin replied to your complaint: "${complaint.subject}"`,
         });
       } catch (notificationError) {
         console.log("Complaint notification error:", notificationError.message);
@@ -311,7 +321,6 @@ const deleteUser = async (req, res) => {
 
 const getDashboardStats = async (req, res) => {
   try {
-
     console.log("===== DASHBOARD API CALLED =====");
     console.log("Logged User:", req.user);
 
@@ -333,7 +342,6 @@ const getDashboardStats = async (req, res) => {
       totalServices,
       totalComplaints,
     });
-
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
@@ -343,51 +351,27 @@ const getDashboardStats = async (req, res) => {
 // ================== ADMIN ANALYTICS ==================
 
 const getAnalytics = async (req, res) => {
-
   console.log("===== ANALYTICS API CALLED =====");
   console.log("Logged User:", req.user);
 
   try {
-
-
     const totalUsers = await User.countDocuments({ role: "user" });
-
     const totalCaregivers = await User.countDocuments({ role: "caregiver" });
-
     const totalServices = await Service.countDocuments();
-
-    const completedServices = await Service.countDocuments({
-      status: "completed",
-    });
-
-    const pendingServices = await Service.countDocuments({
-      status: "pending",
-    });
-
+    const completedServices = await Service.countDocuments({ status: "completed" });
+    const pendingServices = await Service.countDocuments({ status: "pending" });
     const totalComplaints = await Complaint.countDocuments();
-
-    const acceptedServices = await Service.countDocuments({
-      status: "accepted",
-    });
-
-    const inProgressServices = await Service.countDocuments({
-      status: "in-progress",
-    });
-
-    const rejectedServices = await Service.countDocuments({
-     status: "rejected",
-    });
-
+    const acceptedServices = await Service.countDocuments({ status: "accepted" });
+    const inProgressServices = await Service.countDocuments({ status: "in-progress" });
+    const rejectedServices = await Service.countDocuments({ status: "rejected" });
     const verifiedCaregivers = await User.countDocuments({
       role: "caregiver",
-     "caregiverProfile.verified": true,
-     });
-
+      "caregiverProfile.verified": true,
+    });
     const activeUsers = await User.countDocuments({
       role: "user",
       isActive: true,
     });
-
     const activeCaregivers = await User.countDocuments({
       role: "caregiver",
       isActive: true,
@@ -405,37 +389,27 @@ const getAnalytics = async (req, res) => {
       acceptedServices,
       inProgressServices,
       rejectedServices,
-      totalComplaints
+      totalComplaints,
     });
 
     res.json({
-
       totalUsers,
       totalCaregivers,
-
       activeUsers,
       activeCaregivers,
-
       verifiedCaregivers,
-
       totalServices,
-
       completedServices,
       pendingServices,
       acceptedServices,
       inProgressServices,
       rejectedServices,
-
       totalComplaints,
-
     });
-
   } catch (error) {
-
     res.status(500).json({
       message: error.message,
     });
-
   }
 };
 
@@ -451,5 +425,5 @@ module.exports = {
   toggleUserStatus,
   deleteUser,
   getAnalytics,
-  getDashboardStats
+  getDashboardStats,
 };
