@@ -1,15 +1,13 @@
 import axios from "axios";
 
-// ✅ FORCE PRODUCTION URL (Hardcoded fallback)
-const BASE_URL = "https://elderly-care-platform-tf3r.onrender.com/api";
+const BASE_URL = "https://elderly-care-platform-ypwf.onrender.com/api";
 
 const API = axios.create({
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-  
-  withCredentials: true,
+  withCredentials: true, 
 });
 
 API.interceptors.request.use(
