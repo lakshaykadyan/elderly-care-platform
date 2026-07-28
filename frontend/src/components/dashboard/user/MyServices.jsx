@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Calendar, Clock, Package, PlusCircle } from "lucide-react";
 import API from "../../../services/api";
 import { updateService, deleteService } from "../../../hooks/useService";
 import { submitReview } from "../../../hooks/useReview";
@@ -6,7 +7,25 @@ import { showSuccess, showError } from "../../../utils/toast";
 import BookingFilters from "./bookings/BookingFilters";
 import BookingTable from "./bookings/BookingTable";
 import LoadingBookings from "./bookings/LoadingBookings";
-import EmptyBookings from "./bookings/EmptyBookings";
+
+// ---- Duration Helpers ----
+const convertToHours = (value, unit) => {
+  const num = parseInt(value) || 0;
+  switch (unit) {
+    case "hours": return num;
+    case "days": return num * 24;
+    case "weeks": return num * 168;
+    case "months": return num * 720;
+    default: return num;
+  }
+};
+
+const formatDuration = (hours) => {
+  if (hours >= 720 && hours % 720 === 0) return { value: hours / 720, unit: "months" };
+  if (hours >= 168 && hours % 168 === 0) return { value: hours / 168, unit: "weeks" };
+  if (hours >= 24 && hours % 24 === 0) return { value: hours / 24, unit: "days" };
+  return { value: hours, unit: "hours" };
+};
 
 export default function MyServices() {
   const [loading, setLoading] = useState(true);
@@ -15,7 +34,12 @@ export default function MyServices() {
   const [filter, setFilter] = useState("all");
   const [processing, setProcessing] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({ serviceType: "", description: "" });
+  const [editForm, setEditForm] = useState({
+    serviceType: "",
+    description: "",
+    duration: 1,
+    durationUnit: "hours",
+  });
   const [reviewForm, setReviewForm] = useState({ rating: 5, review: "" });
 
   useEffect(() => {
@@ -42,10 +66,15 @@ export default function MyServices() {
     return matchesSearch && matchesFilter;
   });
 
-  // ================== HANDLERS ==================
   const handleEdit = (service) => {
+    const durationInfo = formatDuration(service.duration || 1);
     setEditingId(service._id);
-    setEditForm({ serviceType: service.serviceType, description: service.description });
+    setEditForm({
+      serviceType: service.serviceType,
+      description: service.description,
+      duration: durationInfo.value,
+      durationUnit: durationInfo.unit,
+    });
   };
 
   const handleDelete = async (id) => {
@@ -69,7 +98,13 @@ export default function MyServices() {
     }
     try {
       setProcessing(true);
-      const data = await updateService(editingId, editForm);
+      const durationInHours = convertToHours(editForm.duration, editForm.durationUnit);
+      const payload = {
+        serviceType: editForm.serviceType,
+        description: editForm.description,
+        duration: durationInHours,
+      };
+      const data = await updateService(editingId, payload);
       showSuccess(data.message);
       setEditingId(null);
       loadServices();
@@ -102,37 +137,40 @@ export default function MyServices() {
   if (loading) return <LoadingBookings />;
 
   return (
-    <div className="profile-card" style={{ 
+    <div className="profile-card" style={{
       padding: "32px 28px",
       borderRadius: "24px",
       background: "var(--bg-card)",
       border: "1px solid var(--border-color)",
     }}>
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "space-between", 
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
         alignItems: "center",
         marginBottom: "28px",
         flexWrap: "wrap",
         gap: "16px",
       }}>
-        <div>
-          <h1 style={{ 
-            fontSize: "28px", 
-            fontWeight: "700", 
-            color: "var(--text-primary)",
-            letterSpacing: "-0.5px",
-            margin: 0,
-          }}>
-            📅 My Services
-          </h1>
-          <p style={{ 
-            color: "var(--text-secondary)", 
-            fontSize: "15px",
-            margin: "4px 0 0 0",
-          }}>
-            Manage all your booked services
-          </p>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <Calendar size={28} style={{ color: "var(--primary)" }} />
+          <div>
+            <h1 style={{
+              fontSize: "28px",
+              fontWeight: "700",
+              color: "var(--text-primary)",
+              letterSpacing: "-0.5px",
+              margin: 0,
+            }}>
+              My Services
+            </h1>
+            <p style={{
+              color: "var(--text-secondary)",
+              fontSize: "15px",
+              margin: "4px 0 0 0",
+            }}>
+              Manage all your booked services
+            </p>
+          </div>
         </div>
         <div style={{
           background: "rgba(99, 102, 241, 0.1)",
@@ -142,7 +180,11 @@ export default function MyServices() {
           color: "var(--primary)",
           fontWeight: "600",
           fontSize: "14px",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
         }}>
+          <Package size={16} />
           Total: {filteredServices.length}
         </div>
       </div>
@@ -163,12 +205,12 @@ export default function MyServices() {
           borderRadius: "20px",
           border: "2px dashed var(--border-color)",
         }}>
-          <div style={{ fontSize: "56px", marginBottom: "16px" }}>📭</div>
+          <Package size={56} style={{ color: "var(--text-muted)", marginBottom: "16px" }} />
           <h3 style={{ color: "var(--text-primary)" }}>No services found</h3>
           <p style={{ color: "var(--text-secondary)" }}>Start by booking a new service.</p>
         </div>
       ) : (
-        <BookingTable 
+        <BookingTable
           services={filteredServices}
           processing={processing}
           editingId={editingId}

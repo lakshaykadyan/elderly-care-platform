@@ -11,6 +11,15 @@ import {
   Save,
 } from "lucide-react";
 
+// Helper to format duration for display
+const formatDurationDisplay = (hours) => {
+  if (!hours) return "Not Set";
+  if (hours >= 720 && hours % 720 === 0) return `${hours / 720} Month${hours / 720 > 1 ? 's' : ''}`;
+  if (hours >= 168 && hours % 168 === 0) return `${hours / 168} Week${hours / 168 > 1 ? 's' : ''}`;
+  if (hours >= 24 && hours % 24 === 0) return `${hours / 24} Day${hours / 24 > 1 ? 's' : ''}`;
+  return `${hours} Hour${hours > 1 ? 's' : ''}`;
+};
+
 export default function BookingRow({
   service,
   processing,
@@ -50,10 +59,6 @@ export default function BookingRow({
     });
   };
 
-  const handleDurationChange = (value) => {
-    setEditForm({ ...editForm, duration: value });
-  };
-
   return (
     <div
       style={{
@@ -78,7 +83,6 @@ export default function BookingRow({
         e.currentTarget.style.boxShadow = "0 8px 24px -8px rgba(0,0,0,0.06)";
       }}
     >
-      {/* Accent Line */}
       <div
         style={{
           position: "absolute",
@@ -92,7 +96,6 @@ export default function BookingRow({
         }}
       />
 
-      {/* Header */}
       <div
         style={{
           display: "flex",
@@ -128,7 +131,6 @@ export default function BookingRow({
         </span>
       </div>
 
-      {/* Details Grid */}
       <div
         style={{
           display: "grid",
@@ -213,7 +215,7 @@ export default function BookingRow({
               color: "var(--text-primary)",
             }}
           >
-            {service.duration || "Not Set"}
+            {formatDurationDisplay(service.duration)}
           </span>
         </div>
         <div>
@@ -243,7 +245,6 @@ export default function BookingRow({
         </div>
       </div>
 
-      {/* Description */}
       <div
         style={{
           padding: "12px 16px",
@@ -280,7 +281,6 @@ export default function BookingRow({
         </p>
       </div>
 
-      {/* Care Notes */}
       {service.careNotes && (
         <div
           style={{
@@ -319,7 +319,6 @@ export default function BookingRow({
         </div>
       )}
 
-      {/* Rating */}
       {service.rating > 0 && (
         <div
           style={{
@@ -356,7 +355,6 @@ export default function BookingRow({
         </div>
       )}
 
-      {/* Actions Buttons */}
       <div
         style={{
           display: "flex",
@@ -410,7 +408,7 @@ export default function BookingRow({
         </button>
       </div>
 
-      {/* ============================ EDIT FORM ============================ */}
+      {/* ===================== EDIT FORM ===================== */}
       {editingId === service._id && (
         <div
           style={{
@@ -524,13 +522,13 @@ export default function BookingRow({
                   marginBottom: "4px",
                 }}
               >
-                Duration
+                Duration Value
               </label>
               <input
-                type="text"
-                placeholder="e.g., 2 Hours"
-                value={editForm.duration || ""}
-                onChange={(e) => handleDurationChange(e.target.value)}
+                type="number"
+                min="1"
+                value={editForm.duration}
+                onChange={(e) => setEditForm({ ...editForm, duration: parseInt(e.target.value) || 1 })}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
@@ -553,26 +551,27 @@ export default function BookingRow({
                   marginBottom: "4px",
                 }}
               >
-                Price (₹)
+                Unit
               </label>
-              <input
-                type="number"
-                placeholder="1200"
-                value={editForm.price || ""}
-                disabled
+              <select
+                value={editForm.durationUnit}
+                onChange={(e) => setEditForm({ ...editForm, durationUnit: e.target.value })}
                 style={{
                   width: "100%",
                   padding: "12px 16px",
-                  background: "var(--bg-body)",
+                  background: "var(--bg-card)",
                   border: "1px solid var(--border-color)",
                   borderRadius: "12px",
                   color: "var(--text-primary)",
                   fontSize: "15px",
                   outline: "none",
-                  cursor: "not-allowed",
-                  opacity: 0.7,
                 }}
-              />
+              >
+                <option value="hours">Hours</option>
+                <option value="days">Days</option>
+                <option value="weeks">Weeks</option>
+                <option value="months">Months</option>
+              </select>
             </div>
           </div>
 
@@ -632,7 +631,7 @@ export default function BookingRow({
         </div>
       )}
 
-      {/* Review Form (No Emoji Stars) */}
+      {/* Review Form */}
       {service.status === "completed" && service.rating === 0 && (
         <div
           style={{
