@@ -7,7 +7,7 @@ const API = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 API.interceptors.request.use(
@@ -24,11 +24,17 @@ API.interceptors.request.use(
 API.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    // 401 ya 403 pe logout
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      console.log("⏰ Session expired. Logging out...");
+
       localStorage.removeItem("token");
       localStorage.removeItem("elderlyUser");
       localStorage.removeItem("role");
-      window.location.href = "/login";
+
+      if (window.location.pathname !== "/login") {
+        window.location.replace("/login");
+      }
     }
     return Promise.reject(error);
   }
