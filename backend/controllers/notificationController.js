@@ -105,47 +105,77 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// ================== MARK ALL AS READ ==================
-const markAllAsRead = async (req, res) => {
+// ================== MARK AS READ  ==================
+const markAsRead = async (req, res) => {
   try {
-    console.log("📢 [Backend] markAllAsRead called");
+    console.log(`📢 [Backend] markAsRead called for ID: ${req.params.id}`);
 
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const notificationId = req.params.id;
     const userIdString = req.user.id.toString();
 
-    const result = await Notification.updateMany(
-      { userId: userIdString, isRead: false },
-      { isRead: true }
+    // Check if ID is a valid MongoDB ObjectId
+    const mongoose = require('mongoose');
+    if (!mongoose.Types.ObjectId.isValid(notificationId)) {
+      console.log(`⚠️ Invalid ObjectId: ${notificationId}`);
+      return res.status(404).json({ message: "Notification not found (invalid ID)" });
+    }
+
+    const existingNotification = await Notification.findOne({
+      _id: notificationId,
+      userId: userIdString,
+    });
+
+    if (!existingNotification) {
+      console.log(`⚠️ Notification ${notificationId} not found for this user`);
+      return res.status(404).json({ message: "Notification not found" });
+    }
+
+    const notification = await Notification.findOneAndUpdate(
+      {
+        _id: notificationId,
+        userId: userIdString,
+      },
+      { isRead: true },
+      { new: true }
     );
 
     res.json({
-      message: "All notifications marked as read",
-      modifiedCount: result.modifiedCount,
+      message: "Notification marked as read",
+      notification,
     });
 
   } catch (error) {
-    console.error("❌ [Backend] markAllAsRead error:", error.message);
+    console.error("❌ [Backend] markAsRead error:", error.message);
     res.status(500).json({
-      message: "Failed to mark all notifications as read",
+      message: "Failed to mark notification as read",
       error: error.message,
     });
   }
 };
 
-// ================== DELETE NOTIFICATION ==================
+// ================== DELETE NOTIFICATION  ==================
 const deleteNotification = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const notificationId = req.params.id;
     const userIdString = req.user.id.toString();
 
+    // Check if ID is a valid MongoDB ObjectId
+    const mongoose = require('mongoose');
+    if (!mongoose.Types.ObjectId.isValid(notificationId)) {
+      console.log(`⚠️ Invalid ObjectId: ${notificationId}`);
+      return res.status(404).json({ message: "Notification not found (invalid ID)" });
+    }
+
     const notification = await Notification.findOneAndDelete({
-      _id: req.params.id,
+      _id: notificationId,
       userId: userIdString,
     });
 
