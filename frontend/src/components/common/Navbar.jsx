@@ -43,6 +43,7 @@ export default function Navbar() {
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
+        {/* ✅ Navigation Links – includes auth buttons for mobile only */}
         <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
           <NavLink to="/" onClick={closeMenu}>
             <Home size={16} style={{ display: "inline-block", marginRight: "4px" }} />
@@ -62,16 +63,39 @@ export default function Navbar() {
           <NavLink 
             to="/emergency" 
             onClick={closeMenu}
-            style={{ 
-              color: "#ef4444", 
-              fontWeight: "600",
-            }}
+            style={{ color: "#ef4444", fontWeight: "600" }}
           >
             <AlertTriangle size={16} style={{ display: "inline-block", marginRight: "4px" }} />
             Emergency
           </NavLink>
+
+          {/* ✅ Auth buttons – visible only on mobile (desktop hidden via CSS) */}
+          <div className="mobile-auth">
+            {!user ? (
+              <>
+                <Link to="/login" onClick={closeMenu}>
+                  <button className="login-btn">Login</button>
+                </Link>
+                <Link to="/login" state={{ screen: "signup" }} onClick={closeMenu}>
+                  <button className="register-btn">Register</button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <button className="login-btn" onClick={goToDashboard}>
+                  <LayoutDashboard size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+                  Dashboard
+                </button>
+                <button className="logout-btn" onClick={handleLogout}>
+                  <LogOut size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
         </nav>
 
+        {/* ✅ Desktop Actions (auth buttons + theme toggle) */}
         <div className="nav-actions">
           <ThemeToggle />
 
