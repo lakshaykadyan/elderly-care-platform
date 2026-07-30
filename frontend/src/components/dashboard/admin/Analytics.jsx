@@ -56,20 +56,18 @@ export default function Analytics({ setActivePage }) {
     }
   };
 
-  // ✅ Card click handlers - navigate to respective pages with filter
+  // Top 4 cards click handlers
   const handleCardClick = (type) => {
     if (!setActivePage) return;
-    
     if (type === "users") {
-      // Users page pe jaao with filter "user"
       setActivePage("users");
-      // Filter apply karne ke liye sessionStorage use karo
       sessionStorage.setItem("adminUsersFilter", "user");
     } else if (type === "caregivers") {
       setActivePage("caregivers");
       sessionStorage.setItem("adminUsersFilter", "caregiver");
     } else if (type === "services") {
       setActivePage("services");
+      sessionStorage.removeItem("adminServicesFilter");
     } else if (type === "complaints") {
       setActivePage("complaints");
     }
@@ -100,7 +98,7 @@ export default function Analytics({ setActivePage }) {
         </p>
       </div>
 
-      {/* ✅ Clickable Analytics Cards */}
+      {/* Top 4 Clickable Cards */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(4, 1fr)",
@@ -198,7 +196,7 @@ export default function Analytics({ setActivePage }) {
 
       {!hasData ? <EmptyAnalytics /> : (
         <>
-          <AnalyticsCards stats={stats} />
+          <AnalyticsCards stats={stats} setActivePage={setActivePage} />
           <AnalyticsCharts stats={stats} />
           <AnalyticsSummary stats={stats} />
         </>

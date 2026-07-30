@@ -25,20 +25,20 @@ export default function AdminDashboard() {
       case "dashboard":
         return <Dashboard setActivePage={handleSetActivePage} />;
       case "users": {
-       
         const filter = sessionStorage.getItem("adminUsersFilter") || "all";
-        
         sessionStorage.removeItem("adminUsersFilter");
         return <Users initialFilter={filter} />;
       }
       case "caregivers": {
-        
         const filter = sessionStorage.getItem("adminUsersFilter") || "caregiver";
         sessionStorage.removeItem("adminUsersFilter");
         return <Users initialFilter={filter} />;
       }
-      case "services":
-        return <Services />;
+      case "services": {
+        const filter = sessionStorage.getItem("adminServicesFilter") || null;
+        sessionStorage.removeItem("adminServicesFilter");
+        return <Services initialFilter={filter} />;
+      }
       case "complaints":
         return <Complaints />;
       case "analytics":
