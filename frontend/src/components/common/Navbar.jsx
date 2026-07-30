@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import ThemeToggle from "../common/ThemeToggle";
-import { Home, Info, Phone, LayoutDashboard, LogOut, User, Menu, X } from "lucide-react";
+import { Home, Info, Phone, LayoutDashboard, LogOut, User, Menu, X, AlertTriangle } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -44,7 +44,7 @@ export default function Navbar() {
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Navigation Links (no auth buttons here) */}
+        {/* Navigation Links */}
         <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
           <NavLink to="/" onClick={closeMenu}>
             <Home size={16} style={{ display: "inline-block", marginRight: "4px" }} />
@@ -61,9 +61,21 @@ export default function Navbar() {
             <Phone size={16} style={{ display: "inline-block", marginRight: "4px" }} />
             Contact
           </NavLink>
+          {/* 🔥 Emergency Link – Red Color */}
+          <NavLink 
+            to="/emergency" 
+            onClick={closeMenu}
+            style={{ 
+              color: "#ef4444", 
+              fontWeight: "600",
+            }}
+          >
+            <AlertTriangle size={16} style={{ display: "inline-block", marginRight: "4px" }} />
+            Emergency
+          </NavLink>
         </nav>
 
-        {/* Desktop Actions (auth buttons only here) */}
+        {/* Desktop Actions */}
         <div className="nav-actions">
           <ThemeToggle />
 

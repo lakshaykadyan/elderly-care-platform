@@ -13,13 +13,15 @@ const medicalRecordRoutes = require("./routes/medicalRecordRoutes");
 const emergencyContactRoutes = require("./routes/emergencyContactRoutes");
 const complaintRoutes = require("./routes/complaintRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
+const contactRoutes = require("./routes/contactRoutes"); 
+const emergencyRoutes = require("./routes/emergencyRoutes"); 
 
 const app = express();
 
 // Database connection
 connectDB();
 
-// ✅ CORS - Sabse pehle middleware (Order MATTERS!)
+// CORS
 app.use(
   cors({
     origin: "https://elderly-care-platform-chi.vercel.app",
@@ -29,7 +31,6 @@ app.use(
   })
 );
 
-// ✅ JSON parser - CORS ke BAAD aana chahiye
 app.use(express.json());
 
 // Routes
@@ -42,6 +43,8 @@ app.use("/api/medical-records", medicalRecordRoutes);
 app.use("/api/emergency-contacts", emergencyContactRoutes);
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/contact", contactRoutes); 
+app.use("/api/emergency", emergencyRoutes); 
 
 app.get("/", (req, res) => {
   res.send("Backend running 🚀");
@@ -49,5 +52,5 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

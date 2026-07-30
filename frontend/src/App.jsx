@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext"; // ✅ Import AuthProvider
+import { AuthProvider } from "./context/AuthContext"; 
 
 import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import ServicesPage from "./pages/ServicesPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import EmergencyPage from "./pages/EmergencyPage"; 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import UserDashboard from "./pages/dashboard/user/UserDashboard";
 import AdminDashboard from "./pages/dashboard/admin/AdminDashboard";
@@ -16,7 +17,6 @@ import ProfilePage from "./pages/ProfilePage";
 export default function App() {
   return (
     <BrowserRouter>
-      {/* ✅ Wrap entire app with AuthProvider */}
       <AuthProvider>
         <Routes>
           {/* Public Routes */}
@@ -25,6 +25,7 @@ export default function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/login" element={<AuthPage />} />
+          <Route path="/emergency" element={<EmergencyPage />} /> 
 
           {/* Protected Routes */}
           <Route
