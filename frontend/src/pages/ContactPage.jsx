@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, User, MessageSquare, Send, Phone, MapPin, CheckCircle, Home } from "lucide-react";
+import BackButton from "../components/common/BackButton";
 import API from "../services/api";
 import { showSuccess, showError } from "../utils/toast";
 
@@ -71,6 +72,8 @@ export default function ContactPage() {
       justifyContent: "center",
     }}>
       <div className="container" style={{ maxWidth: "700px", margin: "0 auto", width: "100%" }}>
+        <BackButton />
+
         <h1 style={{
           fontSize: "44px",
           fontWeight: "700",
@@ -214,7 +217,6 @@ export default function ContactPage() {
           </button>
         </form>
 
-        {/* Contact Details */}
         <div style={{
           marginTop: "40px",
           display: "grid",

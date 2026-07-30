@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
+import BackButton from "../components/common/BackButton";
 import {
   Stethoscope,
   UserRound,
@@ -12,10 +13,7 @@ import {
   X,
   Award,
   DollarSign,
-  Clock,
   ShieldCheck,
-  Users,
-  Calendar,
 } from "lucide-react";
 
 const allServices = [
@@ -92,6 +90,8 @@ export default function ServicesPage() {
     <>
       <Navbar />
       <main className="services-page" style={{ padding: "60px 20px", maxWidth: "1200px", margin: "0 auto" }}>
+        <BackButton />
+
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
           <h1 style={{ fontSize: "36px", fontWeight: "700", color: "var(--text-primary)" }}>
             All Services
@@ -159,17 +159,21 @@ export default function ServicesPage() {
                   {service.desc}
                 </p>
 
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  marginTop: "12px",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  color: service.color,
-                }}>
-                  <DollarSign size={16} />
-                  {service.price}
+                {/* ✅ NEW Price Design – Clean Tag Style */}
+                <div style={{ marginTop: "12px" }}>
+                  <span style={{
+                    display: "inline-block",
+                    padding: "4px 14px",
+                    borderRadius: "20px",
+                    background: `${service.color}15`,
+                    color: service.color,
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    border: `1px solid ${service.color}20`,
+                  }}>
+                    <DollarSign size={14} style={{ display: "inline", marginRight: "4px" }} />
+                    {service.price}
+                  </span>
                 </div>
 
                 <button
@@ -258,15 +262,17 @@ export default function ServicesPage() {
             </div>
 
             <div style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              fontSize: "18px",
-              fontWeight: "600",
+              display: "inline-block",
+              padding: "4px 16px",
+              borderRadius: "20px",
+              background: `${selectedService.color}15`,
               color: selectedService.color,
+              fontSize: "16px",
+              fontWeight: "600",
               marginBottom: "16px",
+              border: `1px solid ${selectedService.color}20`,
             }}>
-              <DollarSign size={20} />
+              <DollarSign size={16} style={{ display: "inline", marginRight: "4px" }} />
               {selectedService.price}
             </div>
 

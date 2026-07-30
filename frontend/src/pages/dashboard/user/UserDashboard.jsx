@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SidebarProvider } from "../../../context/SidebarContext";
-import Sidebar from "../../../components/dashboard/Sidebar"; 
+import Sidebar from "../../../components/dashboard/Sidebar";
 import Topbar from "../../../components/dashboard/Topbar";
 import UserHome from "../../../components/dashboard/user/UserDashboard";
 import Profile from "../../../components/dashboard/user/Profile";
@@ -12,7 +12,15 @@ import Notifications from "../../../components/dashboard/user/Notifications";
 import Complaints from "../../../components/dashboard/user/Complaints";
 
 export default function UserDashboard() {
-  const [activePage, setActivePage] = useState("profile");
+
+  const [activePage, setActivePage] = useState(() => {
+    return sessionStorage.getItem("userActivePage") || "profile";
+  });
+
+  const handleSetActivePage = (page) => {
+    setActivePage(page);
+    sessionStorage.setItem("userActivePage", page);
+  };
 
   const renderPage = () => {
     switch (activePage) {
@@ -31,7 +39,7 @@ export default function UserDashboard() {
   return (
     <SidebarProvider>
       <div className="dashboard-container">
-        <Sidebar activePage={activePage} setActivePage={setActivePage} role="user" />
+        <Sidebar activePage={activePage} setActivePage={handleSetActivePage} role="user" />
         <div className="dashboard-content">
           <Topbar />
           <div className="dashboard-main">{renderPage()}</div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { 
-  X, LogOut, User, Calendar, FileText, Phone, Bell, AlertTriangle, 
+  LogOut, User, Calendar, FileText, Phone, Bell, AlertTriangle, 
   Settings, LayoutDashboard, Users, Stethoscope, BarChart3, ClipboardList, Activity 
 } from "lucide-react";
 import ConfirmLogoutModal from "../common/profile/ConfirmLogoutModal";
@@ -20,7 +20,7 @@ export default function Sidebar({
 
   const handlePageChange = (page) => {
     setActivePage(page);
-    closeSidebar(); // ✅ Auto-close on mobile
+    closeSidebar();
   };
 
   const handleLogout = () => {
@@ -63,7 +63,6 @@ export default function Sidebar({
           color: #fca5a5 !important;
         }
 
-        /* ===== Mobile Sidebar Overlay ===== */
         @media (max-width: 768px) {
           .sidebar-mobile-overlay {
             position: fixed;
@@ -115,7 +114,7 @@ export default function Sidebar({
         }
       `}</style>
 
-      {/* ✅ Desktop Sidebar */}
+      {/* Desktop Sidebar */}
       <aside className="sidebar sidebar-desktop">
         <div className="logo">
           <h2>ElderlyCare</h2>
@@ -130,13 +129,13 @@ export default function Sidebar({
         </nav>
       </aside>
 
-      {/* ✅ Mobile Overlay */}
+      {/* Mobile Overlay */}
       <div
         className={`sidebar-mobile-overlay ${isOpen ? "active" : ""}`}
         onClick={closeSidebar}
       />
 
-      {/* ✅ Mobile Sidebar */}
+      {/* Mobile Sidebar – No X button */}
       <aside className={`sidebar sidebar-mobile ${isOpen ? "open" : ""}`}>
         <div style={{
           display: "flex",
@@ -147,26 +146,7 @@ export default function Sidebar({
           <div className="logo" style={{ marginBottom: 0, textAlign: "left" }}>
             <h2>ElderlyCare</h2>
           </div>
-          <button
-            onClick={closeSidebar}
-            style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "none",
-              color: "#fff",
-              width: "40px",
-              height: "40px",
-              borderRadius: "50%",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "background 0.2s ease",
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)"}
-            onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)"}
-          >
-            <X size={24} strokeWidth={2.5} />
-          </button>
+          {/* ❌ X button removed – overlay click se close ho jayega */}
         </div>
 
         <nav className="menu">
@@ -189,7 +169,6 @@ export default function Sidebar({
   );
 }
 
-// ✅ Helper function – now accepts handlePageChange instead of setActivePage
 function renderMenuButtons(getMenuClass, activePage, handlePageChange, role) {
   const buttons = [];
 

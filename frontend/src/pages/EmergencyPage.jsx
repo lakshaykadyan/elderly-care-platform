@@ -11,6 +11,7 @@ import {
   CheckCircle,
   Home,
 } from "lucide-react";
+import BackButton from "../components/common/BackButton";
 import API from "../services/api";
 import { showSuccess, showError } from "../utils/toast";
 import Navbar from "../components/common/Navbar";
@@ -66,7 +67,7 @@ export default function EmergencyPage() {
           <div style={{ textAlign: "center", maxWidth: "500px" }}>
             <CheckCircle size={64} style={{ color: "#22c55e", marginBottom: "20px" }} />
             <h1 style={{ fontSize: "32px", fontWeight: "700", color: "var(--text-primary)" }}>
-              🚨 Emergency Request Sent
+              Emergency Request Sent
             </h1>
             <p style={{ color: "var(--text-secondary)", fontSize: "18px", marginTop: "12px" }}>
               Our team has been notified. We'll reach out to you immediately.
@@ -77,10 +78,9 @@ export default function EmergencyPage() {
             <button
               className="primary-btn"
               onClick={() => { setSubmitted(false); navigate("/"); }}
-              style={{ marginTop: "24px", padding: "12px 36px" }}
+              style={{ marginTop: "24px", padding: "12px 36px", display: "inline-flex", alignItems: "center", gap: "8px" }}
             >
-              <Home size={18} style={{ marginRight: "8px" }} />
-              Back to Home
+              <Home size={18} /> Back to Home
             </button>
           </div>
         </div>
@@ -101,6 +101,8 @@ export default function EmergencyPage() {
         justifyContent: "center",
       }}>
         <div className="container" style={{ maxWidth: "700px", margin: "0 auto", width: "100%" }}>
+          <BackButton />
+
           <div style={{
             background: "rgba(239,68,68,0.08)",
             border: "2px solid #ef4444",
@@ -325,7 +327,7 @@ export default function EmergencyPage() {
             fontSize: "14px",
             marginTop: "16px",
           }}>
-            ⚠️ For life-threatening emergencies, immediately call <strong style={{ color: "var(--primary)" }}>102</strong> or <strong style={{ color: "var(--primary)" }}>+91 9876543210</strong>
+            For life-threatening emergencies, immediately call <strong style={{ color: "var(--primary)" }}>102</strong> or <strong style={{ color: "var(--primary)" }}>+91 9876543210</strong>
           </p>
         </div>
       </div>

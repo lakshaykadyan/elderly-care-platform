@@ -3,6 +3,7 @@ import ProfileDropdown from "../common/profile/ProfileDropdown";
 import { useAuth } from "../../context/AuthContext";
 import { useSidebar } from "../../context/SidebarContext";
 import ThemeToggle from "../common/ThemeToggle";
+import { Menu } from "lucide-react";
 
 export default function Topbar() {
   const { user } = useAuth();
@@ -12,28 +13,30 @@ export default function Topbar() {
 
   return (
     <header className="topbar">
-      <div className="topbar-left">
+      <div className="topbar-left" style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
         <button
           onClick={toggleSidebar}
           className="hamburger-menu-btn"
           style={{
-            display: "none",
+            display: "flex",
             background: "none",
             border: "none",
             cursor: "pointer",
             color: "var(--text-primary)",
-            marginRight: "8px",
             padding: "6px",
             borderRadius: "8px",
             transition: "background 0.2s ease",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "24px",
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.05)")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
         >
-          ☰
+          <Menu size={24} />
         </button>
         <h2 style={{
           fontSize: "clamp(16px, 2.5vw, 22px)",
@@ -43,9 +46,9 @@ export default function Topbar() {
           whiteSpace: "nowrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
-          maxWidth: "140px",
+          maxWidth: "160px",
         }}>
-          Welcome 👋 {userName}
+          Welcome {userName}
         </h2>
       </div>
       <div className="topbar-right" style={{

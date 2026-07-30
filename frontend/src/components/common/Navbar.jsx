@@ -35,7 +35,6 @@ export default function Navbar() {
           <Link to="/" onClick={closeMenu}>ElderlyCare</Link>
         </div>
 
-        {/* Hamburger Icon */}
         <button 
           className="mobile-menu-toggle" 
           onClick={() => setMenuOpen(!menuOpen)}
@@ -44,7 +43,6 @@ export default function Navbar() {
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Navigation Links */}
         <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
           <NavLink to="/" onClick={closeMenu}>
             <Home size={16} style={{ display: "inline-block", marginRight: "4px" }} />
@@ -61,7 +59,6 @@ export default function Navbar() {
             <Phone size={16} style={{ display: "inline-block", marginRight: "4px" }} />
             Contact
           </NavLink>
-          {/* 🔥 Emergency Link – Red Color */}
           <NavLink 
             to="/emergency" 
             onClick={closeMenu}
@@ -75,7 +72,6 @@ export default function Navbar() {
           </NavLink>
         </nav>
 
-        {/* Desktop Actions */}
         <div className="nav-actions">
           <ThemeToggle />
 

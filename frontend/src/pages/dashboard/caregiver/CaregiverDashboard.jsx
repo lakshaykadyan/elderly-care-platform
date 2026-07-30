@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SidebarProvider } from "../../../context/SidebarContext";
-import Sidebar from "../../../components/dashboard/Sidebar"; 
+import Sidebar from "../../../components/dashboard/Sidebar";
 import Topbar from "../../../components/dashboard/Topbar";
 
 import CaregiverHome from "../../../components/dashboard/caregiver/CaregiverDashboard";
@@ -10,7 +10,15 @@ import Notifications from "../../../components/dashboard/caregiver/CaregiverNoti
 import CaregiverProfile from "../../../components/dashboard/caregiver/CaregiverProfile";
 
 export default function CaregiverDashboard() {
-  const [activePage, setActivePage] = useState("dashboard");
+  
+  const [activePage, setActivePage] = useState(() => {
+    return sessionStorage.getItem("caregiverActivePage") || "dashboard";
+  });
+
+  const handleSetActivePage = (page) => {
+    setActivePage(page);
+    sessionStorage.setItem("caregiverActivePage", page);
+  };
 
   const renderPage = () => {
     switch (activePage) {
@@ -26,7 +34,7 @@ export default function CaregiverDashboard() {
   return (
     <SidebarProvider>
       <div className="dashboard-container">
-        <Sidebar activePage={activePage} setActivePage={setActivePage} role="caregiver" />
+        <Sidebar activePage={activePage} setActivePage={handleSetActivePage} role="caregiver" />
         <div className="dashboard-content">
           <Topbar />
           <div className="dashboard-main">{renderPage()}</div>
