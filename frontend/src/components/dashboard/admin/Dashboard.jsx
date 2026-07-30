@@ -31,10 +31,24 @@ export default function Dashboard() {
   return (
     <div>
       <div style={{ marginBottom: "28px" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: "700", color: "var(--text-primary)", margin: 0, letterSpacing: "-0.5px" }}>
-          👑 Admin Dashboard
+        <h1 style={{
+          fontSize: "28px",
+          fontWeight: "700",
+          color: "var(--text-primary)",
+          margin: 0,
+          letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "12px",
+        }}>
+          <Users size={28} style={{ color: "var(--primary)" }} />
+          Admin Dashboard
         </h1>
-        <p style={{ color: "var(--text-secondary)", fontSize: "15px", margin: "6px 0 0 0" }}>
+        <p style={{
+          color: "var(--text-secondary)",
+          fontSize: "15px",
+          margin: "6px 0 0 0",
+        }}>
           Welcome back! Here's today's overview.
         </p>
       </div>
@@ -80,8 +94,23 @@ export default function Dashboard() {
               {card.icon}
             </div>
             <div>
-              <h3 style={{ fontSize: "14px", fontWeight: "500", color: "var(--text-muted)", margin: 0 }}>{card.title}</h3>
-              <h1 style={{ fontSize: "32px", fontWeight: "700", color: "var(--text-primary)", margin: 0, letterSpacing: "-1px" }}>{card.value}</h1>
+              <h3 style={{
+                fontSize: "14px",
+                fontWeight: "500",
+                color: "var(--text-muted)",
+                margin: 0,
+              }}>
+                {card.title}
+              </h3>
+              <h1 style={{
+                fontSize: "32px",
+                fontWeight: "700",
+                color: "var(--text-primary)",
+                margin: 0,
+                letterSpacing: "-1px",
+              }}>
+                {card.value}
+              </h1>
             </div>
           </div>
         ))}

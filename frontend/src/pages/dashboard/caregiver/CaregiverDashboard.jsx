@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SidebarProvider } from "../../../context/SidebarContext";
-import Sidebar from "../../../components/dashboard/Sidebar";
+import Sidebar from "../../../components/dashboard/Sidebar"; 
 import Topbar from "../../../components/dashboard/Topbar";
 
 import CaregiverHome from "../../../components/dashboard/caregiver/CaregiverDashboard";

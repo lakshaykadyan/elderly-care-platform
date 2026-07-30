@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { SidebarProvider } from "../../../context/SidebarContext";
-import Sidebar from "../../../components/dashboard/Sidebar";
+import Sidebar from "../../../components/dashboard/Sidebar"; 
 import Topbar from "../../../components/dashboard/Topbar";
+import UserHome from "../../../components/dashboard/user/UserDashboard";
 import Profile from "../../../components/dashboard/user/Profile";
 import RequestService from "../../../components/dashboard/user/RequestService";
 import MyServices from "../../../components/dashboard/user/MyServices";
@@ -15,6 +16,7 @@ export default function UserDashboard() {
 
   const renderPage = () => {
     switch (activePage) {
+      case "dashboard": return <UserHome />;
       case "profile": return <Profile />;
       case "request": return <RequestService />;
       case "bookings": return <MyServices />;

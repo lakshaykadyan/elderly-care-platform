@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../../services/api";
 import { showSuccess, showError } from "../../../utils/toast";
 import {
@@ -18,9 +19,11 @@ import {
   Home,
   Calendar,
   User,
+  ChevronRight,
 } from "lucide-react";
 
 export default function CaregiverDashboard() {
+  const navigate = useNavigate();
   const [availability, setAvailability] = useState("available");
   const [services, setServices] = useState([]);
   const [stats, setStats] = useState({
@@ -32,7 +35,6 @@ export default function CaregiverDashboard() {
     averageRating: 0,
   });
 
-  // ✅ Safe formatter for averageRating
   const formatRating = (rating) => {
     const num = Number(rating);
     return isNaN(num) ? "0.0" : num.toFixed(1);
@@ -83,6 +85,10 @@ export default function CaregiverDashboard() {
     }
   };
 
+  const goToServiceDetail = (serviceId) => {
+    navigate(`/service/${serviceId}`);
+  };
+
   const recentServices = [...services]
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 5);
@@ -101,14 +107,12 @@ export default function CaregiverDashboard() {
     stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0;
   const todayVisits = stats.accepted + stats.working;
 
-  // Status color mapping
   const statusColors = {
     available: { bg: "#22c55e", text: "#4ade80" },
     busy: { bg: "#f59e0b", text: "#fbbf24" },
     offline: { bg: "#ef4444", text: "#f87171" },
   };
 
-  // Stats Cards Data with Icons
   const statsCards = [
     { icon: <ClipboardList size={28} />, title: "Assigned", value: stats.total, color: "#4f46e5" },
     { icon: <Activity size={28} />, title: "Working", value: stats.working, color: "#f59e0b" },
@@ -121,7 +125,6 @@ export default function CaregiverDashboard() {
   return (
     <div className="caregiver-dashboard-wrapper">
       <style>{`
-        /* --- Force Dark Mode Text Colors --- */
         .caregiver-dashboard-wrapper h2,
         .caregiver-dashboard-wrapper h3,
         .caregiver-dashboard-wrapper p,
@@ -129,7 +132,6 @@ export default function CaregiverDashboard() {
         .caregiver-dashboard-wrapper label {
           color: var(--text-primary, #f8fafc) !important;
         }
-
         .caregiver-dashboard-wrapper .stats-card {
           background: var(--bg-card, #1e293b) !important;
           border: 1px solid var(--border-color, #334155) !important;
@@ -137,13 +139,11 @@ export default function CaregiverDashboard() {
           padding: 24px 28px !important;
           transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
-
         .caregiver-dashboard-wrapper .stats-card:hover {
           transform: translateY(-6px) !important;
           border-color: rgba(99, 102, 241, 0.2) !important;
           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3) !important;
         }
-
         .caregiver-dashboard-wrapper .availability-card {
           background: var(--bg-card, #1e293b) !important;
           border: 1px solid var(--border-color, #334155) !important;
@@ -151,7 +151,6 @@ export default function CaregiverDashboard() {
           padding: 24px 28px !important;
           margin-top: 30px !important;
         }
-
         .caregiver-dashboard-wrapper .action-card {
           background: var(--bg-card, #1e293b) !important;
           border: 1px solid var(--border-color, #334155) !important;
@@ -159,7 +158,6 @@ export default function CaregiverDashboard() {
           padding: 24px 28px !important;
           margin-top: 25px !important;
         }
-
         .caregiver-dashboard-wrapper .recent-card {
           background: var(--bg-card, #1e293b) !important;
           border: 1px solid var(--border-color, #334155) !important;
@@ -167,7 +165,6 @@ export default function CaregiverDashboard() {
           padding: 24px 28px !important;
           margin-top: 30px !important;
         }
-
         .caregiver-dashboard-wrapper .status-btn {
           padding: 10px 28px !important;
           border-radius: 40px !important;
@@ -177,11 +174,9 @@ export default function CaregiverDashboard() {
           cursor: pointer !important;
           transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         }
-
         .caregiver-dashboard-wrapper .status-btn:hover {
           transform: scale(1.04) !important;
         }
-
         .caregiver-dashboard-wrapper .quick-btn {
           padding: 10px 28px !important;
           border-radius: 40px !important;
@@ -194,32 +189,19 @@ export default function CaregiverDashboard() {
           transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
           box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3) !important;
         }
-
         .caregiver-dashboard-wrapper .quick-btn:hover {
           transform: scale(1.04) !important;
           box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5) !important;
         }
-
-        /* --- Light Mode Overrides --- */
-        .caregiver-dashboard-wrapper .stats-card h3,
-        .caregiver-dashboard-wrapper .stats-card span,
-        .caregiver-dashboard-wrapper .availability-card h2,
-        .caregiver-dashboard-wrapper .availability-card p,
-        .caregiver-dashboard-wrapper .action-card h2,
-        .caregiver-dashboard-wrapper .recent-card h2 {
-          color: var(--text-primary, #0f172a) !important;
+        .caregiver-dashboard-wrapper .service-clickable {
+          cursor: pointer;
+          transition: all 0.3s ease;
         }
-
-        [data-theme="dark"] .caregiver-dashboard-wrapper .stats-card h3,
-        [data-theme="dark"] .caregiver-dashboard-wrapper .stats-card span,
-        [data-theme="dark"] .caregiver-dashboard-wrapper .availability-card h2,
-        [data-theme="dark"] .caregiver-dashboard-wrapper .availability-card p,
-        [data-theme="dark"] .caregiver-dashboard-wrapper .action-card h2,
-        [data-theme="dark"] .caregiver-dashboard-wrapper .recent-card h2 {
-          color: #f8fafc !important;
+        .caregiver-dashboard-wrapper .service-clickable:hover {
+          border-color: rgba(99, 102, 241, 0.3) !important;
+          transform: translateX(6px) !important;
+          box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.15) !important;
         }
-
-        /* --- Grid Layout --- */
         .caregiver-dashboard-wrapper .stats-grid {
           display: grid !important;
           grid-template-columns: repeat(3, 1fr) !important;
@@ -227,21 +209,18 @@ export default function CaregiverDashboard() {
           margin-top: 24px !important;
           margin-bottom: 32px !important;
         }
-
         .caregiver-dashboard-wrapper .status-buttons {
           display: flex !important;
           gap: 12px !important;
           flex-wrap: wrap !important;
           margin-top: 16px !important;
         }
-
         .caregiver-dashboard-wrapper .quick-actions {
           display: flex !important;
           gap: 12px !important;
           flex-wrap: wrap !important;
           margin-top: 16px !important;
         }
-
         @media (max-width: 768px) {
           .caregiver-dashboard-wrapper .stats-grid {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -263,15 +242,9 @@ export default function CaregiverDashboard() {
         }
       `}</style>
 
-      {/* ====== PAGE WRAPPER ====== */}
-      <div style={{
-        padding: "8px 4px",
-      }}>
-
-        {/* ====== HEADER ====== */}
-        <div style={{
-          marginBottom: "28px",
-        }}>
+      <div style={{ padding: "8px 4px" }}>
+        {/* Header */}
+        <div style={{ marginBottom: "28px" }}>
           <h1 style={{
             fontSize: "28px",
             fontWeight: "700",
@@ -291,7 +264,7 @@ export default function CaregiverDashboard() {
           </p>
         </div>
 
-        {/* ====== STATS GRID ====== */}
+        {/* Stats Grid */}
         <div className="stats-grid">
           {statsCards.map((card, i) => (
             <div key={i} className="stats-card">
@@ -337,7 +310,7 @@ export default function CaregiverDashboard() {
           ))}
         </div>
 
-        {/* ====== PERFORMANCE SUMMARY ====== */}
+        {/* Performance Summary */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, 1fr)",
@@ -391,14 +364,13 @@ export default function CaregiverDashboard() {
           ))}
         </div>
 
-        {/* ====== CHARTS SECTION ====== */}
+        {/* Charts */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
           gap: "24px",
           marginBottom: "32px",
         }}>
-          {/* Weekly Chart */}
           <div style={{
             background: "var(--bg-card)",
             padding: "24px 28px",
@@ -449,7 +421,6 @@ export default function CaregiverDashboard() {
             </div>
           </div>
 
-          {/* Status Chart */}
           <div style={{
             background: "var(--bg-card)",
             padding: "24px 28px",
@@ -522,7 +493,7 @@ export default function CaregiverDashboard() {
           </div>
         </div>
 
-        {/* ====== AVAILABILITY ====== */}
+        {/* Availability */}
         <div className="availability-card">
           <h2 style={{
             fontSize: "18px",
@@ -530,7 +501,8 @@ export default function CaregiverDashboard() {
             color: "var(--text-primary)",
             margin: 0,
           }}>
-            🟢 Availability
+            <Activity size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+            Availability
           </h2>
           <p style={{
             color: "var(--text-secondary)",
@@ -554,7 +526,7 @@ export default function CaregiverDashboard() {
               }}
               onClick={() => changeAvailability("available")}
             >
-              ✅ Available
+              Available
             </button>
             <button
               className="status-btn"
@@ -565,7 +537,7 @@ export default function CaregiverDashboard() {
               }}
               onClick={() => changeAvailability("busy")}
             >
-              🟡 Busy
+              Busy
             </button>
             <button
               className="status-btn"
@@ -576,12 +548,12 @@ export default function CaregiverDashboard() {
               }}
               onClick={() => changeAvailability("offline")}
             >
-              🔴 Offline
+              Offline
             </button>
           </div>
         </div>
 
-        {/* ====== RECENT ACTIVITY ====== */}
+        {/* Recent Services - Clickable */}
         <div className="recent-card">
           <h2 style={{
             fontSize: "18px",
@@ -604,24 +576,22 @@ export default function CaregiverDashboard() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {recentServices.slice(0, 4).map((service, i) => (
-                <div key={i} style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "14px 18px",
-                  background: "var(--bg-body)",
-                  borderRadius: "14px",
-                  border: "1px solid var(--border-color)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(99,102,241,0.2)";
-                  e.currentTarget.style.transform = "translateX(4px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border-color)";
-                  e.currentTarget.style.transform = "translateX(0)";
-                }}>
+                <div
+                  key={i}
+                  className="service-clickable"
+                  onClick={() => goToServiceDetail(service._id)}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "14px 18px",
+                    background: "var(--bg-body)",
+                    borderRadius: "14px",
+                    border: "1px solid var(--border-color)",
+                    transition: "all 0.3s ease",
+                    cursor: "pointer",
+                  }}
+                >
                   <div>
                     <h4 style={{
                       fontSize: "15px",
@@ -638,36 +608,39 @@ export default function CaregiverDashboard() {
                       {service.bookingDate ? new Date(service.bookingDate).toLocaleDateString() : "N/A"}
                     </span>
                   </div>
-                  <span style={{
-                    padding: "4px 14px",
-                    borderRadius: "30px",
-                    fontSize: "12px",
-                    fontWeight: "600",
-                    background: service.status === "completed" ? "rgba(34,197,94,0.08)" :
-                               service.status === "in-progress" ? "rgba(139,92,246,0.08)" :
-                               service.status === "accepted" ? "rgba(59,130,246,0.08)" :
-                               service.status === "pending" ? "rgba(245,158,11,0.08)" :
-                               "rgba(100,116,139,0.08)",
-                    color: service.status === "completed" ? "#4ade80" :
-                           service.status === "in-progress" ? "#a78bfa" :
-                           service.status === "accepted" ? "#60a5fa" :
-                           service.status === "pending" ? "#fbbf24" :
-                           "#94a3b8",
-                    border: `1px solid ${service.status === "completed" ? "rgba(34,197,94,0.08)" :
-                            service.status === "in-progress" ? "rgba(139,92,246,0.08)" :
-                            service.status === "accepted" ? "rgba(59,130,246,0.08)" :
-                            service.status === "pending" ? "rgba(245,158,11,0.08)" :
-                            "rgba(100,116,139,0.08)"}`,
-                  }}>
-                    {service.status || "Unknown"}
-                  </span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <span style={{
+                      padding: "4px 14px",
+                      borderRadius: "30px",
+                      fontSize: "12px",
+                      fontWeight: "600",
+                      background: service.status === "completed" ? "rgba(34,197,94,0.08)" :
+                                 service.status === "in-progress" ? "rgba(139,92,246,0.08)" :
+                                 service.status === "accepted" ? "rgba(59,130,246,0.08)" :
+                                 service.status === "pending" ? "rgba(245,158,11,0.08)" :
+                                 "rgba(100,116,139,0.08)",
+                      color: service.status === "completed" ? "#4ade80" :
+                             service.status === "in-progress" ? "#a78bfa" :
+                             service.status === "accepted" ? "#60a5fa" :
+                             service.status === "pending" ? "#fbbf24" :
+                             "#94a3b8",
+                      border: `1px solid ${service.status === "completed" ? "rgba(34,197,94,0.08)" :
+                              service.status === "in-progress" ? "rgba(139,92,246,0.08)" :
+                              service.status === "accepted" ? "rgba(59,130,246,0.08)" :
+                              service.status === "pending" ? "rgba(245,158,11,0.08)" :
+                              "rgba(100,116,139,0.08)"}`,
+                    }}>
+                      {service.status || "Unknown"}
+                    </span>
+                    <ChevronRight size={16} color="var(--text-muted)" />
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* ====== TODAY'S SCHEDULE ====== */}
+        {/* Today's Schedule */}
         <div className="recent-card">
           <h2 style={{
             fontSize: "18px",
@@ -734,7 +707,7 @@ export default function CaregiverDashboard() {
           </div>
         </div>
 
-        {/* ====== QUICK ACTIONS ====== */}
+        {/* Quick Actions */}
         <div className="action-card">
           <h2 style={{
             fontSize: "18px",
@@ -742,7 +715,8 @@ export default function CaregiverDashboard() {
             color: "var(--text-primary)",
             margin: 0,
           }}>
-            ⚡ Quick Actions
+            <Bell size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+            Quick Actions
           </h2>
           <div className="quick-actions">
             <button
@@ -760,7 +734,8 @@ export default function CaregiverDashboard() {
                 window.dispatchEvent(new CustomEvent("caregiver-page", { detail: "availability" }))
               }
             >
-              🟢 Availability
+              <Activity size={16} style={{ display: "inline-block", marginRight: "6px" }} />
+              Availability
             </button>
             <button
               className="quick-btn"
@@ -773,7 +748,6 @@ export default function CaregiverDashboard() {
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -18,6 +18,11 @@ export default function Sidebar({
     return activePage === page ? "menu-btn active" : "menu-btn";
   };
 
+  const handlePageChange = (page) => {
+    setActivePage(page);
+    closeSidebar(); // ✅ Auto-close on mobile
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("elderlyUser");
@@ -116,7 +121,7 @@ export default function Sidebar({
           <h2>ElderlyCare</h2>
         </div>
         <nav className="menu">
-          {renderMenuButtons(getMenuClass, activePage, setActivePage, role)}
+          {renderMenuButtons(getMenuClass, activePage, handlePageChange, role)}
           <div style={{ marginTop: "auto", paddingTop: "20px" }}>
             <button className="logout-btn-sidebar" onClick={() => setShowLogoutModal(true)}>
               <LogOut size={18} style={{ marginRight: "10px" }} /> Logout
@@ -131,7 +136,7 @@ export default function Sidebar({
         onClick={closeSidebar}
       />
 
-      {/* ✅ Mobile Sidebar (Premium Close Button) */}
+      {/* ✅ Mobile Sidebar */}
       <aside className={`sidebar sidebar-mobile ${isOpen ? "open" : ""}`}>
         <div style={{
           display: "flex",
@@ -165,7 +170,7 @@ export default function Sidebar({
         </div>
 
         <nav className="menu">
-          {renderMenuButtons(getMenuClass, activePage, setActivePage, role)}
+          {renderMenuButtons(getMenuClass, activePage, handlePageChange, role)}
           <div style={{ marginTop: "auto", paddingTop: "20px" }}>
             <button className="logout-btn-sidebar" onClick={() => setShowLogoutModal(true)}>
               <LogOut size={18} style={{ marginRight: "10px" }} /> Logout
@@ -184,8 +189,8 @@ export default function Sidebar({
   );
 }
 
-// ✅ Helper function to avoid repetition
-function renderMenuButtons(getMenuClass, activePage, setActivePage, role) {
+// ✅ Helper function – now accepts handlePageChange instead of setActivePage
+function renderMenuButtons(getMenuClass, activePage, handlePageChange, role) {
   const buttons = [];
 
   if (role === "user") {
@@ -223,7 +228,7 @@ function renderMenuButtons(getMenuClass, activePage, setActivePage, role) {
       key={btn.key}
       type="button"
       className={btn.disabled ? "menu-btn" : getMenuClass(btn.page)}
-      onClick={() => !btn.disabled && setActivePage(btn.page)}
+      onClick={() => !btn.disabled && handlePageChange(btn.page)}
       disabled={btn.disabled}
     >
       <btn.Icon size={18} style={{ marginRight: "10px" }} />
