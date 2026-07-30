@@ -6,12 +6,13 @@ import ServiceToolbar from "./services/ServiceToolbar";
 import ServiceList from "./services/ServiceList";
 import ServiceModal from "./services/ServiceModal";
 import { showSuccess, showError } from "../../../utils/toast";
+import { ClipboardList } from "lucide-react";
 
-export default function AssignedServices() {
+export default function AssignedServices({ initialFilter = "all" }) {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterStatus, setFilterStatus] = useState(initialFilter); // ✅ Dashboard se filter apply
   const [notes, setNotes] = useState({});
   const [selectedService, setSelectedService] = useState(null);
 
@@ -58,8 +59,17 @@ export default function AssignedServices() {
         email.includes(keyword) ||
         phone.includes(keyword) ||
         serviceName.includes(keyword);
-      const statusMatch =
-        filterStatus === "all" ? true : service.status === filterStatus;
+      
+      // ✅ Filter status with "assigned" logic
+      let statusMatch = false;
+      if (filterStatus === "all") {
+        statusMatch = true;
+      } else if (filterStatus === "assigned") {
+        statusMatch = service.status === "pending" || service.status === "accepted";
+      } else {
+        statusMatch = service.status === filterStatus;
+      }
+      
       return searchMatch && statusMatch;
     });
   }, [services, search, filterStatus]);
@@ -119,8 +129,12 @@ export default function AssignedServices() {
           color: "var(--text-primary)",
           margin: 0,
           letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
         }}>
-          📋 Assigned Services
+          <ClipboardList size={28} style={{ color: "var(--primary)" }} />
+          Assigned Services
         </h1>
         <p style={{
           color: "var(--text-secondary)",

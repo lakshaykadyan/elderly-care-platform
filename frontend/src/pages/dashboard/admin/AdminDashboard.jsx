@@ -23,21 +23,30 @@ export default function AdminDashboard() {
   const renderPage = () => {
     switch (activePage) {
       case "dashboard":
-        return <Dashboard setActivePage={handleSetActivePage} />;  
-      case "users":
-        return <Users />;
-      case "caregivers":
-        return <Caregivers />;
+        return <Dashboard setActivePage={handleSetActivePage} />;
+      case "users": {
+       
+        const filter = sessionStorage.getItem("adminUsersFilter") || "all";
+        
+        sessionStorage.removeItem("adminUsersFilter");
+        return <Users initialFilter={filter} />;
+      }
+      case "caregivers": {
+        
+        const filter = sessionStorage.getItem("adminUsersFilter") || "caregiver";
+        sessionStorage.removeItem("adminUsersFilter");
+        return <Users initialFilter={filter} />;
+      }
       case "services":
         return <Services />;
       case "complaints":
         return <Complaints />;
       case "analytics":
-        return <Analytics />;
+        return <Analytics setActivePage={handleSetActivePage} />;
       case "notifications":
         return <Notifications />;
       default:
-        return <Dashboard setActivePage={handleSetActivePage} />;  
+        return <Dashboard setActivePage={handleSetActivePage} />;
     }
   };
 

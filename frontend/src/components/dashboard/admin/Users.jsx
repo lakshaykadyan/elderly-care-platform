@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Users } from "lucide-react"; 
 import { getUsers, toggleUserStatus, deleteUser } from "../../../hooks/useAdmin";
 import LoadingUsers from "./users/LoadingUsers";
 import UserFilters from "./users/UserFilters";
@@ -6,12 +7,13 @@ import UserTable from "./users/UserTable";
 import UserPagination from "./users/UserPagination";
 import { showSuccess, showError } from "../../../utils/toast";
 
-export default function Users() {
+export default function Users({ initialFilter = "all" }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState(initialFilter); 
+  const [filter, setFilter] = useState(initialFilter || "all");
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,7 +123,8 @@ export default function Users() {
       border: "1px solid var(--border-color)",
     }}>
       <h1 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", marginBottom: "20px", letterSpacing: "-0.5px" }}>
-        👥 Manage Users
+        <Users size={24} style={{ display: "inline-block", marginRight: "8px" }} />
+        Manage Users
       </h1>
 
       <UserFilters

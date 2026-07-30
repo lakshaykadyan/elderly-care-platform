@@ -21,9 +21,11 @@ export default function Dashboard({ setActivePage }) {
     }
   };
 
-  // ✅ Card click handlers
-  const handleCardClick = (page) => {
+  const handleCardClick = (page, filter) => {
     if (setActivePage) {
+      if (filter) {
+        sessionStorage.setItem("adminUsersFilter", filter);
+      }
       setActivePage(page);
     }
   };
@@ -34,28 +36,32 @@ export default function Dashboard({ setActivePage }) {
       title: "Total Users", 
       value: stats.totalUsers, 
       color: "#4f46e5",
-      page: "users"
+      page: "users",
+      filter: "user"
     },
     { 
       icon: <Stethoscope size={28} />, 
       title: "Caregivers", 
       value: stats.totalCaregivers, 
       color: "#22c55e",
-      page: "caregivers"
+      page: "caregivers",
+      filter: "caregiver"
     },
     { 
       icon: <Calendar size={28} />, 
       title: "Services", 
       value: stats.totalServices, 
       color: "#f59e0b",
-      page: "services"
+      page: "services",
+      filter: null
     },
     { 
       icon: <AlertTriangle size={28} />, 
       title: "Complaints", 
       value: stats.totalComplaints, 
       color: "#ef4444",
-      page: "complaints"
+      page: "complaints",
+      filter: null
     },
   ];
 
@@ -92,7 +98,7 @@ export default function Dashboard({ setActivePage }) {
         {cards.map((card, i) => (
           <div 
             key={i} 
-            onClick={() => handleCardClick(card.page)}
+            onClick={() => handleCardClick(card.page, card.filter)}
             style={{
               background: "var(--bg-card)",
               padding: "24px 28px",

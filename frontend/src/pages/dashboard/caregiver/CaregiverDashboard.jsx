@@ -22,17 +22,21 @@ export default function CaregiverDashboard() {
   const renderPage = () => {
     switch (activePage) {
       case "dashboard":
-        return <CaregiverHome setActivePage={handleSetActivePage} />;  
+        return <CaregiverHome setActivePage={handleSetActivePage} />;
+      case "services": {
+        
+        const filter = sessionStorage.getItem("caregiverServiceFilter") || "all";
+        sessionStorage.removeItem("caregiverServiceFilter");
+        return <AssignedServices initialFilter={filter} />;
+      }
       case "profile":
         return <CaregiverProfile />;
-      case "services":
-        return <AssignedServices />;
       case "availability":
         return <Availability />;
       case "notifications":
         return <Notifications />;
       default:
-        return <CaregiverHome setActivePage={handleSetActivePage} />;  
+        return <CaregiverHome setActivePage={handleSetActivePage} />;
     }
   };
 

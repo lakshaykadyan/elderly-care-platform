@@ -59,7 +59,6 @@ export default function CaregiverDashboard({ setActivePage }) {
     }
   };
 
-  // ✅ Filter today's services
   const filterTodayServices = (allServices) => {
     const today = new Date().toDateString();
     const todayList = allServices.filter((s) => {
@@ -102,7 +101,16 @@ export default function CaregiverDashboard({ setActivePage }) {
     }
   };
 
-  // ✅ Fix: Navigate to Assigned Services page instead of 404
+  // ✅ Card click handler with filter
+  const handleCardClick = (page, filter) => {
+    if (setActivePage) {
+      if (filter) {
+        sessionStorage.setItem("caregiverServiceFilter", filter);
+      }
+      setActivePage(page);
+    }
+  };
+
   const goToServiceDetail = (serviceId) => {
     if (setActivePage) {
       setActivePage("services");
@@ -147,42 +155,48 @@ export default function CaregiverDashboard({ setActivePage }) {
       title: "Assigned", 
       value: stats.total, 
       color: "#4f46e5",
-      page: "services" 
+      page: "services",
+      filter: "assigned"
     },
     { 
       icon: <Activity size={28} />, 
       title: "Working", 
       value: stats.working, 
       color: "#f59e0b",
-      page: "services" 
+      page: "services",
+      filter: "in-progress"
     },
     { 
       icon: <CheckCircle size={28} />, 
       title: "Accepted", 
       value: stats.accepted, 
       color: "#22c55e",
-      page: "services" 
+      page: "services",
+      filter: "accepted"
     },
     { 
       icon: <FileCheck size={28} />, 
       title: "Completed", 
       value: stats.completed, 
       color: "#10b981",
-      page: "services" 
+      page: "services",
+      filter: "completed"
     },
     { 
       icon: <Star size={28} />, 
       title: "Rating", 
       value: formatRating(stats.averageRating), 
       color: "#f59e0b",
-      page: "profile" 
+      page: "profile",
+      filter: null
     },
     { 
       icon: <DollarSign size={28} />, 
       title: "Earnings", 
       value: `₹${stats.earnings}`, 
       color: "#8b5cf6",
-      page: null 
+      page: null,
+      filter: null
     },
   ];
 
@@ -304,7 +318,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           </p>
         </div>
 
-        {/* Stats Grid */}
+        {/* Stats Grid - Clickable with Filter */}
         <div className="stats-grid">
           {statsCards.map((card, i) => {
             const isClickable = card.page && card.page !== "dashboard";
@@ -314,7 +328,7 @@ export default function CaregiverDashboard({ setActivePage }) {
                 className={`stats-card ${isClickable ? 'stats-card-clickable' : ''}`}
                 onClick={() => {
                   if (isClickable && setActivePage) {
-                    setActivePage(card.page);
+                    handleCardClick(card.page, card.filter);
                   }
                 }}
                 style={{
@@ -622,7 +636,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           </div>
         </div>
 
-        {/* Recent Services - Clickable (No 404) */}
+        {/* Recent Services */}
         <div className="recent-card" style={{
           background: "var(--bg-card)",
           padding: "24px 28px",
@@ -715,7 +729,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           )}
         </div>
 
-        {/* Today's Schedule - Dynamic */}
+        {/* Today's Schedule */}
         <div className="recent-card" style={{
           background: "var(--bg-card)",
           padding: "24px 28px",
