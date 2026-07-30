@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { showSuccess, showError } from "../../../utils/toast";
+import { Mail, User, Lock, Shield, KeyRound, AlertCircle } from "lucide-react";
 
 export default function AdminProfile() {
   const { user } = useAuth();
@@ -49,7 +50,6 @@ export default function AdminProfile() {
         width: "100%",
         margin: "0 auto",
       }}>
-        {/* ===== MAIN CARD ===== */}
         <div style={{
           background: "var(--bg-card)",
           borderRadius: "24px",
@@ -60,7 +60,6 @@ export default function AdminProfile() {
           position: "relative",
           overflow: "hidden",
         }}>
-          {/* Premium Accent Gradient Line */}
           <div style={{
             position: "absolute",
             top: 0,
@@ -72,7 +71,7 @@ export default function AdminProfile() {
             animation: "gradientMove 4s ease infinite",
           }} />
 
-          {/* ===== 1. AVATAR + HEADER ===== */}
+          {/* ===== AVATAR + HEADER ===== */}
           <div style={{
             display: "flex",
             flexDirection: "column",
@@ -83,7 +82,6 @@ export default function AdminProfile() {
               position: "relative",
               marginBottom: "16px",
             }}>
-              {/* ✅ Glowing Ring Behind Avatar */}
               <div style={{
                 position: "absolute",
                 inset: "-8px",
@@ -100,13 +98,13 @@ export default function AdminProfile() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "40px",
+                fontSize: "36px",
                 color: "#fff",
                 boxShadow: "0 12px 32px rgba(79,70,229,0.35)",
                 position: "relative",
                 zIndex: 1,
               }}>
-                👑
+                <User size={40} />
               </div>
             </div>
 
@@ -139,7 +137,8 @@ export default function AdminProfile() {
                 alignItems: "center",
                 gap: "4px",
               }}>
-                👑 Admin
+                <Shield size={14} />
+                Admin
               </span>
               <span style={{
                 padding: "4px 16px",
@@ -153,19 +152,19 @@ export default function AdminProfile() {
                 alignItems: "center",
                 gap: "4px",
               }}>
-                🛡️ Super Admin
+                <Shield size={14} />
+                Super Admin
               </span>
             </div>
           </div>
 
-          {/* ===== 2. DETAILS GRID ===== */}
+          {/* ===== DETAILS GRID ===== */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
             gap: "16px",
             marginBottom: "32px",
           }}>
-            {/* Full Name */}
             <div style={{
               padding: "16px 20px",
               background: "var(--bg-body)",
@@ -191,8 +190,12 @@ export default function AdminProfile() {
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 marginBottom: "4px",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
               }}>
-                📛 Full Name
+                <User size={14} />
+                Full Name
               </span>
               <span style={{
                 fontSize: "17px",
@@ -204,7 +207,6 @@ export default function AdminProfile() {
               </span>
             </div>
 
-            {/* Email */}
             <div style={{
               padding: "16px 20px",
               background: "var(--bg-body)",
@@ -230,8 +232,12 @@ export default function AdminProfile() {
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 marginBottom: "4px",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
               }}>
-                📧 Email
+                <Mail size={14} />
+                Email
               </span>
               <span style={{
                 fontSize: "17px",
@@ -243,7 +249,6 @@ export default function AdminProfile() {
               </span>
             </div>
 
-            {/* Role */}
             <div style={{
               padding: "16px 20px",
               background: "var(--bg-body)",
@@ -269,8 +274,12 @@ export default function AdminProfile() {
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 marginBottom: "4px",
+                display: "flex",
+                alignItems: "center",
+                gap: "4px",
               }}>
-                🎯 Role
+                <Shield size={14} />
+                Role
               </span>
               <span style={{
                 fontSize: "17px",
@@ -278,12 +287,13 @@ export default function AdminProfile() {
                 color: "#ef4444",
                 display: "block",
               }}>
-                👑 Administrator
+                <Shield size={16} style={{ display: "inline", marginRight: "4px" }} />
+                Administrator
               </span>
             </div>
           </div>
 
-          {/* ===== 3. SECURITY SECTION ===== */}
+          {/* ===== SECURITY SECTION ===== */}
           <div style={{
             background: "var(--bg-body)",
             borderRadius: "20px",
@@ -305,7 +315,8 @@ export default function AdminProfile() {
                 alignItems: "center",
                 gap: "8px",
               }}>
-                🔐 Security
+                <Lock size={20} />
+                Security
               </h3>
               {!isEditing && (
                 <button
@@ -331,6 +342,7 @@ export default function AdminProfile() {
                     e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)";
                   }}
                 >
+                  <KeyRound size={16} style={{ display: "inline", marginRight: "6px" }} />
                   Change Password
                 </button>
               )}
@@ -487,14 +499,15 @@ export default function AdminProfile() {
                       e.target.style.boxShadow = "0 4px 14px rgba(34,197,94,0.3)";
                     }}
                   >
-                    💾 Update Password
+                    <KeyRound size={16} style={{ display: "inline", marginRight: "6px" }} />
+                    Update Password
                   </button>
                 </div>
               </div>
             )}
           </div>
 
-          {/* ===== 4. FOOTER NOTE ===== */}
+          {/* ===== FOOTER NOTE ===== */}
           <div style={{
             marginTop: "24px",
             padding: "14px 18px",
@@ -512,12 +525,12 @@ export default function AdminProfile() {
               justifyContent: "center",
               gap: "6px",
             }}>
-              🔒 You have full administrative access to the platform.
+              <AlertCircle size={16} />
+              You have full administrative access to the platform.
             </p>
           </div>
         </div>
 
-        {/*  Global Animation Keyframes */}
         <style>{`
           @keyframes gradientMove {
             0% { background-position: 0% 50%; }

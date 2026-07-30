@@ -10,7 +10,6 @@ import Notifications from "../../../components/dashboard/caregiver/CaregiverNoti
 import CaregiverProfile from "../../../components/dashboard/caregiver/CaregiverProfile";
 
 export default function CaregiverDashboard() {
-  
   const [activePage, setActivePage] = useState(() => {
     return sessionStorage.getItem("caregiverActivePage") || "dashboard";
   });
@@ -22,12 +21,18 @@ export default function CaregiverDashboard() {
 
   const renderPage = () => {
     switch (activePage) {
-      case "dashboard": return <CaregiverHome />;
-      case "profile": return <CaregiverProfile />;
-      case "services": return <AssignedServices />;
-      case "availability": return <Availability />;
-      case "notifications": return <Notifications />;
-      default: return <CaregiverHome />;
+      case "dashboard":
+        return <CaregiverHome setActivePage={handleSetActivePage} />;  
+      case "profile":
+        return <CaregiverProfile />;
+      case "services":
+        return <AssignedServices />;
+      case "availability":
+        return <Availability />;
+      case "notifications":
+        return <Notifications />;
+      default:
+        return <CaregiverHome setActivePage={handleSetActivePage} />;  
     }
   };
 

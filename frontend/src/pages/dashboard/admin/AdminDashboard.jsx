@@ -11,7 +11,6 @@ import Analytics from "../../../components/dashboard/admin/Analytics";
 import Notifications from "../../../components/common/Notifications";
 
 export default function AdminDashboard() {
- 
   const [activePage, setActivePage] = useState(() => {
     return sessionStorage.getItem("adminActivePage") || "dashboard";
   });
@@ -23,14 +22,22 @@ export default function AdminDashboard() {
 
   const renderPage = () => {
     switch (activePage) {
-      case "dashboard": return <Dashboard />;
-      case "users": return <Users />;
-      case "caregivers": return <Caregivers />;
-      case "services": return <Services />;
-      case "complaints": return <Complaints />;
-      case "analytics": return <Analytics />;
-      case "notifications": return <Notifications />;
-      default: return <Dashboard />;
+      case "dashboard":
+        return <Dashboard setActivePage={handleSetActivePage} />;  
+      case "users":
+        return <Users />;
+      case "caregivers":
+        return <Caregivers />;
+      case "services":
+        return <Services />;
+      case "complaints":
+        return <Complaints />;
+      case "analytics":
+        return <Analytics />;
+      case "notifications":
+        return <Notifications />;
+      default:
+        return <Dashboard setActivePage={handleSetActivePage} />;  
     }
   };
 

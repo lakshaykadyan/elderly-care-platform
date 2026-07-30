@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Users, Stethoscope, Calendar, AlertTriangle } from "lucide-react";
 import { getDashboardStats } from "../../../hooks/useAdmin";
 
-export default function Dashboard() {
+export default function Dashboard({ setActivePage }) {
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalCaregivers: 0,
@@ -21,11 +21,42 @@ export default function Dashboard() {
     }
   };
 
+  // ✅ Card click handlers
+  const handleCardClick = (page) => {
+    if (setActivePage) {
+      setActivePage(page);
+    }
+  };
+
   const cards = [
-    { icon: <Users size={28} />, title: "Total Users", value: stats.totalUsers, color: "#4f46e5" },
-    { icon: <Stethoscope size={28} />, title: "Caregivers", value: stats.totalCaregivers, color: "#22c55e" },
-    { icon: <Calendar size={28} />, title: "Services", value: stats.totalServices, color: "#f59e0b" },
-    { icon: <AlertTriangle size={28} />, title: "Complaints", value: stats.totalComplaints, color: "#ef4444" },
+    { 
+      icon: <Users size={28} />, 
+      title: "Total Users", 
+      value: stats.totalUsers, 
+      color: "#4f46e5",
+      page: "users"
+    },
+    { 
+      icon: <Stethoscope size={28} />, 
+      title: "Caregivers", 
+      value: stats.totalCaregivers, 
+      color: "#22c55e",
+      page: "caregivers"
+    },
+    { 
+      icon: <Calendar size={28} />, 
+      title: "Services", 
+      value: stats.totalServices, 
+      color: "#f59e0b",
+      page: "services"
+    },
+    { 
+      icon: <AlertTriangle size={28} />, 
+      title: "Complaints", 
+      value: stats.totalComplaints, 
+      color: "#ef4444",
+      page: "complaints"
+    },
   ];
 
   return (
@@ -59,27 +90,32 @@ export default function Dashboard() {
         gap: "20px",
       }}>
         {cards.map((card, i) => (
-          <div key={i} style={{
-            background: "var(--bg-card)",
-            padding: "24px 28px",
-            borderRadius: "20px",
-            border: "1px solid var(--border-color)",
-            boxShadow: "0 8px 24px -8px rgba(0,0,0,0.06)",
-            transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-            display: "flex",
-            alignItems: "center",
-            gap: "16px",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-6px)";
-            e.currentTarget.style.borderColor = "rgba(99,102,241,0.2)";
-            e.currentTarget.style.boxShadow = "0 25px 50px -12px rgba(0,0,0,0.2)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.borderColor = "var(--border-color)";
-            e.currentTarget.style.boxShadow = "0 8px 24px -8px rgba(0,0,0,0.06)";
-          }}>
+          <div 
+            key={i} 
+            onClick={() => handleCardClick(card.page)}
+            style={{
+              background: "var(--bg-card)",
+              padding: "24px 28px",
+              borderRadius: "20px",
+              border: "1px solid var(--border-color)",
+              boxShadow: "0 8px 24px -8px rgba(0,0,0,0.06)",
+              transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-6px)";
+              e.currentTarget.style.borderColor = "rgba(99,102,241,0.2)";
+              e.currentTarget.style.boxShadow = "0 25px 50px -12px rgba(0,0,0,0.2)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "var(--border-color)";
+              e.currentTarget.style.boxShadow = "0 8px 24px -8px rgba(0,0,0,0.06)";
+            }}
+          >
             <div style={{
               width: "56px",
               height: "56px",
