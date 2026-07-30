@@ -6,6 +6,7 @@ import LoadingComplaints from "./complaints/LoadingComplaints";
 import EmptyComplaints from "./complaints/EmptyComplaints";
 import ComplaintPagination from "./complaints/ComplaintPagination";
 import { showSuccess, showError } from "../../../utils/toast";
+import { AlertTriangle } from "lucide-react";
 
 export default function Complaints() {
   const [complaints, setComplaints] = useState([]);
@@ -43,7 +44,6 @@ export default function Complaints() {
     }
   };
 
-  // ✅ Filter Logic
   const filteredComplaints = useMemo(() => {
     return complaints.filter((item) => {
       const keyword = search.toLowerCase().trim();
@@ -56,13 +56,11 @@ export default function Complaints() {
     });
   }, [complaints, search, filter]);
 
-  // ✅ Pagination Logic
   const totalPages = Math.ceil(filteredComplaints.length / complaintsPerPage);
   const indexOfLast = currentPage * complaintsPerPage;
   const indexOfFirst = indexOfLast - complaintsPerPage;
   const currentComplaints = filteredComplaints.slice(indexOfFirst, indexOfLast);
 
-  // ✅ Reset page on search/filter change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filter]);
@@ -82,8 +80,12 @@ export default function Complaints() {
         color: "var(--text-primary)",
         marginBottom: "20px",
         letterSpacing: "-0.5px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
       }}>
-        ⚠️ Manage Complaints
+        <AlertTriangle size={24} style={{ color: "#ef4444" }} />
+        Manage Complaints
       </h1>
 
       <ComplaintFilters

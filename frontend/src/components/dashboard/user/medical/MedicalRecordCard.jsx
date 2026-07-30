@@ -1,3 +1,5 @@
+import { FileText, Calendar, Eye, Trash2 } from "lucide-react";
+
 export default function MedicalRecordCard({ record, handleDelete }) {
   const type = (record.fileType || "N/A").toUpperCase();
 
@@ -38,8 +40,9 @@ export default function MedicalRecordCard({ record, handleDelete }) {
           fontSize: "24px",
           border: "1px solid rgba(79,70,229,0.06)",
           flexShrink: 0,
+          color: "var(--primary)",
         }}>
-          📄
+          <FileText size={24} />
         </div>
         <div>
           <h4 style={{
@@ -65,8 +68,12 @@ export default function MedicalRecordCard({ record, handleDelete }) {
             <span style={{
               color: "var(--text-muted)",
               fontSize: "13px",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
             }}>
-              📅 {new Date(record.createdAt).toLocaleDateString()}
+              <Calendar size={14} />
+              {new Date(record.createdAt).toLocaleDateString()}
             </span>
           </div>
         </div>
@@ -97,7 +104,8 @@ export default function MedicalRecordCard({ record, handleDelete }) {
           onMouseEnter={(e) => { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 20px rgba(79,70,229,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 12px rgba(79,70,229,0.2)"; }}
         >
-          👁 View
+          <Eye size={14} />
+          View
         </a>
         <button
           onClick={() => handleDelete(record._id)}
@@ -118,7 +126,8 @@ export default function MedicalRecordCard({ record, handleDelete }) {
           onMouseEnter={(e) => { e.target.style.background = "#ef4444"; e.target.style.color = "#fff"; e.target.style.borderColor = "#ef4444"; e.target.style.boxShadow = "0 4px 12px rgba(239,68,68,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.background = "transparent"; e.target.style.color = "#f87171"; e.target.style.borderColor = "rgba(239,68,68,0.15)"; e.target.style.boxShadow = "none"; }}
         >
-          🗑 Delete
+          <Trash2 size={14} />
+          Delete
         </button>
       </div>
     </div>

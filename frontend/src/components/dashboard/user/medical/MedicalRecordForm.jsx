@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { FileText, Link, FolderOpen, Upload } from "lucide-react";
+import { FileText, Link, FolderOpen, Upload, Paperclip, Loader } from "lucide-react";
 
 export default function MedicalRecordForm({
   form,
@@ -153,7 +153,7 @@ export default function MedicalRecordForm({
               <option value="Document">Document</option>
             </select>
 
-            {/* ✅ Attach File Button */}
+            {/* Attach File Button */}
             <button
               type="button"
               onClick={() => fileInputRef.current.click()}
@@ -174,7 +174,7 @@ export default function MedicalRecordForm({
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg-card)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "var(--bg-body)")}
             >
-              📎 Attach
+              <Paperclip size={18} />
             </button>
             <input
               ref={fileInputRef}
@@ -198,10 +198,13 @@ export default function MedicalRecordForm({
           color: "#fff",
           fontWeight: "600",
           fontSize: "15px",
-          cursor: "pointer",
+          cursor: uploading ? "not-allowed" : "pointer",
           transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
           boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
           opacity: uploading ? 0.6 : 1,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "8px",
         }}
         onMouseEnter={(e) => {
           if (!uploading) {
@@ -217,14 +220,26 @@ export default function MedicalRecordForm({
         }}
       >
         {uploading ? (
-          "⏳ Uploading..."
+          <>
+            <Loader size={18} className="spin" />
+            Uploading...
+          </>
         ) : (
           <>
-            <Upload size={16} style={{ display: "inline-block", marginRight: "6px" }} />
+            <Upload size={16} />
             Upload Record
           </>
         )}
       </button>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

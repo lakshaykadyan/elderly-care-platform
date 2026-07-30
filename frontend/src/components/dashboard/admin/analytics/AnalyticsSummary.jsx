@@ -1,13 +1,15 @@
+import { Trophy, Users, Stethoscope, Calendar, BarChart3 } from "lucide-react";
+
 export default function AnalyticsSummary({ stats }) {
   const successRate = stats.totalServices > 0
     ? ((stats.completedServices / stats.totalServices) * 100).toFixed(1)
     : 0;
 
   const items = [
-    { icon: "🏆", title: "Success Rate", value: `${successRate}%`, color: "#f59e0b" },
-    { icon: "👥", title: "Active Users", value: stats.activeUsers, color: "#4f46e5" },
-    { icon: "🧑‍⚕️", title: "Verified Caregivers", value: stats.verifiedCaregivers, color: "#22c55e" },
-    { icon: "📅", title: "Total Services", value: stats.totalServices, color: "#8b5cf6" },
+    { icon: <Trophy size={28} />, title: "Success Rate", value: `${successRate}%`, color: "#f59e0b" },
+    { icon: <Users size={28} />, title: "Active Users", value: stats.activeUsers, color: "#4f46e5" },
+    { icon: <Stethoscope size={28} />, title: "Verified Caregivers", value: stats.verifiedCaregivers, color: "#22c55e" },
+    { icon: <Calendar size={28} />, title: "Total Services", value: stats.totalServices, color: "#8b5cf6" },
   ];
 
   return (
@@ -17,8 +19,17 @@ export default function AnalyticsSummary({ stats }) {
       borderRadius: "20px",
       border: "1px solid var(--border-color)",
     }}>
-      <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "16px" }}>
-        📈 Quick Summary
+      <h3 style={{
+        fontSize: "18px",
+        fontWeight: "600",
+        color: "var(--text-primary)",
+        marginBottom: "16px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <BarChart3 size={20} style={{ color: "var(--primary)" }} />
+        Quick Summary
       </h3>
       <div style={{
         display: "grid",
@@ -42,7 +53,15 @@ export default function AnalyticsSummary({ stats }) {
             e.currentTarget.style.borderColor = "var(--border-color)";
             e.currentTarget.style.transform = "translateY(0)";
           }}>
-            <div style={{ fontSize: "28px", marginBottom: "4px" }}>{item.icon}</div>
+            <div style={{
+              fontSize: "28px",
+              marginBottom: "4px",
+              color: item.color,
+              display: "flex",
+              justifyContent: "center",
+            }}>
+              {item.icon}
+            </div>
             <span style={{ fontSize: "12px", fontWeight: "500", color: "var(--text-muted)", display: "block" }}>{item.title}</span>
             <h4 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", margin: 0 }}>{item.value}</h4>
           </div>

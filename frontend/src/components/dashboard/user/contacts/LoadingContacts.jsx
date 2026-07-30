@@ -1,3 +1,5 @@
+import { Loader } from "lucide-react";
+
 export default function LoadingContacts() {
   return (
     <div style={{
@@ -7,7 +9,15 @@ export default function LoadingContacts() {
       borderRadius: "16px",
       border: "1px solid var(--border-color)",
     }}>
-      <div style={{ fontSize: "32px", marginBottom: "12px" }}>⏳</div>
+      <div style={{
+        fontSize: "32px",
+        marginBottom: "12px",
+        color: "var(--primary)",
+        display: "flex",
+        justifyContent: "center",
+      }}>
+        <Loader size={32} className="spin" />
+      </div>
       <h4 style={{ color: "var(--text-primary)", marginBottom: "4px" }}>Loading Contacts...</h4>
       <p style={{ color: "var(--text-muted)", fontSize: "14px" }}>Please wait...</p>
     </div>

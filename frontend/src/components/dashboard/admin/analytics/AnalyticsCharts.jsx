@@ -1,4 +1,5 @@
 import { Pie, Bar } from "react-chartjs-2";
+import { PieChart, BarChart3 } from "lucide-react";
 
 export default function AnalyticsCharts({ stats }) {
   const pieData = {
@@ -31,7 +32,18 @@ export default function AnalyticsCharts({ stats }) {
         borderRadius: "20px",
         border: "1px solid var(--border-color)",
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "16px" }}>📊 Service Status</h3>
+        <h3 style={{
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "var(--text-primary)",
+          marginBottom: "16px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}>
+          <PieChart size={20} style={{ color: "var(--primary)" }} />
+          Service Status
+        </h3>
         <Pie data={pieData} />
       </div>
       <div style={{
@@ -40,7 +52,18 @@ export default function AnalyticsCharts({ stats }) {
         borderRadius: "20px",
         border: "1px solid var(--border-color)",
       }}>
-        <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "16px" }}>📈 System Overview</h3>
+        <h3 style={{
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "var(--text-primary)",
+          marginBottom: "16px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}>
+          <BarChart3 size={20} style={{ color: "var(--primary)" }} />
+          System Overview
+        </h3>
         <Bar data={barData} />
       </div>
     </div>

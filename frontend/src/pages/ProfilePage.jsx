@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import UserProfile from "../components/dashboard/user/Profile";
 import CaregiverProfile from "../components/dashboard/caregiver/CaregiverProfile";
 import AdminProfile from "../components/dashboard/admin/AdminProfile";
+import { ArrowLeft } from "lucide-react";
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
-  // ✅ Detect mobile view
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -42,7 +42,6 @@ export default function ProfilePage() {
 
   const role = user.role?.toLowerCase();
 
-  // ✅ Back button component
   const BackButton = () => (
     <button
       onClick={() => navigate(-1)}
@@ -50,7 +49,6 @@ export default function ProfilePage() {
         display: isMobile ? "flex" : "none",
         background: "none",
         border: "none",
-        fontSize: "28px",
         cursor: "pointer",
         color: "var(--text-primary)",
         padding: "8px 12px",
@@ -60,15 +58,17 @@ export default function ProfilePage() {
         zIndex: 10,
         borderRadius: "8px",
         transition: "background 0.2s ease",
+        alignItems: "center",
+        gap: "6px",
+        fontSize: "16px",
       }}
       onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(0,0,0,0.05)")}
       onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
     >
-      ←
+      <ArrowLeft size={20} /> Back
     </button>
   );
 
-  // Admin -> AdminProfile
   if (role === "admin") {
     return (
       <div style={{ position: "relative" }}>
@@ -78,7 +78,6 @@ export default function ProfilePage() {
     );
   }
 
-  // Caregiver -> CaregiverProfile
   if (role === "caregiver") {
     return (
       <div style={{ position: "relative" }}>
@@ -88,7 +87,6 @@ export default function ProfilePage() {
     );
   }
 
-  // Default: User Profile
   return (
     <div style={{ position: "relative" }}>
       <BackButton />

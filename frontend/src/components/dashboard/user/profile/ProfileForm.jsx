@@ -1,3 +1,5 @@
+import { User, Calendar, Stethoscope, Phone, MapPin, Loader, Save } from "lucide-react";
+
 export default function ProfileForm({
   profile,
   setProfile,
@@ -7,7 +9,6 @@ export default function ProfileForm({
   return (
     <div className="profile-form-wrapper">
       <style>{`
-        /* --- Base Input Styles --- */
         .profile-form-wrapper .pf-input,
         .profile-form-wrapper .pf-textarea {
           width: 100% !important;
@@ -35,7 +36,6 @@ export default function ProfileForm({
           margin-bottom: 6px !important;
         }
 
-        /* --- LIGHT MODE --- */
         .profile-form-wrapper .pf-input,
         .profile-form-wrapper .pf-textarea {
           background: #f8fafc !important;
@@ -46,7 +46,6 @@ export default function ProfileForm({
           color: #475569 !important;
         }
 
-        /* --- DARK MODE (Forcefully override) --- */
         [data-theme="dark"] .profile-form-wrapper .pf-input,
         [data-theme="dark"] .profile-form-wrapper .pf-textarea {
           background: #0f172a !important;
@@ -57,7 +56,6 @@ export default function ProfileForm({
           color: #94a3b8 !important;
         }
 
-        /* --- Placeholder Fix for Dark Mode --- */
         [data-theme="dark"] .profile-form-wrapper .pf-input::placeholder,
         [data-theme="dark"] .profile-form-wrapper .pf-textarea::placeholder {
           color: #64748b !important;
@@ -73,7 +71,10 @@ export default function ProfileForm({
       }}>
         {/* Row 1: Name + Age */}
         <div>
-          <label className="pf-label">📛 Full Name</label>
+          <label className="pf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <User size={14} style={{ color: "var(--text-muted)" }} />
+            Full Name
+          </label>
           <input
             className="pf-input"
             type="text"
@@ -83,7 +84,10 @@ export default function ProfileForm({
           />
         </div>
         <div>
-          <label className="pf-label">🎂 Age</label>
+          <label className="pf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Calendar size={14} style={{ color: "var(--text-muted)" }} />
+            Age
+          </label>
           <input
             className="pf-input"
             type="number"
@@ -96,7 +100,10 @@ export default function ProfileForm({
 
         {/* Row 2: Condition + Emergency Contact */}
         <div>
-          <label className="pf-label">🏥 Medical Condition</label>
+          <label className="pf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Stethoscope size={14} style={{ color: "var(--text-muted)" }} />
+            Medical Condition
+          </label>
           <input
             className="pf-input"
             type="text"
@@ -106,7 +113,10 @@ export default function ProfileForm({
           />
         </div>
         <div>
-          <label className="pf-label">📞 Emergency Contact</label>
+          <label className="pf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Phone size={14} style={{ color: "var(--text-muted)" }} />
+            Emergency Contact
+          </label>
           <input
             className="pf-input"
             type="text"
@@ -118,7 +128,10 @@ export default function ProfileForm({
 
         {/* Row 3: Address (Full Width) */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="pf-label">🏠 Address</label>
+          <label className="pf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <MapPin size={14} style={{ color: "var(--text-muted)" }} />
+            Address
+          </label>
           <textarea
             className="pf-textarea"
             rows="3"
@@ -142,17 +155,39 @@ export default function ProfileForm({
             color: "#fff",
             fontWeight: "600",
             fontSize: "16px",
-            cursor: "pointer",
+            cursor: saving ? "not-allowed" : "pointer",
             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
             opacity: saving ? 0.6 : 1,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
           }}
           onMouseEnter={(e) => { if (!saving) { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 25px rgba(79,70,229,0.5)"; } }}
           onMouseLeave={(e) => { if (!saving) { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)"; } }}
         >
-          {saving ? "⏳ Saving..." : "💾 Save Profile"}
+          {saving ? (
+            <>
+              <Loader size={18} className="spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save size={18} />
+              Save Profile
+            </>
+          )}
         </button>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

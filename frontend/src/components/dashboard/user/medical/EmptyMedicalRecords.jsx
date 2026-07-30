@@ -1,3 +1,5 @@
+import { FolderOpen } from "lucide-react";
+
 export default function EmptyMedicalRecords() {
   return (
     <div style={{
@@ -7,7 +9,15 @@ export default function EmptyMedicalRecords() {
       borderRadius: "20px",
       border: "2px dashed var(--border-color)",
     }}>
-      <div style={{ fontSize: "56px", marginBottom: "16px" }}>📂</div>
+      <div style={{
+        fontSize: "56px",
+        marginBottom: "16px",
+        color: "var(--text-muted)",
+        display: "flex",
+        justifyContent: "center",
+      }}>
+        <FolderOpen size={56} strokeWidth={1.5} />
+      </div>
       <h3 style={{ color: "var(--text-primary)", marginBottom: "8px" }}>No Medical Records</h3>
       <p style={{ color: "var(--text-secondary)", fontSize: "15px" }}>
         Upload your first medical record to keep everything organized.

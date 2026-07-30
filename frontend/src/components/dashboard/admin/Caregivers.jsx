@@ -6,6 +6,7 @@ import LoadingCaregivers from "./caregivers/LoadingCaregivers";
 import EmptyCaregivers from "./caregivers/EmptyCaregivers";
 import CaregiverPagination from "./caregivers/CaregiverPagination";
 import { showSuccess, showError } from "../../../utils/toast";
+import { Stethoscope } from "lucide-react";
 
 export default function Caregivers() {
   const [caregivers, setCaregivers] = useState([]);
@@ -41,7 +42,6 @@ export default function Caregivers() {
     }
   };
 
-  // ✅ Filter Logic with useMemo
   const filteredCaregivers = useMemo(() => {
     return caregivers.filter((caregiver) => {
       const keyword = search.toLowerCase().trim();
@@ -57,13 +57,11 @@ export default function Caregivers() {
     });
   }, [caregivers, search, filter]);
 
-  // ✅ Pagination Logic
   const totalPages = Math.ceil(filteredCaregivers.length / caregiversPerPage);
   const indexOfLast = currentPage * caregiversPerPage;
   const indexOfFirst = indexOfLast - caregiversPerPage;
   const currentCaregivers = filteredCaregivers.slice(indexOfFirst, indexOfLast);
 
-  // ✅ Reset page on search/filter change
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filter]);
@@ -77,8 +75,18 @@ export default function Caregivers() {
       borderRadius: "20px",
       border: "1px solid var(--border-color)",
     }}>
-      <h1 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", marginBottom: "20px", letterSpacing: "-0.5px" }}>
-        👨‍⚕️ Manage Caregivers
+      <h1 style={{
+        fontSize: "24px",
+        fontWeight: "700",
+        color: "var(--text-primary)",
+        marginBottom: "20px",
+        letterSpacing: "-0.5px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <Stethoscope size={24} style={{ color: "var(--primary)" }} />
+        Manage Caregivers
       </h1>
 
       <CaregiverFilters

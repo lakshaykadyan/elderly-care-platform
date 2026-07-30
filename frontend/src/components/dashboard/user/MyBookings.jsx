@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Calendar } from "lucide-react";
 
 import {
   getServices,
@@ -112,9 +113,19 @@ export default function MyBookings() {
 
   return (
     <div className="profile-card">
-      <h2 style={{ marginBottom: "25px" }}>📅 My Bookings</h2>
+      <h2 style={{
+        marginBottom: "25px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        fontSize: "24px",
+        fontWeight: "700",
+        color: "var(--text-primary)",
+      }}>
+        <Calendar size={24} style={{ color: "var(--primary)" }} />
+        My Bookings
+      </h2>
       
-      {/* ✅ Sirf EK baar BookingTable render ho raha hai, aur saare props bhej rahe hain */}
       <BookingTable
         services={services}
         processing={processing}

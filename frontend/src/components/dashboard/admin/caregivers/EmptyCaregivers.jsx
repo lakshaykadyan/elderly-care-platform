@@ -1,3 +1,5 @@
+import { Stethoscope } from "lucide-react";
+
 export default function EmptyCaregivers() {
   return (
     <div style={{
@@ -7,7 +9,15 @@ export default function EmptyCaregivers() {
       borderRadius: "20px",
       border: "2px dashed var(--border-color)",
     }}>
-      <div style={{ fontSize: "56px", marginBottom: "16px" }}>👨‍⚕️</div>
+      <div style={{
+        fontSize: "56px",
+        marginBottom: "16px",
+        color: "var(--text-muted)",
+        display: "flex",
+        justifyContent: "center",
+      }}>
+        <Stethoscope size={56} strokeWidth={1.5} />
+      </div>
       <h3 style={{ color: "var(--text-primary)", marginBottom: "8px" }}>No Caregivers Found</h3>
       <p style={{ color: "var(--text-secondary)", fontSize: "15px" }}>
         There are no caregivers available.

@@ -1,3 +1,18 @@
+import {
+  User,
+  Mail,
+  Phone,
+  UserRound,
+  Calendar,
+  GraduationCap,
+  Stethoscope,
+  MapPin,
+  Home,
+  FileText,
+  Loader,
+  Save,
+} from "lucide-react";
+
 export default function ProfileForm({ profile, handleChange, saveProfile, saving }) {
   return (
     <div className="caregiver-profile-wrapper" style={{ background: "transparent" }}>
@@ -31,7 +46,6 @@ export default function ProfileForm({ profile, handleChange, saveProfile, saving
           margin-bottom: 6px !important;
         }
 
-        /* --- LIGHT MODE --- */
         .caregiver-profile-wrapper .cp-input,
         .caregiver-profile-wrapper .cp-textarea {
           background: #f8fafc !important;
@@ -42,7 +56,6 @@ export default function ProfileForm({ profile, handleChange, saveProfile, saving
           color: #475569 !important;
         }
 
-        /* --- DARK MODE (FORCE WHITE TEXT) --- */
         [data-theme="dark"] .caregiver-profile-wrapper .cp-input,
         [data-theme="dark"] .caregiver-profile-wrapper .cp-textarea {
           background: #0f172a !important;
@@ -57,7 +70,6 @@ export default function ProfileForm({ profile, handleChange, saveProfile, saving
           color: #64748b !important;
         }
 
-        /* --- DISABLED INPUTS (Dark Mode Fix) --- */
         [data-theme="dark"] .caregiver-profile-wrapper .cp-input:disabled {
           color: #94a3b8 !important;
           opacity: 0.8 !important;
@@ -98,7 +110,7 @@ export default function ProfileForm({ profile, handleChange, saveProfile, saving
           color: "#fff",
           boxShadow: "0 8px 24px rgba(79,70,229,0.3)",
         }}>
-          👨‍⚕️
+          <Stethoscope size={36} />
         </div>
         <div>
           <h2 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", margin: 0 }}>
@@ -111,56 +123,94 @@ export default function ProfileForm({ profile, handleChange, saveProfile, saving
       </div>
 
       {/* Personal Information */}
-      <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "16px" }}>
-        📋 Personal Information
+      <h3 style={{
+        fontSize: "18px",
+        fontWeight: "600",
+        color: "var(--text-primary)",
+        marginBottom: "16px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <FileText size={18} style={{ color: "var(--primary)" }} />
+        Personal Information
       </h3>
 
       <div className="cp-grid">
         <div>
-          <label className="cp-label">👤 Full Name</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <User size={14} style={{ color: "var(--text-muted)" }} /> Full Name
+          </label>
           <input className="cp-input" value={profile.name} disabled placeholder="Full Name" />
         </div>
         <div>
-          <label className="cp-label">📧 Email</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Mail size={14} style={{ color: "var(--text-muted)" }} /> Email
+          </label>
           <input className="cp-input" value={profile.email} disabled placeholder="Email" />
         </div>
         <div>
-          <label className="cp-label">📞 Phone</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Phone size={14} style={{ color: "var(--text-muted)" }} /> Phone
+          </label>
           <input className="cp-input" name="phone" value={profile.phone} onChange={handleChange} placeholder="Phone" />
         </div>
         <div>
-          <label className="cp-label">⚤ Gender</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <UserRound size={14} style={{ color: "var(--text-muted)" }} /> Gender
+          </label>
           <input className="cp-input" name="gender" value={profile.gender} onChange={handleChange} placeholder="Gender" />
         </div>
         <div>
-          <label className="cp-label">🎂 Age</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Calendar size={14} style={{ color: "var(--text-muted)" }} /> Age
+          </label>
           <input className="cp-input" name="age" value={profile.age} onChange={handleChange} placeholder="Age" />
         </div>
         <div>
-          <label className="cp-label">🎓 Qualification</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <GraduationCap size={14} style={{ color: "var(--text-muted)" }} /> Qualification
+          </label>
           <input className="cp-input" name="qualification" value={profile.qualification} onChange={handleChange} placeholder="Qualification" />
         </div>
         <div>
-          <label className="cp-label">🩺 Specialization</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Stethoscope size={14} style={{ color: "var(--text-muted)" }} /> Specialization
+          </label>
           <input className="cp-input" name="specialization" value={profile.specialization} onChange={handleChange} placeholder="Specialization" />
         </div>
         <div>
-          <label className="cp-label">📅 Experience (Years)</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Calendar size={14} style={{ color: "var(--text-muted)" }} /> Experience (Years)
+          </label>
           <input className="cp-input" name="experience" value={profile.experience} onChange={handleChange} placeholder="Experience" />
         </div>
         <div>
-          <label className="cp-label">📍 Service Area</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <MapPin size={14} style={{ color: "var(--text-muted)" }} /> Service Area
+          </label>
           <input className="cp-input" name="serviceArea" value={profile.serviceArea} onChange={handleChange} placeholder="Service Area" />
         </div>
         <div>
-          <label className="cp-label">🏠 Address</label>
+          <label className="cp-label" style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <Home size={14} style={{ color: "var(--text-muted)" }} /> Address
+          </label>
           <input className="cp-input" name="address" value={profile.address} onChange={handleChange} placeholder="Address" />
         </div>
       </div>
 
       {/* About Me */}
-      <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "12px" }}>
-        📝 About Me
+      <h3 style={{
+        fontSize: "18px",
+        fontWeight: "600",
+        color: "var(--text-primary)",
+        marginBottom: "12px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <FileText size={18} style={{ color: "var(--primary)" }} />
+        About Me
       </h3>
       <textarea
         className="cp-textarea"
@@ -184,17 +234,39 @@ export default function ProfileForm({ profile, handleChange, saveProfile, saving
             color: "#fff",
             fontWeight: "600",
             fontSize: "16px",
-            cursor: "pointer",
+            cursor: saving ? "not-allowed" : "pointer",
             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
             opacity: saving ? 0.6 : 1,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
           }}
           onMouseEnter={(e) => { if (!saving) { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 25px rgba(79,70,229,0.5)"; } }}
           onMouseLeave={(e) => { if (!saving) { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)"; } }}
         >
-          {saving ? "⏳ Saving..." : "💾 Save Changes"}
+          {saving ? (
+            <>
+              <Loader size={18} className="spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save size={18} />
+              Save Changes
+            </>
+          )}
         </button>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

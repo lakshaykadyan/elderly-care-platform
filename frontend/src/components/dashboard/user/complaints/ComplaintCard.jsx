@@ -1,3 +1,5 @@
+import { Clock, CheckCircle, XCircle, RefreshCw, Mail } from "lucide-react";
+
 export default function ComplaintCard({ complaint }) {
   const statusColors = {
     pending: { bg: "#f59e0b", text: "#fbbf24" },
@@ -6,11 +8,18 @@ export default function ComplaintCard({ complaint }) {
     processing: { bg: "#3b82f6", text: "#60a5fa" },
   };
 
+  const statusIcons = {
+    pending: <Clock size={14} style={{ display: "inline", marginRight: "4px" }} />,
+    resolved: <CheckCircle size={14} style={{ display: "inline", marginRight: "4px" }} />,
+    rejected: <XCircle size={14} style={{ display: "inline", marginRight: "4px" }} />,
+    processing: <RefreshCw size={14} style={{ display: "inline", marginRight: "4px" }} />,
+  };
+
   const statusLabels = {
-    pending: "⏳ Pending",
-    resolved: "✅ Resolved",
-    rejected: "❌ Rejected",
-    processing: "🔄 Processing",
+    pending: "Pending",
+    resolved: "Resolved",
+    rejected: "Rejected",
+    processing: "Processing",
   };
 
   const status = complaint.status || "pending";
@@ -59,7 +68,10 @@ export default function ComplaintCard({ complaint }) {
           background: `${statusColors[status]?.bg}15`,
           color: statusColors[status]?.text || "#94a3b8",
           border: `1px solid ${statusColors[status]?.bg}20`,
+          display: "inline-flex",
+          alignItems: "center",
         }}>
+          {statusIcons[status]}
           {statusLabels[status] || status}
         </span>
       </div>
@@ -94,10 +106,13 @@ export default function ComplaintCard({ complaint }) {
           <strong style={{
             fontSize: "13px",
             color: "var(--text-muted)",
-            display: "block",
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
             marginBottom: "4px",
           }}>
-            📨 Admin Reply
+            <Mail size={14} />
+            Admin Reply
           </strong>
           <p style={{
             color: "var(--text-primary)",

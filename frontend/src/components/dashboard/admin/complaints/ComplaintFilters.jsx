@@ -1,3 +1,5 @@
+import { Search } from "lucide-react";
+
 export default function ComplaintFilters({
   search,
   setSearch,
@@ -42,25 +44,38 @@ export default function ComplaintFilters({
         gap: "15px",
         marginBottom: "20px",
       }}>
-        <input
-          className="complaint-search-input"
-          type="text"
-          placeholder="🔍 Search User or Subject..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            flex: 1,
-            minWidth: "280px",
-            padding: "12px 16px",
-            borderRadius: "12px",
-            border: "1px solid var(--border-color)",
-            fontSize: "15px",
-            outline: "none",
-            transition: "all 0.3s ease",
-          }}
-          onFocus={(e) => { e.target.borderColor = "#4f46e5"; e.target.boxShadow = "0 0 0 4px rgba(79,70,229,0.08)"; }}
-          onBlur={(e) => { e.target.borderColor = "var(--border-color)"; e.target.boxShadow = "none"; }}
-        />
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          flex: 1,
+          minWidth: "280px",
+          background: "var(--bg-body)",
+          borderRadius: "12px",
+          border: "1px solid var(--border-color)",
+          padding: "0 12px",
+          transition: "all 0.3s ease",
+        }}
+        onFocus={(e) => { e.currentTarget.style.borderColor = "#4f46e5"; e.currentTarget.style.boxShadow = "0 0 0 4px rgba(79,70,229,0.08)"; }}
+        onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.boxShadow = "none"; }}
+        >
+          <Search size={18} color="var(--text-muted)" />
+          <input
+            className="complaint-search-input"
+            type="text"
+            placeholder="Search User or Subject..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              flex: 1,
+              padding: "12px 10px",
+              border: "none",
+              background: "transparent",
+              color: "var(--text-primary)",
+              fontSize: "15px",
+              outline: "none",
+            }}
+          />
+        </div>
         <div style={{
           background: "#4f46e5",
           color: "#fff",

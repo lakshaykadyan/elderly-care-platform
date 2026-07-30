@@ -1,3 +1,5 @@
+import { Check } from "lucide-react";
+
 export default function ServiceTimeline({ status, getStep }) {
   const current = getStep(status);
   const steps = ["Requested", "Accepted", "Working", "Completed"];
@@ -21,7 +23,9 @@ export default function ServiceTimeline({ status, getStep }) {
         <div className="tl-line" />
         {steps.map((label, i) => (
           <div key={i} className="tl-step">
-            <div className={`tl-circle ${current >= i ? "active" : ""}`}>{current >= i ? "✓" : ""}</div>
+            <div className={`tl-circle ${current >= i ? "active" : ""}`}>
+              {current >= i ? <Check size={16} /> : ""}
+            </div>
             <span className={`tl-label ${current >= i ? "active" : ""}`}>{label}</span>
           </div>
         ))}

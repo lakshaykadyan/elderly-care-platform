@@ -1,3 +1,5 @@
+import { X } from "lucide-react";
+
 export default function NotificationCard({ notification }) {
   return (
     <div className={`notification-card ${notification.unread ? "unread" : ""}`}>
@@ -9,7 +11,9 @@ export default function NotificationCard({ notification }) {
           <small>{notification.time}</small>
         </div>
       </div>
-      <button className="delete-btn">✕</button>
+      <button className="delete-btn">
+        <X size={14} />
+      </button>
     </div>
   );
 }

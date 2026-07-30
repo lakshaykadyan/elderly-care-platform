@@ -1,3 +1,5 @@
+import { CheckCircle, Clock, Check } from "lucide-react";
+
 export default function CaregiverRow({ caregiver, handleVerify }) {
   const isVerified = caregiver.caregiverProfile?.verified;
 
@@ -25,9 +27,13 @@ export default function CaregiverRow({ caregiver, handleVerify }) {
       </td>
       <td style={{ padding: "12px 16px", textAlign: "center" }}>
         {isVerified ? (
-          <span style={{ color: "#22c55e", fontWeight: "600" }}>✅ Verified</span>
+          <span style={{ color: "#22c55e", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+            <CheckCircle size={14} /> Verified
+          </span>
         ) : (
-          <span style={{ color: "#f59e0b", fontWeight: "600" }}>⏳ Pending</span>
+          <span style={{ color: "#f59e0b", fontWeight: "600", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+            <Clock size={14} /> Pending
+          </span>
         )}
       </td>
       <td style={{ padding: "12px 16px", textAlign: "center" }}>
@@ -39,8 +45,11 @@ export default function CaregiverRow({ caregiver, handleVerify }) {
             borderRadius: "30px",
             fontSize: "12px",
             fontWeight: "600",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "4px",
           }}>
-            ✔ Approved
+            <Check size={14} /> Approved
           </span>
         ) : (
           <button

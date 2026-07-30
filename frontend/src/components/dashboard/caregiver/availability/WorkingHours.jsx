@@ -1,14 +1,25 @@
+import { Clock, Save } from "lucide-react";
+
 export default function WorkingHours() {
   return (
     <>
       <hr style={{ margin: "35px 0", border: "none", borderTop: "1px solid var(--border-color)" }} />
 
       <div className="working-hours">
-        <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "20px" }}>
-          ⏰ Working Hours
+        <h3 style={{
+          fontSize: "18px",
+          fontWeight: "600",
+          color: "var(--text-primary)",
+          marginBottom: "20px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+        }}>
+          <Clock size={20} style={{ color: "var(--primary)" }} />
+          Working Hours
         </h3>
 
-        {/* ✅ Grid for inputs */}
+        {/* Grid for inputs */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, 1fr)",
@@ -73,7 +84,7 @@ export default function WorkingHours() {
           </div>
         </div>
 
-        {/* ✅ Button - Right aligned with flex */}
+        {/* Button - Right aligned with flex */}
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button
             style={{
@@ -87,6 +98,9 @@ export default function WorkingHours() {
               cursor: "pointer",
               transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
               boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
             }}
             onMouseEnter={(e) => {
               e.target.style.transform = "scale(1.04)";
@@ -97,7 +111,8 @@ export default function WorkingHours() {
               e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)";
             }}
           >
-            💾 Save Working Hours
+            <Save size={18} />
+            Save Working Hours
           </button>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 export default function ComplaintPagination({
   currentPage,
   totalPages,
@@ -26,9 +28,13 @@ export default function ComplaintPagination({
           fontSize: "14px",
           transition: "all 0.3s ease",
           opacity: currentPage === 1 ? 0.5 : 1,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "4px",
         }}
       >
-        ← Previous
+        <ChevronLeft size={16} />
+        Previous
       </button>
 
       <span style={{ fontWeight: "600", color: "var(--text-primary)" }}>
@@ -49,9 +55,13 @@ export default function ComplaintPagination({
           fontSize: "14px",
           transition: "all 0.3s ease",
           opacity: (currentPage === totalPages || totalPages === 0) ? 0.5 : 1,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "4px",
         }}
       >
-        Next →
+        Next
+        <ChevronRight size={16} />
       </button>
     </div>
   );

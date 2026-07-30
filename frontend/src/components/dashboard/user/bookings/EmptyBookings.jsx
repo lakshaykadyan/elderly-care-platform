@@ -1,7 +1,7 @@
+import { Calendar } from "lucide-react";
+
 export default function EmptyBookings() {
-
   return (
-
     <div
       className="profile-card"
       style={{
@@ -9,18 +9,21 @@ export default function EmptyBookings() {
         padding: "60px",
       }}
     >
-
       <div
         style={{
           fontSize: "70px",
+          color: "var(--text-muted)",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        📅
+        <Calendar size={70} strokeWidth={1.2} />
       </div>
 
       <h2
         style={{
           marginTop: "15px",
+          color: "var(--text-primary)",
         }}
       >
         No Bookings Found
@@ -28,15 +31,12 @@ export default function EmptyBookings() {
 
       <p
         style={{
-          color: "#777",
+          color: "var(--text-secondary)",
           marginTop: "10px",
         }}
       >
         You haven't booked any service yet.
       </p>
-
     </div>
-
   );
-
 }

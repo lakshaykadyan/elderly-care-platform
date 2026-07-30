@@ -11,6 +11,7 @@ import LoadingServices from "./services/LoadingServices";
 import EmptyServices from "./services/EmptyServices";
 import ServicePagination from "./services/ServicePagination";
 import { showSuccess, showError } from "../../../utils/toast";
+import { Calendar } from "lucide-react";
 
 export default function Services() {
   const [services, setServices] = useState([]);
@@ -68,7 +69,6 @@ export default function Services() {
     }
   };
 
-  // Filter Logic
   const filteredServices = useMemo(() => {
     return services.filter((service) => {
       const keyword = search.toLowerCase().trim();
@@ -81,13 +81,11 @@ export default function Services() {
     });
   }, [services, search, filter]);
 
-  // Pagination Logic
   const totalPages = Math.ceil(filteredServices.length / servicesPerPage);
   const indexOfLastService = currentPage * servicesPerPage;
   const indexOfFirstService = indexOfLastService - servicesPerPage;
   const currentServices = filteredServices.slice(indexOfFirstService, indexOfLastService);
 
-  // Reset page when search or filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [search, filter]);
@@ -107,8 +105,12 @@ export default function Services() {
         color: "var(--text-primary)",
         marginBottom: "20px",
         letterSpacing: "-0.5px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
       }}>
-        📅 Manage Services
+        <Calendar size={24} style={{ color: "var(--primary)" }} />
+        Manage Services
       </h1>
 
       <ServiceFilters

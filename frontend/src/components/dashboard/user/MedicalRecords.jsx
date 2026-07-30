@@ -9,6 +9,7 @@ import MedicalRecordForm from "./medical/MedicalRecordForm";
 import MedicalRecordList from "./medical/MedicalRecordList";
 import LoadingMedicalRecords from "./medical/LoadingMedicalRecords";
 import EmptyMedicalRecords from "./medical/EmptyMedicalRecords";
+import { Folder, FileText } from "lucide-react";
 
 export default function MedicalRecords() {
   const [records, setRecords] = useState([]);
@@ -85,8 +86,12 @@ export default function MedicalRecords() {
           color: "var(--text-primary)",
           margin: 0,
           letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
         }}>
-          📂 Medical Records
+          <Folder size={24} style={{ color: "var(--primary)" }} />
+          Medical Records
         </h2>
         <p style={{
           color: "var(--text-secondary)",
@@ -122,7 +127,8 @@ export default function MedicalRecords() {
         alignItems: "center",
         gap: "8px",
       }}>
-        📑 Your Medical Records
+        <FileText size={20} style={{ color: "var(--primary)" }} />
+        Your Medical Records
       </h3>
 
       {loading ? (

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getNotifications } from "../../../hooks/useNotification";
 import { showSuccess, showError } from "../../../utils/toast";
+import { Inbox, Bell, CheckSquare, BellOff, Loader } from "lucide-react";
 
 export default function UserNotifications() {
   const [notifications, setNotifications] = useState([]);
@@ -41,7 +42,15 @@ export default function UserNotifications() {
         borderRadius: "24px",
         border: "1px solid var(--border-color)",
       }}>
-        <div style={{ fontSize: "32px", marginBottom: "12px" }}>🔔</div>
+        <div style={{
+          fontSize: "32px",
+          marginBottom: "12px",
+          color: "var(--primary)",
+          display: "flex",
+          justifyContent: "center",
+        }}>
+          <Loader size={32} className="spin" />
+        </div>
         <p style={{ color: "var(--text-secondary)" }}>Loading notifications...</p>
       </div>
     );
@@ -70,8 +79,12 @@ export default function UserNotifications() {
             color: "var(--text-primary)",
             margin: 0,
             letterSpacing: "-0.5px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
           }}>
-            📬 My Notifications
+            <Inbox size={24} style={{ color: "var(--primary)" }} />
+            My Notifications
           </h2>
           <p style={{
             color: "var(--text-secondary)",
@@ -93,11 +106,15 @@ export default function UserNotifications() {
             fontSize: "14px",
             cursor: "pointer",
             transition: "all 0.3s ease",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
           }}
           onMouseEnter={(e) => { e.target.style.background = "rgba(99,102,241,0.15)"; e.target.style.borderColor = "rgba(99,102,241,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.background = "rgba(99,102,241,0.08)"; e.target.style.borderColor = "rgba(99,102,241,0.15)"; }}
         >
-          ✅ Mark All Read
+          <CheckSquare size={16} />
+          Mark All Read
         </button>
       </div>
 
@@ -110,7 +127,15 @@ export default function UserNotifications() {
           borderRadius: "20px",
           border: "2px dashed var(--border-color)",
         }}>
-          <div style={{ fontSize: "56px", marginBottom: "16px" }}>🔕</div>
+          <div style={{
+            fontSize: "56px",
+            marginBottom: "16px",
+            color: "var(--text-muted)",
+            display: "flex",
+            justifyContent: "center",
+          }}>
+            <BellOff size={56} strokeWidth={1.5} />
+          </div>
           <h3 style={{ color: "var(--text-primary)" }}>No notifications yet</h3>
           <p style={{ color: "var(--text-secondary)" }}>We'll notify you when something important happens.</p>
         </div>

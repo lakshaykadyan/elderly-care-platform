@@ -1,40 +1,21 @@
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip, CartesianGrid } from "recharts";
+import { BarChart3 } from "lucide-react";
 
 export default function WeeklyServiceChart({ data }) {
   return (
     <div className="chart-card">
-
-      <h2>📊 Weekly Service Analytics</h2>
+      <h2 style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <BarChart3 size={20} /> Weekly Service Analytics
+      </h2>
 
       <ResponsiveContainer width="100%" height={320}>
-
         <BarChart data={data}>
-
           <CartesianGrid strokeDasharray="3 3" />
-
           <XAxis dataKey="day" />
-
-          <Tooltip
-            cursor={{ fill: "#f5f7ff" }}
-          />
-
-          <Bar
-            dataKey="services"
-            radius={[10, 10, 0, 0]}
-            fill="#4f6df5"
-            animationDuration={1200}
-          />
+          <Tooltip cursor={{ fill: "#f5f7ff" }} />
+          <Bar dataKey="services" radius={[10, 10, 0, 0]} fill="#4f6df5" animationDuration={1200} />
         </BarChart>
-
       </ResponsiveContainer>
-
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { showSuccess, showError } from "../../../utils/toast";
 import RequestForm from "./request/RequestForm";
 import LoadingRequest from "./request/LoadingRequest";
 import EmptyRequest from "./request/EmptyRequest";
+import { Calendar } from "lucide-react";
 
 export default function RequestService() {
   const [loading, setLoading] = useState(false);
@@ -64,8 +65,12 @@ export default function RequestService() {
           color: "var(--text-primary)",
           margin: 0,
           letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
         }}>
-          📅 Book Service
+          <Calendar size={24} style={{ color: "var(--primary)" }} />
+          Book Service
         </h2>
         <p style={{
           color: "var(--text-secondary)",

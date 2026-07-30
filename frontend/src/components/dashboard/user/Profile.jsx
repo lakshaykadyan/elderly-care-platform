@@ -3,6 +3,7 @@ import { getPatientProfile, savePatientProfile } from "../../../hooks/usePatient
 import { showSuccess, showError } from "../../../utils/toast";
 import ProfileForm from "./profile/ProfileForm";
 import LoadingProfile from "./profile/LoadingProfile";
+import { User } from "lucide-react";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
@@ -81,7 +82,7 @@ export default function Profile() {
           boxShadow: "0 8px 24px rgba(79,70,229,0.3)",
           marginBottom: "16px",
         }}>
-          👤
+          <User size={36} />
         </div>
         <h2 style={{ fontSize: "26px", fontWeight: "700", color: "var(--text-primary)", margin: 0, letterSpacing: "-0.5px" }}>
           {hasProfile ? "Patient Profile" : "Create Profile"}
@@ -91,7 +92,6 @@ export default function Profile() {
         </p>
       </div>
 
-      {/* Always show form, no empty state blocking */}
       <ProfileForm profile={profile} setProfile={setProfile} handleSave={handleSave} saving={saving} />
     </div>
   );

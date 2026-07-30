@@ -1,3 +1,5 @@
+import { CheckCircle, Check } from "lucide-react";
+
 export default function ComplaintRow({
   complaint,
   reply,
@@ -13,7 +15,6 @@ export default function ComplaintRow({
   return (
     <>
       <style>{`
-        /* Force dark mode textarea */
         [data-theme="dark"] .complaint-reply-textarea {
           background: #0f172a !important;
           border: 1px solid #334155 !important;
@@ -63,22 +64,18 @@ export default function ComplaintRow({
         onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-card)"}
         onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
       >
-        {/* ✅ User - Left Align */}
         <td style={{ padding: "12px 16px", textAlign: "left", fontWeight: "600", color: "var(--text-primary)" }}>
           {complaint.userId?.name || "-"}
         </td>
 
-        {/* ✅ Subject - Left Align */}
         <td style={{ padding: "12px 16px", textAlign: "left", color: "var(--text-primary)" }}>
           {complaint.subject}
         </td>
 
-        {/* ✅ Message - Left Align */}
         <td style={{ padding: "12px 16px", textAlign: "left", maxWidth: "250px", color: "var(--text-secondary)" }}>
           {complaint.message}
         </td>
 
-        {/* ✅ Status - Center Align */}
         <td style={{ padding: "12px 16px", textAlign: "center" }}>
           <span
             style={{
@@ -95,7 +92,6 @@ export default function ComplaintRow({
           </span>
         </td>
 
-        {/* ✅ Reply - Left Align */}
         <td style={{ padding: "12px 16px", textAlign: "left" }}>
           {complaint.status === "resolved" ? (
             <span style={{ color: "#22c55e", fontWeight: "600" }}>
@@ -117,16 +113,18 @@ export default function ComplaintRow({
           )}
         </td>
 
-        {/* ✅ Action - Center Align */}
         <td style={{ padding: "12px 16px", textAlign: "center" }}>
           {complaint.status === "resolved" ? (
-            <span style={{ color: "#22c55e", fontWeight: "700" }}>✔ Done</span>
+            <span style={{ color: "#22c55e", fontWeight: "700", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+              <Check size={16} /> Done
+            </span>
           ) : (
             <button
               className="complaint-resolve-btn"
               onClick={() => handleReply(complaint._id)}
+              style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}
             >
-              ✅ Resolve
+              <CheckCircle size={14} /> Resolve
             </button>
           )}
         </td>

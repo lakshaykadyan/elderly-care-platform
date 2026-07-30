@@ -1,10 +1,5 @@
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart3 } from "lucide-react";
 
 export default function ServiceStatusChart({
   assigned,
@@ -19,27 +14,17 @@ export default function ServiceStatusChart({
     { name: "Completed", value: completed },
   ];
 
-  const COLORS = [
-    "#4f6df5",
-    "#00b894",
-    "#ff9800",
-    "#4CAF50",
-  ];
+  const COLORS = ["#4f6df5", "#00b894", "#ff9800", "#4CAF50"];
 
   return (
     <div className="status-chart">
-
-      <h2>📊 Service Status</h2>
+      <h2 style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <BarChart3 size={20} /> Service Status
+      </h2>
 
       <div className="chart-box">
-
-        <ResponsiveContainer
-          width="100%"
-          height={300}
-        >
-
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
-
             <Pie
               animationDuration={1200}
               data={data}
@@ -50,55 +35,24 @@ export default function ServiceStatusChart({
               paddingAngle={5}
               dataKey="value"
             >
-
               {data.map((entry, index) => (
-                <Cell
-                  key={index}
-                  fill={COLORS[index]}
-                />
+                <Cell key={index} fill={COLORS[index]} />
               ))}
-
             </Pie>
-
-            <Tooltip
-              formatter={(value)=>[
-                value+" Services",
-                "Count"
-              ]}
-            />
-
+            <Tooltip formatter={(value) => [value + " Services", "Count"]} />
           </PieChart>
-
         </ResponsiveContainer>
-
       </div>
 
       <div className="chart-legend">
-
         {data.map((item, index) => (
-
-          <div
-            className="legend-item"
-            key={index}
-          >
-
-            <span
-              className="legend-color"
-              style={{
-                background: COLORS[index],
-              }}
-            />
-
+          <div className="legend-item" key={index}>
+            <span className="legend-color" style={{ background: COLORS[index] }} />
             <span>{item.name}</span>
-
             <b>{item.value}</b>
-
           </div>
-
         ))}
-
       </div>
-
     </div>
   );
 }

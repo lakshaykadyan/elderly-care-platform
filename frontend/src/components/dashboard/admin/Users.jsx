@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Users as UsersIcon } from "lucide-react";
+import { Users as UsersIcon, Stethoscope } from "lucide-react";
 import { getUsers, toggleUserStatus, deleteUser } from "../../../hooks/useAdmin";
 import LoadingUsers from "./users/LoadingUsers";
 import UserFilters from "./users/UserFilters";
@@ -7,13 +7,19 @@ import UserTable from "./users/UserTable";
 import UserPagination from "./users/UserPagination";
 import { showSuccess, showError } from "../../../utils/toast";
 
-export default function Users({ initialFilter = "all" }) {
+export default function Users({ initialFilter = "all", page = "users" }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
-  // ✅ Single state declaration – initialFilter se set ho raha hai
-  const [filter, setFilter] = useState(initialFilter);
+  
+  // ✅ Default filter based on page
+  const getDefaultFilter = () => {
+    if (page === "caregivers") return "verified";
+    return initialFilter || "all";
+  };
+  
+  const [filter, setFilter] = useState(getDefaultFilter());
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,11 +71,31 @@ export default function Users({ initialFilter = "all" }) {
     }
   };
 
+  // ✅ Filtered users logic with page-specific behavior
   const filteredUsers = useMemo(() => {
     return users.filter((user) => {
       const keyword = search.toLowerCase();
       const matchSearch = user.name.toLowerCase().includes(keyword) ||
                          user.email.toLowerCase().includes(keyword);
+
+      // ✅ Base filter: Sirf caregivers for caregivers page, otherwise all
+      if (page === "caregivers" && user.role !== "caregiver") {
+        return false;
+      }
+
+      // ✅ Caregiver-specific filters
+      if (page === "caregivers") {
+        if (filter === "verified") {
+          return matchSearch && user.caregiverProfile?.verified === true;
+        }
+        if (filter === "unverified") {
+          return matchSearch && user.caregiverProfile?.verified !== true;
+        }
+        // "all" filter – sabhi caregivers (verified + unverified)
+        return matchSearch;
+      }
+
+      // ✅ User page filters (original logic)
       const matchFilter = filter === "all" ||
                          (filter === "active" && user.isActive) ||
                          (filter === "disabled" && !user.isActive) ||
@@ -77,7 +103,7 @@ export default function Users({ initialFilter = "all" }) {
                          (filter === "caregiver" && user.role === "caregiver");
       return matchSearch && matchFilter;
     });
-  }, [users, search, filter]);
+  }, [users, search, filter, page]);
 
   const sortedUsers = useMemo(() => {
     return [...filteredUsers].sort((a, b) => {
@@ -115,6 +141,10 @@ export default function Users({ initialFilter = "all" }) {
 
   if (loading) return <LoadingUsers />;
 
+  // ✅ Page-specific title and icon
+  const pageTitle = page === "caregivers" ? "Manage Caregivers" : "Manage Users";
+  const PageIcon = page === "caregivers" ? Stethoscope : UsersIcon;
+
   return (
     <div style={{
       padding: "24px 28px",
@@ -132,10 +162,11 @@ export default function Users({ initialFilter = "all" }) {
         alignItems: "center",
         gap: "8px",
       }}>
-        <UsersIcon size={24} style={{ color: "var(--primary)" }} />
-        Manage Users
+        <PageIcon size={24} style={{ color: "var(--primary)" }} />
+        {pageTitle}
       </h1>
 
+      {/* ✅ Pass page prop to UserFilters for custom filter options */}
       <UserFilters
         search={search}
         setSearch={setSearch}
@@ -143,6 +174,7 @@ export default function Users({ initialFilter = "all" }) {
         setFilter={setFilter}
         setCurrentPage={setCurrentPage}
         totalUsers={filteredUsers.length}
+        page={page}
       />
 
       <UserTable
@@ -155,6 +187,7 @@ export default function Users({ initialFilter = "all" }) {
         sortOrder={sortOrder}
         handleToggle={handleToggle}
         handleDelete={handleDelete}
+        page={page}
       />
 
       <UserPagination

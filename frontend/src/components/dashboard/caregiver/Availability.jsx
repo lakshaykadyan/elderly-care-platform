@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import API from "../../../services/api";
 import AvailabilityCard from "./availability/AvailabilityCard";
 import { showSuccess, showError } from "../../../utils/toast";
+import { Activity } from "lucide-react";
 
 export default function Availability() {
   const [availability, setAvailability] = useState("available");
@@ -49,8 +50,12 @@ export default function Availability() {
           color: "var(--text-primary)",
           margin: 0,
           letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
         }}>
-          🟢 Availability
+          <Activity size={24} style={{ color: "#22c55e" }} />
+          Availability
         </h2>
         <p style={{
           color: "var(--text-secondary)",

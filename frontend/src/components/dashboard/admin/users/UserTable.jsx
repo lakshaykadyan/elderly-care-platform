@@ -11,8 +11,13 @@ export default function UserTable({
   sortOrder,
   handleToggle,
   handleDelete,
+  page = "users",
 }) {
   if (users.length === 0) return <EmptyUsers />;
+
+  const isCaregiverPage = page === "caregivers";
+  const roleLabel = isCaregiverPage ? "Status" : "Role";
+  const roleSortField = isCaregiverPage ? "caregiverProfile.verified" : "role";
 
   return (
     <div style={{
@@ -41,8 +46,8 @@ export default function UserTable({
             <th style={{ padding: "14px 16px", textAlign: "left", cursor: "pointer" }} onClick={() => handleSort("email")}>
               Email {sortField === "email" ? (sortOrder === "asc" ? "↑" : "↓") : "↕"}
             </th>
-            <th style={{ padding: "14px 16px", textAlign: "center", cursor: "pointer" }} onClick={() => handleSort("role")}>
-              Role {sortField === "role" ? (sortOrder === "asc" ? "↑" : "↓") : "↕"}
+            <th style={{ padding: "14px 16px", textAlign: "center", cursor: "pointer" }} onClick={() => handleSort(roleSortField)}>
+              {roleLabel} {sortField === roleSortField ? (sortOrder === "asc" ? "↑" : "↓") : "↕"}
             </th>
             <th style={{ padding: "14px 16px", textAlign: "center", cursor: "pointer" }} onClick={() => handleSort("isActive")}>
               Status {sortField === "isActive" ? (sortOrder === "asc" ? "↑" : "↓") : "↕"}
@@ -59,6 +64,7 @@ export default function UserTable({
               handleSelect={handleSelect}
               handleToggle={handleToggle}
               handleDelete={handleDelete}
+              page={page}
             />
           ))}
         </tbody>

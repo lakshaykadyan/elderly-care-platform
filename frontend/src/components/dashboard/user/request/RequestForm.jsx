@@ -1,3 +1,5 @@
+import { Wrench, Clock, Calendar, Clock as ClockIcon, FileText, Loader } from "lucide-react";
+
 export default function RequestForm({
   form,
   setForm,
@@ -7,7 +9,6 @@ export default function RequestForm({
   return (
     <div className="request-form-wrapper">
       <style>{`
-        /* --- Input Styles --- */
         .request-form-wrapper .rf-input,
         .request-form-wrapper .rf-select,
         .request-form-wrapper .rf-textarea {
@@ -41,7 +42,6 @@ export default function RequestForm({
           margin-bottom: 6px !important;
         }
 
-        /* --- LIGHT MODE --- */
         .request-form-wrapper .rf-input,
         .request-form-wrapper .rf-select,
         .request-form-wrapper .rf-textarea {
@@ -53,7 +53,6 @@ export default function RequestForm({
           color: #475569 !important;
         }
 
-        /* --- DARK MODE --- */
         [data-theme="dark"] .request-form-wrapper .rf-input,
         [data-theme="dark"] .request-form-wrapper .rf-select,
         [data-theme="dark"] .request-form-wrapper .rf-textarea {
@@ -65,7 +64,6 @@ export default function RequestForm({
           color: #94a3b8 !important;
         }
 
-        /* --- Placeholder Fix --- */
         [data-theme="dark"] .request-form-wrapper .rf-input::placeholder,
         [data-theme="dark"] .request-form-wrapper .rf-textarea::placeholder,
         [data-theme="dark"] .request-form-wrapper .rf-select {
@@ -82,7 +80,10 @@ export default function RequestForm({
       }}>
         {/* Row 1: Service Type + Duration */}
         <div>
-          <label className="rf-label">🛠️ Service Type</label>
+          <label className="rf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Wrench size={14} style={{ color: "var(--text-muted)" }} />
+            Service Type
+          </label>
           <select
             className="rf-select"
             value={form.serviceType}
@@ -96,7 +97,10 @@ export default function RequestForm({
           </select>
         </div>
         <div>
-          <label className="rf-label">⏳ Duration</label>
+          <label className="rf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Clock size={14} style={{ color: "var(--text-muted)" }} />
+            Duration
+          </label>
           <input
             className="rf-input"
             type="text"
@@ -108,7 +112,10 @@ export default function RequestForm({
 
         {/* Row 2: Date + Time */}
         <div>
-          <label className="rf-label">📅 Booking Date</label>
+          <label className="rf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Calendar size={14} style={{ color: "var(--text-muted)" }} />
+            Booking Date
+          </label>
           <input
             className="rf-input"
             type="date"
@@ -117,7 +124,10 @@ export default function RequestForm({
           />
         </div>
         <div>
-          <label className="rf-label">🕒 Booking Time</label>
+          <label className="rf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <ClockIcon size={14} style={{ color: "var(--text-muted)" }} />
+            Booking Time
+          </label>
           <input
             className="rf-input"
             type="time"
@@ -128,7 +138,10 @@ export default function RequestForm({
 
         {/* Row 3: Description (Full Width) */}
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="rf-label">📝 Description</label>
+          <label className="rf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <FileText size={14} style={{ color: "var(--text-muted)" }} />
+            Description
+          </label>
           <textarea
             className="rf-textarea"
             rows="4"
@@ -152,17 +165,39 @@ export default function RequestForm({
             color: "#fff",
             fontWeight: "600",
             fontSize: "16px",
-            cursor: "pointer",
+            cursor: loading ? "not-allowed" : "pointer",
             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
             opacity: loading ? 0.6 : 1,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
           }}
           onMouseEnter={(e) => { if (!loading) { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 25px rgba(79,70,229,0.5)"; } }}
           onMouseLeave={(e) => { if (!loading) { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)"; } }}
         >
-          {loading ? "⏳ Booking..." : "📅 Book Service"}
+          {loading ? (
+            <>
+              <Loader size={18} className="spin" />
+              Booking...
+            </>
+          ) : (
+            <>
+              <Calendar size={18} />
+              Book Service
+            </>
+          )}
         </button>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

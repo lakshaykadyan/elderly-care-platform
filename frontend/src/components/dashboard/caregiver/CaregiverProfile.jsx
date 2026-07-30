@@ -24,7 +24,6 @@ export default function CaregiverProfile() {
     availability: "available",
   });
 
-  // ✅ Detect dark mode from localStorage
   useEffect(() => {
     const dark = localStorage.getItem("theme") === "dark";
     setIsDark(dark);

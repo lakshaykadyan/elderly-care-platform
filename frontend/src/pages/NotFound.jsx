@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
+import { Home } from "lucide-react";
 
 export default function NotFound() {
-
   return (
-
     <div
       style={{
         minHeight: "100vh",
@@ -14,14 +13,12 @@ export default function NotFound() {
         padding: "20px",
       }}
     >
-
       <div
         style={{
           textAlign: "center",
           maxWidth: "500px",
         }}
       >
-
         <h1
           style={{
             fontSize: "90px",
@@ -32,11 +29,7 @@ export default function NotFound() {
           404
         </h1>
 
-        <h2>
-
-          Page Not Found
-
-        </h2>
+        <h2>Page Not Found</h2>
 
         <p
           style={{
@@ -44,25 +37,15 @@ export default function NotFound() {
             color: "#666",
           }}
         >
-
           Sorry, the page you're looking for doesn't exist.
-
         </p>
 
         <Link to="/">
-
-          <button className="primary-btn">
-
-            🏠 Back to Home
-
+          <button className="primary-btn" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+            <Home size={18} /> Back to Home
           </button>
-
         </Link>
-
       </div>
-
     </div>
-
   );
-
 }

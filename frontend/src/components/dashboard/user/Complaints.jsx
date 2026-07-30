@@ -8,6 +8,7 @@ import ComplaintForm from "./complaints/ComplaintForm";
 import ComplaintList from "./complaints/ComplaintList";
 import LoadingComplaints from "./complaints/LoadingComplaints";
 import EmptyComplaints from "./complaints/EmptyComplaints";
+import { AlertTriangle, FileText } from "lucide-react";
 
 export default function Complaints() {
   const [complaints, setComplaints] = useState([]);
@@ -71,8 +72,12 @@ export default function Complaints() {
           color: "var(--text-primary)",
           margin: 0,
           letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
         }}>
-          ⚠️ Complaints
+          <AlertTriangle size={24} style={{ color: "#ef4444" }} />
+          Complaints
         </h2>
         <p style={{
           color: "var(--text-secondary)",
@@ -108,7 +113,8 @@ export default function Complaints() {
         alignItems: "center",
         gap: "8px",
       }}>
-        📜 Complaint History
+        <FileText size={20} style={{ color: "var(--primary)" }} />
+        Complaint History
       </h3>
 
       {loading ? (

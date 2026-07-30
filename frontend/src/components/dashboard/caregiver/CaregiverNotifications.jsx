@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getNotifications } from "../../../hooks/useNotification";
 import { showSuccess, showError } from "../../../utils/toast";
+import { Loader, Bell, CheckCircle, BellOff } from "lucide-react";
 
 export default function CaregiverNotifications() {
   const [notifications, setNotifications] = useState([]);
@@ -25,7 +26,6 @@ export default function CaregiverNotifications() {
 
   const handleMarkAllRead = async () => {
     try {
-      // Yahan API call karna hai (placeholder)
       showSuccess("All notifications marked as read");
       loadNotifications();
     } catch (error) {
@@ -42,7 +42,15 @@ export default function CaregiverNotifications() {
         borderRadius: "24px",
         border: "1px solid var(--border-color)",
       }}>
-        <div style={{ fontSize: "32px", marginBottom: "12px" }}>⏳</div>
+        <div style={{
+          fontSize: "32px",
+          marginBottom: "12px",
+          color: "var(--primary)",
+          display: "flex",
+          justifyContent: "center",
+        }}>
+          <Loader size={32} className="spin" />
+        </div>
         <p style={{ color: "var(--text-secondary)" }}>Loading notifications...</p>
       </div>
     );
@@ -57,7 +65,7 @@ export default function CaregiverNotifications() {
       boxShadow: "0 8px 32px -8px rgba(0,0,0,0.06)",
     }}>
       
-      {/* === HEADER: Title + Mark All Read === */}
+      {/* Header */}
       <div style={{
         display: "flex",
         justifyContent: "space-between",
@@ -73,8 +81,12 @@ export default function CaregiverNotifications() {
             color: "var(--text-primary)",
             margin: 0,
             letterSpacing: "-0.5px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
           }}>
-            🔔 Caregiver Notifications
+            <Bell size={24} style={{ color: "var(--primary)" }} />
+            Caregiver Notifications
           </h2>
           <p style={{
             color: "var(--text-secondary)",
@@ -96,17 +108,20 @@ export default function CaregiverNotifications() {
             fontSize: "14px",
             cursor: "pointer",
             transition: "all 0.3s ease",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
           }}
           onMouseEnter={(e) => { e.target.style.background = "rgba(99,102,241,0.15)"; e.target.style.borderColor = "rgba(99,102,241,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.background = "rgba(99,102,241,0.08)"; e.target.style.borderColor = "rgba(99,102,241,0.15)"; }}
         >
-          ✅ Mark All Read
+          <CheckCircle size={16} />
+          Mark All Read
         </button>
       </div>
 
-      {/* === NOTIFICATIONS LIST === */}
+      {/* Notifications List */}
       {notifications.length === 0 ? (
-        // ✅ PREMIUM EMPTY STATE - No more dull/odd look
         <div style={{
           textAlign: "center",
           padding: "60px 20px",
@@ -131,8 +146,9 @@ export default function CaregiverNotifications() {
             padding: "20px",
             borderRadius: "50%",
             border: "2px dashed var(--border-color)",
+            color: "var(--text-muted)",
           }}>
-            🔕
+            <BellOff size={56} strokeWidth={1.5} />
           </div>
           <h4 style={{
             fontSize: "20px",
@@ -194,7 +210,7 @@ export default function CaregiverNotifications() {
                     fontSize: "18px",
                     color: "#4f46e5",
                   }}>
-                    {item.icon || "🔔"}
+                    <Bell size={18} />
                   </span>
                   <p style={{
                     color: "var(--text-primary)",

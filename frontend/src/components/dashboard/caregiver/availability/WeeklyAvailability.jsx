@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Calendar, MapPin } from "lucide-react";
 
 export default function WeeklyAvailability({ onToggle }) {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -8,16 +9,16 @@ export default function WeeklyAvailability({ onToggle }) {
     days.reduce((acc, day) => ({ ...acc, [day]: true }), {})
   );
 
-  // ✅ Track previous today status to prevent duplicate calls
+  // Track previous today status to prevent duplicate calls
   const prevTodayOffRef = useRef(false);
 
-  // ✅ Get today's day name
+  // Get today's day name
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
 
-  // ✅ Get today's status
+  // Get today's status
   const isTodayOff = !schedule[today];
 
-  // ✅ Notify parent ONLY when today's status actually changes
+  // Notify parent ONLY when today's status actually changes
   useEffect(() => {
     if (prevTodayOffRef.current !== isTodayOff) {
       prevTodayOffRef.current = isTodayOff;
@@ -25,11 +26,10 @@ export default function WeeklyAvailability({ onToggle }) {
         onToggle(isTodayOff);
       }
     }
-    // ✅ Remove onToggle from dependencies to avoid re-runs
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isTodayOff]);
 
-  // ✅ Toggle handler
+  // Toggle handler
   const toggleDay = (day) => {
     setSchedule((prev) => ({
       ...prev,
@@ -40,8 +40,17 @@ export default function WeeklyAvailability({ onToggle }) {
   return (
     <>
       <hr style={{ margin: "30px 0", border: "none", borderTop: "1px solid var(--border-color)" }} />
-      <h3 style={{ fontSize: "18px", fontWeight: "600", color: "var(--text-primary)", marginBottom: "16px" }}>
-        📅 Weekly Availability
+      <h3 style={{
+        fontSize: "18px",
+        fontWeight: "600",
+        color: "var(--text-primary)",
+        marginBottom: "16px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <Calendar size={20} style={{ color: "var(--primary)" }} />
+        Weekly Availability
       </h3>
       <div className="weekly-grid">
         {days.map((day) => (
@@ -58,11 +67,14 @@ export default function WeeklyAvailability({ onToggle }) {
               border: "1px solid var(--border-color)",
             }}
           >
-            <span style={{ 
-              color: "var(--text-primary)", 
+            <span style={{
+              color: "var(--text-primary)",
               fontWeight: day === today ? "700" : "500",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
             }}>
-              {day} {day === today && "📍"}
+              {day} {day === today && <MapPin size={16} style={{ color: "var(--primary)" }} />}
             </span>
 
             <label

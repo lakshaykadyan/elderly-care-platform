@@ -1,3 +1,5 @@
+import { Pin, MessageSquare, Loader, Send } from "lucide-react";
+
 export default function ComplaintForm({
   form,
   setForm,
@@ -74,7 +76,10 @@ export default function ComplaintForm({
         marginBottom: "20px",
       }}>
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="cf-label">📌 Subject</label>
+          <label className="cf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Pin size={14} style={{ color: "var(--text-muted)" }} />
+            Subject
+          </label>
           <input
             className="cf-input"
             type="text"
@@ -84,7 +89,10 @@ export default function ComplaintForm({
           />
         </div>
         <div style={{ gridColumn: "1 / -1" }}>
-          <label className="cf-label">📝 Message</label>
+          <label className="cf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <MessageSquare size={14} style={{ color: "var(--text-muted)" }} />
+            Message
+          </label>
           <textarea
             className="cf-textarea"
             rows="5"
@@ -108,17 +116,40 @@ export default function ComplaintForm({
             color: "#fff",
             fontWeight: "600",
             fontSize: "16px",
-            cursor: "pointer",
+            cursor: submitting ? "not-allowed" : "pointer",
             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
             opacity: submitting ? 0.6 : 1,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
           }}
           onMouseEnter={(e) => { if (!submitting) { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 25px rgba(79,70,229,0.5)"; } }}
           onMouseLeave={(e) => { if (!submitting) { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)"; } }}
         >
-          {submitting ? "⏳ Submitting..." : "📤 Submit Complaint"}
+          {submitting ? (
+            <>
+              <Loader size={18} className="spin" />
+              Submitting...
+            </>
+          ) : (
+            <>
+              <Send size={18} />
+              Submit Complaint
+            </>
+          )}
         </button>
       </div>
+
+      {/* Add spinner animation if not already present */}
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

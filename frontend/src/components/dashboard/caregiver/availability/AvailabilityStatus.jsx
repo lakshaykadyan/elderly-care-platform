@@ -1,3 +1,5 @@
+import { Circle } from "lucide-react";
+
 export default function AvailabilityStatus({ availability, updateAvailability }) {
   const getBtnClass = (status) => {
     if (availability === status) return `status-btn active-${status}`;
@@ -25,20 +27,23 @@ export default function AvailabilityStatus({ availability, updateAvailability })
           onClick={() => updateAvailability("available")}
           disabled={availability === "offline"}
         >
-          🟢 Available
+          <Circle size={16} color="#22c55e" style={{ display: "inline", marginRight: "6px" }} />
+          Available
         </button>
         <button 
           className={getBtnClass("busy")} 
           onClick={() => updateAvailability("busy")}
           disabled={availability === "offline"}
         >
-          🟠 Busy
+          <Circle size={16} color="#f59e0b" style={{ display: "inline", marginRight: "6px" }} />
+          Busy
         </button>
         <button 
           className={getBtnClass("offline")} 
           onClick={() => updateAvailability("offline")}
         >
-          🔴 Offline
+          <Circle size={16} color="#ef4444" style={{ display: "inline", marginRight: "6px" }} />
+          Offline
         </button>
       </div>
     </>

@@ -27,12 +27,12 @@ export default function AdminDashboard() {
       case "users": {
         const filter = sessionStorage.getItem("adminUsersFilter") || "all";
         sessionStorage.removeItem("adminUsersFilter");
-        return <Users initialFilter={filter} />;
+        return <Users initialFilter={filter} page="users" />;  
       }
       case "caregivers": {
-        const filter = sessionStorage.getItem("adminUsersFilter") || "caregiver";
+        const filter = sessionStorage.getItem("adminUsersFilter") || "verified";
         sessionStorage.removeItem("adminUsersFilter");
-        return <Users initialFilter={filter} />;
+        return <Users initialFilter={filter} page="caregivers" />; 
       }
       case "services": {
         const filter = sessionStorage.getItem("adminServicesFilter") || null;

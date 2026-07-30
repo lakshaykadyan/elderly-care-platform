@@ -1,3 +1,5 @@
+import { Calendar } from "lucide-react";
+
 export default function EmptyRequest() {
   return (
     <div style={{
@@ -17,8 +19,12 @@ export default function EmptyRequest() {
         padding: "8px 12px",
         borderRadius: "12px",
         border: "1px solid rgba(79, 70, 229, 0.04)",
+        color: "var(--primary)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}>
-        📅
+        <Calendar size={32} />
       </div>
       <div style={{ flex: 1 }}>
         <h3 style={{

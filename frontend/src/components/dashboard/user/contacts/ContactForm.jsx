@@ -1,3 +1,5 @@
+import { User, Heart, Phone, MapPin, Loader, Edit, Plus } from "lucide-react";
+
 export default function ContactForm({
   form,
   setForm,
@@ -12,7 +14,7 @@ export default function ContactForm({
         .contact-form-wrapper .cf-textarea {
           width: 100% !important;
           padding: 12px 16px !important;
-          border-radius: 12px !important;
+          borderRadius: 12px !important;
           font-size: 15px !important;
           font-family: inherit !important;
           outline: none !important;
@@ -39,7 +41,6 @@ export default function ContactForm({
           margin-bottom: 6px !important;
         }
 
-        /* --- LIGHT MODE --- */
         .contact-form-wrapper .cf-input,
         .contact-form-wrapper .cf-textarea {
           background: #f8fafc !important;
@@ -50,7 +51,6 @@ export default function ContactForm({
           color: #475569 !important;
         }
 
-        /* --- DARK MODE --- */
         [data-theme="dark"] .contact-form-wrapper .cf-input,
         [data-theme="dark"] .contact-form-wrapper .cf-textarea {
           background: #0f172a !important;
@@ -75,7 +75,10 @@ export default function ContactForm({
         marginBottom: "20px",
       }}>
         <div>
-          <label className="cf-label">👤 Full Name</label>
+          <label className="cf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <User size={14} style={{ color: "var(--text-muted)" }} />
+            Full Name
+          </label>
           <input
             className="cf-input"
             type="text"
@@ -85,7 +88,10 @@ export default function ContactForm({
           />
         </div>
         <div>
-          <label className="cf-label">❤️ Relationship</label>
+          <label className="cf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Heart size={14} style={{ color: "var(--text-muted)" }} />
+            Relationship
+          </label>
           <input
             className="cf-input"
             type="text"
@@ -95,7 +101,10 @@ export default function ContactForm({
           />
         </div>
         <div>
-          <label className="cf-label">📞 Phone Number</label>
+          <label className="cf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <Phone size={14} style={{ color: "var(--text-muted)" }} />
+            Phone Number
+          </label>
           <input
             className="cf-input"
             type="tel"
@@ -105,7 +114,10 @@ export default function ContactForm({
           />
         </div>
         <div>
-          <label className="cf-label">📍 Address</label>
+          <label className="cf-label" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <MapPin size={14} style={{ color: "var(--text-muted)" }} />
+            Address
+          </label>
           <textarea
             className="cf-textarea"
             rows="3"
@@ -129,23 +141,44 @@ export default function ContactForm({
             color: "#fff",
             fontWeight: "600",
             fontSize: "16px",
-            cursor: "pointer",
+            cursor: saving ? "not-allowed" : "pointer",
             transition: "all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
             boxShadow: "0 4px 14px rgba(79,70,229,0.3)",
             opacity: saving ? 0.6 : 1,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
           }}
           onMouseEnter={(e) => { if (!saving) { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 25px rgba(79,70,229,0.5)"; } }}
           onMouseLeave={(e) => { if (!saving) { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 14px rgba(79,70,229,0.3)"; } }}
         >
-          {saving
-            ? editingId
-              ? "⏳ Updating..."
-              : "⏳ Adding..."
-            : editingId
-            ? "✏️ Update Contact"
-            : "➕ Add Contact"}
+          {saving ? (
+            <>
+              <Loader size={18} className="spin" />
+              {editingId ? "Updating..." : "Adding..."}
+            </>
+          ) : editingId ? (
+            <>
+              <Edit size={18} />
+              Update Contact
+            </>
+          ) : (
+            <>
+              <Plus size={18} />
+              Add Contact
+            </>
+          )}
         </button>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spin {
+          animation: spin 1s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { Phone, MapPin, Edit, Trash2 } from "lucide-react";
+
 export default function ContactCard({ contact, handleEdit, handleDelete }) {
   return (
     <div style={{
@@ -61,16 +63,27 @@ export default function ContactCard({ contact, handleEdit, handleDelete }) {
             }}>
               {contact.relationship}
             </span>
-            <span style={{ color: "var(--text-muted)", fontSize: "13px", display: "flex", alignItems: "center", gap: "4px" }}>
-              📞 {contact.phoneNumber}
+            <span style={{
+              color: "var(--text-muted)",
+              fontSize: "13px",
+              display: "flex",
+              alignItems: "center",
+              gap: "4px",
+            }}>
+              <Phone size={14} />
+              {contact.phoneNumber}
             </span>
           </div>
           <p style={{
             color: "var(--text-secondary)",
             fontSize: "14px",
             margin: "6px 0 0 0",
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
           }}>
-            📍 {contact.address}
+            <MapPin size={14} />
+            {contact.address}
           </p>
         </div>
       </div>
@@ -98,7 +111,8 @@ export default function ContactCard({ contact, handleEdit, handleDelete }) {
           onMouseEnter={(e) => { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 20px rgba(34,197,94,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 12px rgba(34,197,94,0.2)"; }}
         >
-          📞 Call
+          <Phone size={14} />
+          Call
         </a>
         <button
           onClick={() => handleEdit(contact)}
@@ -117,7 +131,8 @@ export default function ContactCard({ contact, handleEdit, handleDelete }) {
           onMouseEnter={(e) => { e.target.style.transform = "scale(1.04)"; e.target.style.boxShadow = "0 8px 20px rgba(79,70,229,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.transform = "scale(1)"; e.target.style.boxShadow = "0 4px 12px rgba(79,70,229,0.2)"; }}
         >
-          ✏️ Edit
+          <Edit size={14} />
+          Edit
         </button>
         <button
           onClick={() => handleDelete(contact._id)}
@@ -135,7 +150,8 @@ export default function ContactCard({ contact, handleEdit, handleDelete }) {
           onMouseEnter={(e) => { e.target.style.background = "#ef4444"; e.target.style.color = "#fff"; e.target.style.borderColor = "#ef4444"; e.target.style.boxShadow = "0 4px 12px rgba(239,68,68,0.3)"; }}
           onMouseLeave={(e) => { e.target.style.background = "transparent"; e.target.style.color = "#f87171"; e.target.style.borderColor = "rgba(239,68,68,0.15)"; e.target.style.boxShadow = "none"; }}
         >
-          🗑 Delete
+          <Trash2 size={14} />
+          Delete
         </button>
       </div>
     </div>

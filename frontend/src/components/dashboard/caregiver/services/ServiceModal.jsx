@@ -1,3 +1,17 @@
+import {
+  Stethoscope,
+  Mail,
+  Phone,
+  Home,
+  Calendar,
+  Clock,
+  Hourglass,
+  DollarSign,
+  Star,
+  FileText,
+  X,
+} from "lucide-react";
+
 export default function ServiceModal({ service, badgeColor, onClose }) {
   if (!service) return null;
 
@@ -41,8 +55,9 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
           gap: "16px",
         }}>
           <div>
-            <h2 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", margin: 0 }}>
-              👨‍⚕️ Patient Details
+            <h2 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+              <Stethoscope size={24} style={{ color: "var(--primary)" }} />
+              Patient Details
             </h2>
             <p style={{ color: "var(--text-secondary)", fontSize: "15px", margin: "4px 0 0 0" }}>
               Complete Service Information
@@ -67,7 +82,7 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
             onMouseEnter={(e) => { e.target.style.background = "rgba(239,68,68,0.1)"; e.target.style.borderColor = "#ef4444"; e.target.style.color = "#ef4444"; }}
             onMouseLeave={(e) => { e.target.style.background = "transparent"; e.target.style.borderColor = "var(--border-color)"; e.target.style.color = "var(--text-primary)"; }}
           >
-            ✕
+            <X size={24} />
           </button>
         </div>
 
@@ -102,11 +117,11 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
               <h3 style={{ fontSize: "18px", fontWeight: "700", color: "var(--text-primary)", margin: 0 }}>
                 {service.userId?.name || "Unknown"}
               </h3>
-              <p style={{ color: "var(--text-muted)", fontSize: "14px", margin: "2px 0 0 0" }}>
-                📧 {service.userId?.email || "No email"}
+              <p style={{ color: "var(--text-muted)", fontSize: "14px", margin: "2px 0 0 0", display: "flex", alignItems: "center", gap: "4px" }}>
+                <Mail size={14} /> {service.userId?.email || "No email"}
               </p>
-              <p style={{ color: "var(--text-muted)", fontSize: "14px", margin: "0" }}>
-                📞 {service.userId?.phone || "Not Available"}
+              <p style={{ color: "var(--text-muted)", fontSize: "14px", margin: "0", display: "flex", alignItems: "center", gap: "4px" }}>
+                <Phone size={14} /> {service.userId?.phone || "Not Available"}
               </p>
             </div>
           </div>
@@ -131,12 +146,12 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
           marginBottom: "20px",
         }}>
           {[
-            { label: "🏥 Service", value: service.serviceType },
-            { label: "📅 Booking Date", value: service.bookingDate || "Not Set" },
-            { label: "⏰ Booking Time", value: service.bookingTime || "Not Set" },
-            { label: "⌛ Duration", value: service.duration || "Not Set" },
-            { label: "💰 Price", value: `₹ ${service.price || 0}` },
-            { label: "⭐ Rating", value: `${service.rating || 0}/5` },
+            { label: "Service", value: service.serviceType, icon: <Home size={14} /> },
+            { label: "Booking Date", value: service.bookingDate || "Not Set", icon: <Calendar size={14} /> },
+            { label: "Booking Time", value: service.bookingTime || "Not Set", icon: <Clock size={14} /> },
+            { label: "Duration", value: service.duration || "Not Set", icon: <Hourglass size={14} /> },
+            { label: "Price", value: `₹ ${service.price || 0}`, icon: <DollarSign size={14} /> },
+            { label: "Rating", value: `${service.rating || 0}/5`, icon: <Star size={14} /> },
           ].map((item, i) => (
             <div key={i} style={{
               padding: "14px 18px",
@@ -144,8 +159,8 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
               borderRadius: "14px",
               border: "1px solid var(--border-color)",
             }}>
-              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: "500", display: "block", textTransform: "uppercase", letterSpacing: "0.3px" }}>
-                {item.label}
+              <span style={{ fontSize: "12px", color: "var(--text-muted)", fontWeight: "500", display: "flex", alignItems: "center", gap: "4px", textTransform: "uppercase", letterSpacing: "0.3px" }}>
+                {item.icon} {item.label}
               </span>
               <strong style={{ fontSize: "15px", color: "var(--text-primary)", display: "block", marginTop: "2px" }}>
                 {item.value}
@@ -162,7 +177,9 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
           marginBottom: "12px",
           borderLeft: "3px solid #4f46e5",
         }}>
-          <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--text-muted)", display: "block", textTransform: "uppercase", letterSpacing: "0.3px" }}>📄 Description</span>
+          <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "4px", textTransform: "uppercase", letterSpacing: "0.3px" }}>
+            <FileText size={14} /> Description
+          </span>
           <p style={{ color: "var(--text-primary)", fontSize: "15px", lineHeight: "1.6", margin: "4px 0 0 0" }}>
             {service.description || "No description"}
           </p>
@@ -176,7 +193,9 @@ export default function ServiceModal({ service, badgeColor, onClose }) {
           marginBottom: "20px",
           borderLeft: "3px solid #22c55e",
         }}>
-          <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--text-muted)", display: "block", textTransform: "uppercase", letterSpacing: "0.3px" }}>📝 Care Notes</span>
+          <span style={{ fontSize: "12px", fontWeight: "600", color: "var(--text-muted)", display: "flex", alignItems: "center", gap: "4px", textTransform: "uppercase", letterSpacing: "0.3px" }}>
+            <FileText size={14} /> Care Notes
+          </span>
           <p style={{ color: "var(--text-primary)", fontSize: "15px", lineHeight: "1.6", margin: "4px 0 0 0" }}>
             {service.careNotes || "No Care Notes Available"}
           </p>

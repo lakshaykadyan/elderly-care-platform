@@ -10,6 +10,7 @@ import ContactForm from "./contacts/ContactForm";
 import ContactList from "./contacts/ContactList";
 import LoadingContacts from "./contacts/LoadingContacts";
 import EmptyContacts from "./contacts/EmptyContacts";
+import { AlertTriangle, Phone } from "lucide-react";
 
 export default function EmergencyContacts() {
   const [contacts, setContacts] = useState([]);
@@ -109,8 +110,12 @@ export default function EmergencyContacts() {
           color: "var(--text-primary)",
           margin: 0,
           letterSpacing: "-0.5px",
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
         }}>
-          🚨 Emergency Contacts
+          <AlertTriangle size={24} style={{ color: "#ef4444" }} />
+          Emergency Contacts
         </h2>
         <p style={{
           color: "var(--text-secondary)",
@@ -147,7 +152,8 @@ export default function EmergencyContacts() {
         alignItems: "center",
         gap: "8px",
       }}>
-        📞 Saved Contacts
+        <Phone size={20} style={{ color: "var(--primary)" }} />
+        Saved Contacts
       </h3>
 
       {loading ? (
