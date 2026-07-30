@@ -26,7 +26,6 @@ export default function Navbar() {
     setMenuOpen(false);
   };
 
-  // Close menu when any nav link is clicked
   const closeMenu = () => setMenuOpen(false);
 
   return (
@@ -36,7 +35,7 @@ export default function Navbar() {
           <Link to="/" onClick={closeMenu}>ElderlyCare</Link>
         </div>
 
-        {/* Hamburger Icon (visible on mobile) */}
+        {/* Hamburger Icon */}
         <button 
           className="mobile-menu-toggle" 
           onClick={() => setMenuOpen(!menuOpen)}
@@ -45,7 +44,7 @@ export default function Navbar() {
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Navigation Links (hidden on mobile, shown when menuOpen) */}
+        {/* Navigation Links (no auth buttons here) */}
         <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
           <NavLink to="/" onClick={closeMenu}>
             <Home size={16} style={{ display: "inline-block", marginRight: "4px" }} />
@@ -62,38 +61,12 @@ export default function Navbar() {
             <Phone size={16} style={{ display: "inline-block", marginRight: "4px" }} />
             Contact
           </NavLink>
-
-          {/* Auth buttons inside mobile menu as well (optional) */}
-          {!user ? (
-            <>
-              <Link to="/login" onClick={closeMenu}>
-                <button className="login-btn">
-                  <User size={16} style={{ display: "inline-block", marginRight: "4px" }} />
-                  Login
-                </button>
-              </Link>
-              <Link to="/login" state={{ screen: "signup" }} onClick={closeMenu}>
-                <button className="register-btn">Register</button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <button className="login-btn" onClick={goToDashboard}>
-                <LayoutDashboard size={16} style={{ display: "inline-block", marginRight: "4px" }} />
-                Dashboard
-              </button>
-              <button className="logout-btn" onClick={handleLogout}>
-                <LogOut size={16} style={{ display: "inline-block", marginRight: "4px" }} />
-                Logout
-              </button>
-            </>
-          )}
         </nav>
 
-        {/* Desktop Actions (already present) */}
+        {/* Desktop Actions (auth buttons only here) */}
         <div className="nav-actions">
           <ThemeToggle />
-          {/* Desktop buttons – we can keep them or move inside nav-links; we'll keep both */}
+
           {!user ? (
             <>
               <Link to="/login">
