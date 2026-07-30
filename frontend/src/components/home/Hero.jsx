@@ -8,7 +8,6 @@ export default function Hero() {
 
   const handleGetStarted = () => {
     if (user) {
-      // Agar user logged in hai -> dashboard pe bhejo
       if (user.role === "admin") {
         navigate("/dashboard/admin");
       } else if (user.role === "caregiver") {
@@ -17,8 +16,8 @@ export default function Hero() {
         navigate("/dashboard/user");
       }
     } else {
-      // Naya user -> login page pe bhejo (wahan register/login ka option hai)
-      navigate("/login", { state: { screen: "signup" } });
+      // ✅ Login page khulega (signup state nahi)
+      navigate("/login");
     }
   };
 

@@ -20,13 +20,14 @@ import {
   Calendar,
   User,
   ChevronRight,
+  Clock,
 } from "lucide-react";
 
-// ✅ Accept setActivePage prop for navigation
 export default function CaregiverDashboard({ setActivePage }) {
   const navigate = useNavigate();
   const [availability, setAvailability] = useState("available");
   const [services, setServices] = useState([]);
+  const [todaysServices, setTodaysServices] = useState([]);
   const [stats, setStats] = useState({
     total: 0,
     completed: 0,
@@ -52,9 +53,20 @@ export default function CaregiverDashboard({ setActivePage }) {
     try {
       const data = await getAssignedServices();
       setServices(data.services || []);
+      filterTodayServices(data.services || []);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  // ✅ Filter today's services
+  const filterTodayServices = (allServices) => {
+    const today = new Date().toDateString();
+    const todayList = allServices.filter((s) => {
+      if (!s.bookingDate) return false;
+      return new Date(s.bookingDate).toDateString() === today;
+    });
+    setTodaysServices(todayList);
   };
 
   const loadAvailability = async () => {
@@ -75,11 +87,9 @@ export default function CaregiverDashboard({ setActivePage }) {
     }
   };
 
-  // ✅ Optimistic availability update (instant UI change)
   const changeAvailability = async (status) => {
     setAvailability(status);
     setUpdatingAvailability(true);
-
     try {
       const data = await updateAvailability(status);
       showSuccess(data.message || `Availability updated to ${status}`);
@@ -92,11 +102,15 @@ export default function CaregiverDashboard({ setActivePage }) {
     }
   };
 
+  // ✅ Fix: Navigate to Assigned Services page instead of 404
   const goToServiceDetail = (serviceId) => {
-    navigate(`/service/${serviceId}`);
+    if (setActivePage) {
+      setActivePage("services");
+    } else {
+      navigate("/dashboard/caregiver");
+    }
   };
 
-  // ✅ Quick action handler using setActivePage prop
   const handleQuickAction = (page) => {
     if (setActivePage) {
       setActivePage(page);
@@ -240,6 +254,14 @@ export default function CaregiverDashboard({ setActivePage }) {
           flex-wrap: wrap !important;
           margin-top: 16px !important;
         }
+        .caregiver-dashboard-wrapper .schedule-item {
+          transition: all 0.3s ease;
+        }
+        .caregiver-dashboard-wrapper .schedule-item:hover {
+          border-color: rgba(99, 102, 241, 0.2) !important;
+          transform: translateY(-4px) !important;
+          box-shadow: 0 8px 24px -6px rgba(0,0,0,0.06) !important;
+        }
         @media (max-width: 768px) {
           .caregiver-dashboard-wrapper .stats-grid {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -262,7 +284,6 @@ export default function CaregiverDashboard({ setActivePage }) {
       `}</style>
 
       <div style={{ padding: "8px 4px" }}>
-        {/* Header */}
         <div style={{ marginBottom: "28px" }}>
           <h1 style={{
             fontSize: "28px",
@@ -283,7 +304,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           </p>
         </div>
 
-        {/* Stats Grid - Clickable */}
+        {/* Stats Grid */}
         <div className="stats-grid">
           {statsCards.map((card, i) => {
             const isClickable = card.page && card.page !== "dashboard";
@@ -531,7 +552,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           </div>
         </div>
 
-        {/* Availability - Optimistic Update */}
+        {/* Availability */}
         <div className="availability-card" style={{
           background: "var(--bg-card)",
           padding: "24px 28px",
@@ -601,7 +622,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           </div>
         </div>
 
-        {/* Recent Services */}
+        {/* Recent Services - Clickable (No 404) */}
         <div className="recent-card" style={{
           background: "var(--bg-card)",
           padding: "24px 28px",
@@ -694,7 +715,7 @@ export default function CaregiverDashboard({ setActivePage }) {
           )}
         </div>
 
-        {/* Today's Schedule */}
+        {/* Today's Schedule - Dynamic */}
         <div className="recent-card" style={{
           background: "var(--bg-card)",
           padding: "24px 28px",
@@ -708,66 +729,81 @@ export default function CaregiverDashboard({ setActivePage }) {
             color: "var(--text-primary)",
             margin: "0 0 16px 0",
           }}>
-            <Calendar size={18} style={{ display: "inline-block", marginRight: "6px" }} />
+            <Clock size={18} style={{ display: "inline-block", marginRight: "6px" }} />
             Today's Schedule
           </h2>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-            gap: "12px",
-          }}>
-            {[
-              { time: "09:00 AM", title: "Morning Check-up", patient: "Rajesh K." },
-              { time: "11:30 AM", title: "Medication Reminder", patient: "Suman P." },
-              { time: "02:00 PM", title: "Physiotherapy", patient: "Anita M." },
-              { time: "04:30 PM", title: "Evening Visit", patient: "Vikram S." },
-            ].map((item, i) => (
-              <div key={i} style={{
-                padding: "14px 18px",
-                background: "var(--bg-body)",
-                borderRadius: "14px",
-                border: "1px solid var(--border-color)",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(99,102,241,0.2)";
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.boxShadow = "0 8px 24px -6px rgba(0,0,0,0.06)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "var(--border-color)";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
-              }}>
-                <div style={{
-                  fontSize: "13px",
-                  fontWeight: "600",
-                  color: "#4f46e5",
-                  marginBottom: "4px",
-                }}>
-                  {item.time}
-                </div>
-                <h4 style={{
-                  fontSize: "15px",
-                  fontWeight: "600",
-                  color: "var(--text-primary)",
-                  margin: 0,
-                }}>
-                  {item.title}
-                </h4>
-                <span style={{
-                  color: "var(--text-muted)",
-                  fontSize: "13px",
-                }}>
-                  <User size={12} style={{ display: "inline-block", marginRight: "4px" }} />
-                  {item.patient}
-                </span>
-              </div>
-            ))}
-          </div>
+          {todaysServices.length === 0 ? (
+            <p style={{
+              color: "var(--text-muted)",
+              fontSize: "15px",
+              textAlign: "center",
+              padding: "30px 0",
+            }}>
+              No services scheduled for today.
+            </p>
+          ) : (
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+              gap: "12px",
+            }}>
+              {todaysServices.slice(0, 4).map((service, i) => {
+                const time = service.bookingTime || "Time TBD";
+                return (
+                  <div
+                    key={i}
+                    className="schedule-item"
+                    onClick={() => goToServiceDetail(service._id)}
+                    style={{
+                      padding: "14px 18px",
+                      background: "var(--bg-body)",
+                      borderRadius: "14px",
+                      border: "1px solid var(--border-color)",
+                      cursor: "pointer",
+                      transition: "all 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "rgba(99,102,241,0.2)";
+                      e.currentTarget.style.transform = "translateY(-4px)";
+                      e.currentTarget.style.boxShadow = "0 8px 24px -6px rgba(0,0,0,0.06)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "var(--border-color)";
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                  >
+                    <div style={{
+                      fontSize: "13px",
+                      fontWeight: "600",
+                      color: "#4f46e5",
+                      marginBottom: "4px",
+                    }}>
+                      {time}
+                    </div>
+                    <h4 style={{
+                      fontSize: "15px",
+                      fontWeight: "600",
+                      color: "var(--text-primary)",
+                      margin: 0,
+                    }}>
+                      {service.serviceType || "Service"}
+                    </h4>
+                    <span style={{
+                      color: "var(--text-muted)",
+                      fontSize: "13px",
+                    }}>
+                      <User size={12} style={{ display: "inline-block", marginRight: "4px" }} />
+                      {service.patientName || service.userId?.name || "Patient"}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
-        {/* Quick Actions - Fixed */}
+        {/* Quick Actions */}
         <div className="action-card" style={{
           background: "var(--bg-card)",
           padding: "24px 28px",
