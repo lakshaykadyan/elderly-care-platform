@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Users } from "lucide-react"; 
+import { Users as UsersIcon } from "lucide-react";
 import { getUsers, toggleUserStatus, deleteUser } from "../../../hooks/useAdmin";
 import LoadingUsers from "./users/LoadingUsers";
 import UserFilters from "./users/UserFilters";
@@ -12,8 +12,8 @@ export default function Users({ initialFilter = "all" }) {
   const [loading, setLoading] = useState(true);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState(initialFilter); 
-  const [filter, setFilter] = useState(initialFilter || "all");
+  // ✅ Single state declaration – initialFilter se set ho raha hai
+  const [filter, setFilter] = useState(initialFilter);
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
@@ -122,8 +122,17 @@ export default function Users({ initialFilter = "all" }) {
       borderRadius: "20px",
       border: "1px solid var(--border-color)",
     }}>
-      <h1 style={{ fontSize: "24px", fontWeight: "700", color: "var(--text-primary)", marginBottom: "20px", letterSpacing: "-0.5px" }}>
-        <Users size={24} style={{ display: "inline-block", marginRight: "8px" }} />
+      <h1 style={{
+        fontSize: "24px",
+        fontWeight: "700",
+        color: "var(--text-primary)",
+        marginBottom: "20px",
+        letterSpacing: "-0.5px",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}>
+        <UsersIcon size={24} style={{ color: "var(--primary)" }} />
         Manage Users
       </h1>
 
